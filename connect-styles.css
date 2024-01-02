@@ -1,0 +1,55 @@
+body {
+    /* Existing styles */
+/*    margin-top: 150px;*/
+    position: relative; /* Add this to position the wrapper relative to the body */
+}
+
+.wallet-connect-wrapper {
+    position: fixed; /* Position the wrapper absolutely */
+    top: 0;   /* Align to the top */
+    right: 0; /* Align to the right */
+    padding: 20px; /* Add some padding */
+ -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+
+.connect-button {
+    background-color: #004F8B; /* Light blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align:center;
+    margin-left:50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+ -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+.connect-button:hover {
+    background-color: #0073CF;
+}
+
+.connect-status {
+    margin-top: 10px;
+    color: green;
+    font-size:8pt;
+ -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+
+
+@media screen and (max-width: 1200px) {
+
+.wallet-connect-wrapper{
+    position:relative;
+}
+
+}
+
+

@@ -1,0 +1,150 @@
+a {
+color:white;
+}
+
+.body-container {
+width: 1000px;
+margin-top:100px;
+margin:auto;
+
+}
+
+/*
+.body-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1000px;
+    height: 100%;
+    transform: translateX(-50%); /* Centers the background */
+    background: url('images/padlock3.png') no-repeat center center;
+    background-size: cover;
+    opacity: 0.1;
+    z-index: -1;
+}
+*/
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+font-family: Lato, Arial;
+background: #171717;
+/*background-size: cover;*/
+transition: opacity 1s ease-in-out;
+/*width: 800px;*/
+margin:auto;
+background-size:cover;
+/*margin-top:150px;*/
+/*overflow: hidden;*/
+/*position: relative;*/
+/*height:800px;*/
+
+}
+/*
+body.bg-loaded {
+    background: url('/images/bg.jpg') no-repeat center center fixed;
+opacity:1;
+transition: opacity 3s ease-in-out;
+background-size:cover;
+}*/
+
+
+/*body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background: url('images/padlock3.png') no-repeat center center;
+    background-size: cover;
+    opacity: 0.1;
+    z-index: -1;
+}
+*/
+
+h1, h2, h3, h4, h5, h6, p {
+color: white;
+}
+
+.text-container {
+
+padding-left:75px;
+padding-right:75px;
+padding-top:25px;
+padding-bottom:25px;
+position:relative;
+height:50%;
+width:50%;
+margin:auto;
+background-color: rgba(50, 50, 50, 0.5);
+
+}
+
+
+
+.launch-button {
+    background-color: #1F1F1F;
+    border: 3px solid #004F8B; /* Light blue border */
+    color: white;
+    padding: 20px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-weight:bold;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.launch-button:hover {
+    background-color: #2E2E2E; /* Slightly lighter gray on hover */
+    border-color: #2A79A5; /* Slightly brighter blue on hover */
+    transform: scale(1.05);
+}
+
+.button-container {
+    text-align: center;
+}
+
+
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  
+
+    .body-container, .text-container, section {
+        width: 95%; /* Full width for all containers */
+        margin-top: 0px; /* Uniform top margin */
+	padding:0px;
+	margin-left:2%;
+	margin-right:0px;
+	
+    }
+
+
+    /* Optionally, adjust font sizes for smaller screens */
+    h1, h2, h3, h4, h5, h6, p {
+       /* font-size: smaller;*/
+
+    }
+h1 {
+margin-left:56%;
+text-align:center;
+transform: translateX(-50%);
+font-size:17pt;
+}
+
+.body-container::before {
+width:100%;
+}
+
+
+
+}

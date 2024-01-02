@@ -1,0 +1,68 @@
+
+<?php
+
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SovCube</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles-fonts.css">
+
+<script type="text/javascript">
+        function showMessage() {
+            document.getElementById('message').style.display = 'block';
+        }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+
+<!--<script src="/dapp/connect.js"> </script>-->
+
+
+</head>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
+<body>
+
+<!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>-->
+<!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>-->
+
+<div class="body-container">
+<!--<p style="color:red;">This site is currently under construction. Do not use the dApp yet.</p>-->
+
+<div class="blurred-background"></div>
+<!--<div class="text-container">-->
+    <div class="text-container">
+<center><h1 class="brand-name">SovCube</h1></center>
+    <center><h2>Freedom to Save</h2></center>
+    <p><strong>Freedom to Save is Financial Freedom.</strong> Keep your BSOV tokens safe and help them grow with SovCube. In a market that's always changing, thinking long-term is really important. SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on. Choose SovCube to make your BSOV tokens stronger and more stable for the future.
+</p>
+<br><br><br>
+  <center><h3>Time-Lock Your BSOV Tokens with SovCube dApp</h3></center>
+    <p>SovCube offers a smart way to time-lock your BSOV tokens using the web3 interface, demonstrating your commitment to BSOV Token's long-term value. The unique Slow-Release feature gradually reintroduces BSOV tokens to the market after the time-lock period, preventing market shocks and maintaining supply stability. This responsible approach fosters trust and sustains long-term value, making SovCube an ideal choice for forward-thinking token holders.</p>
+</div>
+
+<div class="button-container">
+	<button onclick="window.location.href='/dapp/index.php'" class="launch-button">Launch dApp</button>
+<p id="message" style="display: none; color: red; margin-top: 10px;">Under construction</p>
+</div>
+
+
+<!--<script src="/dapp/app.js"></script> -->
+</div>
+</div>
+<script>
+window.onload = function() {
+    document.body.classList.add('bg-loaded');
+};
+
+</script>
+
+</body>
+</html>
+

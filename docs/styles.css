@@ -1,0 +1,245 @@
+.body-container {
+width: 1400px;
+margin-top:100px;
+margin:auto;
+
+}
+
+
+a {
+color:white;
+}
+
+section {
+  /*  padding-top: 80px;*/
+    margin-top: -80px; /* Negative value of the padding to offset the actual position */ 
+ scroll-margin-top: 100px;
+        background-color: #0A192F; /* Dark Blue Background */
+    color: #FFFFFF; /* White Text */
+    border-radius: 10px; /* Rounded Corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle Shadow for Depth */
+    margin-bottom: 20px; /* Space between sections */
+    padding: 20px; /* Padding inside sections */
+    transition: all 0.3s ease; /* Smooth Transition for Hover Effects */
+margin:30px;
+}
+
+section:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increased Shadow on Hover */
+    background-color: #0E2240;
+}
+
+.table-section {
+  /*  padding-top: 80px;*/
+    margin-top: -80px; /* Negative value of the padding to offset the actual position */ 
+ scroll-margin-top: 100px;
+        background-color: #0A192F; /* Dark Blue Background */
+    color: #FFFFFF; /* White Text */
+    border-radius: 10px; /* Rounded Corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle Shadow for Depth */
+    margin-bottom: 0px; /* Space between sections */
+    padding: 0px; /* Padding inside sections */
+    transition: all 0.3s ease; /* Smooth Transition for Hover Effects */
+margin:0px;
+}
+
+.table-section:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increased Shadow on Hover */
+    background-color: #0E2240;
+}
+
+
+
+#contract-1 h2, #contract-2 h2 {
+    text-align: center;
+    color: #FFFFFF;
+}
+
+#contract-1 table, #contract-2 table {
+    width: 100%;
+    max-width:100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+
+#contract-1 th, #contract-2 th,
+#contract-1 td, #contract-2 td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+#contract-1 th, #contract-2 th {
+    background-color: #0A192F;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+#contract-1 tr, #contract-2 tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+
+#contract-1 tr, #contract-2 tr:last-of-type {
+    border-bottom: 2px solid #0A192F;
+}
+
+#contract-1 tr:hover, #contract-2 tr:hover {
+    background-color: #0E2240;
+    
+}
+
+#contract-1 code, #contract-2 code {
+    background: #02203C;
+    color: white;
+    border-radius: 3px;
+    padding: 3px 6px;
+    font-size: 0.9em;
+}
+
+
+
+
+
+body {
+font-family: Lato, Arial;
+background: #171717;
+width: 100%;
+margin:auto;
+/*margin-top:150px;*/
+position: relative;
+}
+/*
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    
+    background: url('images/padlock3.png') no-repeat center center;
+    background-size: cover;
+    opacity: 0.1;
+    z-index: -1;
+}
+*/
+/*
+h1, h2, h3, h4, h5, h6, p {
+color: white;
+}
+
+.text-container {
+padding-left:75px;
+padding-right:75px;
+padding-top:25px;
+padding-bottom:25px;
+}
+*/
+
+
+.text-container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    color: white;
+}
+
+
+.toc-container {
+    position: fixed;
+    top: 240px;
+    left: 50px;
+    background: #112240; /* Slightly Lighter Blue */
+    border-radius: 10px;
+    padding: 15px;
+    width: 200px;
+}
+
+/* Styles for .toc and .toc li a remain the same */
+
+
+
+.toc {
+    list-style: none;
+    padding: 0;
+}
+
+.toc li a {
+    color: #58A6FF; /* Light Blue for Links */
+    display: block;
+    padding: 5px;
+}
+
+.toc li a:hover {
+    color: #CAE9FF; /* Lighter Blue on Hover */
+}
+
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .toc-container {
+        top: 0;
+        left: 6%;
+	
+        width: 95%;
+        border-radius: 0;
+        text-align: center;
+        position:relative;
+margin-top:0px;
+margin:0;
+    }
+
+    .body-container, .text-container, section {
+        width: 95%; /* Full width for all containers */
+        margin-top: 0px; /* Uniform top margin */
+	padding:0px;
+	margin-left:0px;
+	margin-right:0px;
+	
+    }
+
+    section {
+        margin: 15px; /* Smaller margins */
+        padding: 15px; /* Adjust padding if needed */
+	scroll-margin-top: 10px;
+    }
+
+    /* Optionally, adjust font sizes for smaller screens */
+    h1, h2, h3, h4, h5, h6, p {
+       /* font-size: smaller;*/
+
+    }
+h1 {
+margin-left:56%;
+text-align:center;
+transform: translateX(-50%);
+font-size:17pt;
+}
+
+.responsive-iframe {
+    position: relative;
+    padding-bottom: 56.25%; /* Aspect ratio */
+    height: 0;
+    overflow: hidden;
+    margin-bottom: 20px; /* Adjust as needed */
+}
+
+.responsive-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+}
+

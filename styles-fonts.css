@@ -1,0 +1,22 @@
+/* CSS for the font faces */
+@font-face {
+  font-family: Lato;
+  src: /fonts/Lato-Regular.ttf;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Lato;
+  src: /fonts/Lato-Bold.ttf;
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Lato;
+  src: /fonts/Lato-Black.ttf;
+  font-weight: 900;
+  font-display: swap;
+}
+
+
