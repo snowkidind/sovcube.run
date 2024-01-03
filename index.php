@@ -40,11 +40,19 @@
     <div class="text-container">
 <center><h1 class="brand-name">SovCube</h1></center>
     <center><h2>Freedom to Save</h2></center>
-    <p><strong>Freedom to Save is Financial Freedom.</strong> Keep your BSOV tokens safe and help them grow with SovCube. In a market that's always changing, thinking long-term is really important. SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on. Choose SovCube to make your BSOV tokens stronger and more stable for the future.
+    <p><strong>Freedom to Save is Financial Freedom.</strong>
+Keep your BSOV tokens safe and help them grow with SovCube. In a market that's always changing, thinking long-term is really important.
+SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on.
+Use SovCube's web3 dApp to make your BSOV tokens stronger and more stable for the future.
 </p>
 <br><br><br>
-  <center><h3>Time-Lock Your BSOV Tokens with SovCube dApp</h3></center>
-    <p>SovCube offers a smart way to time-lock your BSOV tokens using the web3 interface, demonstrating your commitment to BSOV Token's long-term value. The unique Slow-Release feature gradually reintroduces BSOV tokens to the market after the time-lock period, preventing market shocks and maintaining supply stability. This responsible approach fosters trust and sustains long-term value, making SovCube an ideal choice for forward-thinking token holders.</p>
+  <center><h3>Use SovCube's Web3 dApp<br>and Time-Lock Your BSOV Tokens</h3></center>
+    <p>
+SovCube offers a smart way to time-lock your BSOV tokens using the web3 interface, demonstrating your commitment to BSOV Token's long-term value.
+The unique Slow-Release feature gradually reintroduces BSOV tokens to the market after the time-lock period,
+preventing market shocks and maintaining supply stability.
+This responsible approach fosters trust and sustains long-term value, making SovCube an ideal choice for forward-thinking token holders.
+</p>
 </div>
 
 <div class="button-container">
@@ -58,7 +66,9 @@
 </div>
 <script>
 window.onload = function() {
-    document.body.classList.add('bg-loaded');
+    setTimeout(function() {
+        document.querySelector('.body-container').classList.add('bg-loaded');
+    }, 2000); // Wait for 2000 milliseconds before executing the code inside the function
 };
 
 </script>
