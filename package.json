@@ -1,0 +1,25 @@
+{
+  "name": "sovcube.com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realrouse/sovcube.com.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/realrouse/sovcube.com/issues"
+  },
+  "homepage": "https://github.com/realrouse/sovcube.com#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs": "0.0.1-security",
+    "typescript": "^4.9.4",
+    "web3": "^4.3.0"
+  }
+}

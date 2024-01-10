@@ -1,0 +1,6 @@
+// Rename this file to config.js and fill in your actual values
+
+module.exports = {
+  infuraUrl: 'https://goerli.infura.io/v3/YOUR_PROJECT_ID',
+  port: 3000
+};

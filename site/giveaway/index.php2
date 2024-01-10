@@ -1,0 +1,119 @@
+
+<?php
+
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SovCube</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles-fonts.css">
+
+<script type="text/javascript">
+        function showMessage() {
+            document.getElementById('message').style.display = 'block';
+        }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+
+<!--<script src="/dapp/connect.js"> </script>-->
+
+
+</head>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
+<body>
+
+<!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>-->
+<!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>-->
+
+<div class="body-container">
+<!--<p style="color:red;">This site is currently under construction. Do not use the dApp yet.</p>-->
+
+<div class="blurred-background"></div>
+<!--<div class="text-container">-->
+    <div class="text-container">
+<center><h1 class="brand-name">Giveaway</h1></center>
+    <center><h2>Be Early To Double Your Investment</h2></center>
+<p><strong>We want the community to Timelock in 1.5 Million BSOV Tokens.</strong></p>
+<p>
+The 
+</p>
+
+<div class="button-container">
+        <button onclick="window.location.href='/dapp/index.php'" class="launch-button">Receive the giveaway</button>
+<p>Time-lock BSOV Tokens to receive even more timelocked tokens.</p>
+<p id="message" style="display: none; color: red; margin-top: 10px;">Under construction</p>
+</div>
+
+
+<br><br><br>
+  <center><h3>Giveaway Tiers<br>The earlier the better</h3></center>
+    <p>
+<div class="giveaway-container">
+    <h3>BSOV Token Giveaway: Understanding the Distribution</h3>
+<p><strong>For every 150,000 BSOV that are time-locked, we progress to the next tier, where the rewards are halved.</strong></p>
+    <p>Welcome to the BSOV Token Giveaway! In this unique event, we are distributing a total of 300,000 BSOV tokens to the community. The giveaway is structured in tiers, where the amount given away halves with each new tier, after the first cumulative 150,000 BSOV tokens have been timelocked by users. This structure ensures a fair and exciting distribution, rewarding early participants while keeping the giveaway engaging for newcomers. Here's how it works:</p>
+    
+    <div class="giveaway" id="giveaway1">
+        <h2>Giveaway Tier 1</h2>
+        <p><strong>150,000 BSOV</strong> are distributed among the first users who timelock their tokens, up to a cumulative total of 150,000 timelocked tokens.</p>
+    </div>
+    <div class="giveaway" id="giveaway2">
+        <h2>Giveaway Tier 2</h2>
+        <p>Once 150,000 tokens have been timelocked, the next <strong>75,000 BSOV</strong> are distributed among users until the cumulative total reaches 300,000 timelocked tokens.</p>
+    </div>
+    <div class="giveaway" id="giveaway3">
+        <h2>Giveaway Tier 3</h2>
+        <p>For the next tier, <strong>37,500 BSOV</strong> are available for users contributing towards the next 150,000 timelocked tokens.</p>
+    </div>
+    <div class="giveaway" id="giveaway4">
+        <h2>Giveaway Tier 4</h2>
+        <p>The giveaway amount now halves to <strong>18,750 BSOV</strong> for the following tier of users.</p>
+    </div>
+    <div class="giveaway" id="giveaway5">
+        <h2>Giveaway Tier 5</h2>
+        <p>Continuing with the halving theme, <strong>9,375 BSOV</strong> are up for grabs in this tier.</p>
+    </div>
+    <div class="giveaway" id="giveaway6">
+        <h2>Giveaway Tier 6</h2>
+        <p>Participants in this tier can share <strong>4,687.5 BSOV</strong>.</p>
+    </div>
+    <div class="giveaway" id="giveaway7">
+        <h2>Giveaway Tier 7</h2>
+        <p>The giveaway amount is now <strong>2,343.75 BSOV</strong>.</p>
+    </div>
+    <div class="giveaway" id="giveaway8">
+        <h2>Giveaway Tier 8</h2>
+        <p>As we near the end, this tier offers <strong>1,171.875 BSOV</strong>.</p>
+    </div>
+    <div class="giveaway" id="giveaway9">
+        <h2>Giveaway Tier 9</h2>
+        <p>Participants in this penultimate tier are eligible for a total of <strong>585.9375 BSOV</strong>.</p>
+    </div>
+    <div class="giveaway" id="giveaway10">
+        <h2>Final Giveaway Tier</h2>
+        <p>The last tier, <strong>585.9375 BSOV</strong>, is adjusted to ensure the total giveaway amounts to exactly 300,000 BSOV, bringing the event to a grand finale.</p>
+    </div>
+
+    <p>Participate, timelock your BSOV, and be part of this exciting giveaway event! The more you contribute early on, the greater your share from the giveaway pool. Let's lock in and lift off!</p>
+</div>
+
+
+</p>
+</div>
+
+
+
+<!--<script src="/dapp/app.js"></script> -->
+</div>
+</div>
+
+</body>
+</html>
+
