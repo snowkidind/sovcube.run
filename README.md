@@ -4,12 +4,12 @@ Timelock BSOV Tokens and receive giveaway rewards.
 
 ### Known issues:
 
-CRITICAL - [WORKING ON IT] GiveawayReserve contract doesn't calculate correctly when users timelock tokens that are between Tiers.
-CRITICAL - [WORKING ON IT] The window variables interfere with Uniswap.
-INFO - Stats are not made.
-INFO - Docs & Help page needs to be filled.
-COSMETIC - Code Cleanup needed.
-COSMETIC - Implement responsive design fitting for phones and tablets.
+- CRITICAL - [WORKING ON IT] GiveawayReserve contract doesn't calculate correctly when users timelock tokens that are between Tiers.
+- CRITICAL - [WORKING ON IT] The window variables interfere with Uniswap.
+- INFO - Stats are not made.
+- INFO - Docs & Help page needs to be filled.
+- COSMETIC - Code Cleanup needed.
+- COSMETIC - Implement responsive design fitting for phones and tablets.
 
 
 
