@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const contract1Address = '0xb045F5aa2A057ab5CA8bcbd70D23f06E3409Ba77'; // Replace with actual Contract 1 address
-const contract2Address = '0x4D5BCB3502c4FDb254a6cF1a4C6d45B889132A93'; // Replace with actual Contract 2 address
-const tokenContractAddress = '0x4566758462670286fF751718B7cE026dD0895980';
-const giveawayReserveContractAddress = '0xd99aB5920f34477F74b922C04cFB1c77a9688B59';
+const contract2Address = '0x5a6A986B1ac571DE57F46Ba78ebE75c9F46aE0B6'; // Replace with actual Contract 2 address
+const tokenContractAddress = '0x09136144d9E442314051735DCa3Ead1a705f1546';
+const giveawayReserveContractAddress = '0xD0D599e0116E11D4980594371907e7D269Cab5C7';
 
 let web3;
 let selectedAccount;

@@ -61,7 +61,7 @@ contract LockMyBSOV {
     bool isPending;
 }
 
-    address constant tokenContract = 0x4566758462670286fF751718B7cE026dD0895980; // The BSOV Token contract
+    address constant tokenContract = 0x09136144d9E442314051735DCa3Ead1a705f1546; // The BSOV Token contract
 
     address public giveawayReserveAddress;
     IGiveawayReserve giveawayReserve;
@@ -237,4 +237,5 @@ function getGiveawayBalance(address _addr) public view returns (uint256 _balance
      }
   }
     }
+    
 }
