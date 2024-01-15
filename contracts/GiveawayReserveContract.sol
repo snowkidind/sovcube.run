@@ -1,24 +1,10 @@
 pragma solidity 0.5.9;
 
 /*
-The function of this smart-contract is to act as a reserve and distributor of timelocked giveaways.
-It interacts with a timelocking contract (timelockContract) that has a function that looks like this:
+The function of this smart-contract is to act as a Giveaway reserve and distributor of timelocked tokens.
+It interacts with a timelocking contract (timelockContract).
+https://SovCube.com
 
-// This function timelocks the tokens.
-    function receiveApproval(address _sender, uint256 _value, address _tokenContract, bytes memory _extraData) public {
-        require(_tokenContract == tokenContract, "Can only deposit BSOV into this contract!");
-        require(_value > 100, "Value must be greater than 100 Mundos");
-        require(ERC20Interface(tokenContract).transferFrom(_sender, address(this), _value), "Timelocking transaction failed");
-
-        uint _adjustedValue = _value.mul(99).div(100);
-        balance[_sender] += _adjustedValue;
-        emit TokensFrozen(_sender, _adjustedValue, now);
-        if (_sender != giveawayReserveAddress) {
-        if (giveawayReserveAddress != address(0)) {
-        giveawayReserve.updateEligibility(_sender, _adjustedValue);
-     }
-  }
-    }
 */
 
 library SafeMath {
@@ -56,14 +42,11 @@ contract GiveawayReserve {
     ITokenContract tokenContract;
     uint256 public currentTier;
     uint256 public totalTimelocked;
-    uint256 public totalEligibleAmount; // Tracks total tokens eligible for giveaway
+    uint256 public totalEligibleAmount;
+    uint256 public totalClaimed;
     mapping(uint256 => uint256) public tiers;
-    mapping(address => uint256) public giveawayEligible;
-    mapping(address => uint256) public userTimelocked;
-    mapping(address => bool) public hasClaimed;
     mapping(address => mapping(uint256 => uint256)) private userTimelockedInTier;
     mapping(uint256 => uint256) private totalTimelockedInTier;
-
     mapping(address => uint256) public eligibleAmount;
 
 
@@ -78,10 +61,8 @@ constructor(address _timelockContractAddress, address _tokenContractAddress) pub
         tokenContract = ITokenContract(_tokenContractAddress);
         setupTiers();
     }
-
-// These amounts for each tier is the total amount of tokens that can be designated to the totalEligibleAmount variable. 
+ 
 function setupTiers() internal {
-        // Setup tier amounts
     tiers[1] = 15000000000000;
     tiers[2] = 7500000000000;
     tiers[3] = 3750000000000;
@@ -96,93 +77,64 @@ function setupTiers() internal {
         
     }
 
-
 function getGiveawayRatioForTier(uint256 tier) internal pure returns (uint256) {
 
-    if (tier == 1) return 1 * 10**8; // 1:1 ratio
-    if (tier == 2) return 0.5 * 10**8; // 0.5:1 ratio
-    if (tier == 3) return 0.25 * 10**8; // 0.25:1 ratio
-    if (tier == 4) return 0.125 * 10**8; // 0.125:1 ratio
-    if (tier == 5) return 0.0625 * 10**8; // 0.0625:1 ratio
-    if (tier == 6) return 0.03125 * 10**8; // 0.03125:1 ratio
-    if (tier == 7) return 0.015625 * 10**8; // 0.015625:1 ratio
-    if (tier == 8) return 0.0078125 * 10**8; // 0.0078125:1 ratio
-    if (tier == 9) return 0.00390625 * 10**8; // 0.00390625:1 ratio
-    if (tier == 10) return 0.00390625 * 10**8; // 0.00390625:1 ratio
-    return 0; // Default case for an undefined tier
+    if (tier == 1) return 1 * 10**8;
+    if (tier == 2) return 0.5 * 10**8;
+    if (tier == 3) return 0.25 * 10**8;
+    if (tier == 4) return 0.125 * 10**8;
+    if (tier == 5) return 0.0625 * 10**8;
+    if (tier == 6) return 0.03125 * 10**8;
+    if (tier == 7) return 0.015625 * 10**8;
+    if (tier == 8) return 0.0078125 * 10**8;
+    if (tier == 9) return 0.00390625 * 10**8;
+    if (tier == 10) return 0.00390625 * 10**8;
+    return 0;
 
 }
 
 function updateEligibility(address user, uint256 amountTimelocked) external {
     require(msg.sender == address(timelockContract), "Not timelock contract");
-
-    // Update the total timelocked amount
+    require(amountTimelocked <= 14500000000000, "Cannot timelock more than 145,000 tokens at once");
     totalTimelocked = totalTimelocked.add(amountTimelocked);
     uint256 newEligibleAmount = 0;
-
-    // Calculate the threshold for the next tier
-    uint256 nextTierThreshold = currentTier.mul(15000000000000); // 150,000 in base units
-
-    // Check if the totalTimelocked amount is still within the current tier
+    uint256 nextTierThreshold = currentTier.mul(15000000000000);
     if (totalTimelocked < nextTierThreshold || currentTier == 10) {
-        // Entire amount is in the current tier
         uint256 giveawayRatio = getGiveawayRatioForTier(currentTier);
         newEligibleAmount = amountTimelocked.mul(giveawayRatio).div(10**8);
         totalTimelockedInTier[currentTier] = totalTimelockedInTier[currentTier].add(amountTimelocked);
         userTimelockedInTier[user][currentTier] = userTimelockedInTier[user][currentTier].add(amountTimelocked);
     } else {
-        // Part of the amount causes a transition to the next tier
-
-        // Amount in the current tier
         uint256 amountInCurrentTier = nextTierThreshold.sub(totalTimelocked.sub(amountTimelocked));
         uint256 giveawayRatioCurrent = getGiveawayRatioForTier(currentTier);
         newEligibleAmount = amountInCurrentTier.mul(giveawayRatioCurrent).div(10**8);
         totalTimelockedInTier[currentTier] = totalTimelockedInTier[currentTier].add(amountInCurrentTier);
         userTimelockedInTier[user][currentTier] = userTimelockedInTier[user][currentTier].add(amountInCurrentTier);
-
-        // Update the tier
         currentTier++;
-
-        // Amount in the next tier
         uint256 amountInNextTier = amountTimelocked.sub(amountInCurrentTier);
         uint256 giveawayRatioNext = getGiveawayRatioForTier(currentTier);
         newEligibleAmount = newEligibleAmount.add(amountInNextTier.mul(giveawayRatioNext).div(10**8));
         totalTimelockedInTier[currentTier] = totalTimelockedInTier[currentTier].add(amountInNextTier);
         userTimelockedInTier[user][currentTier] = userTimelockedInTier[user][currentTier].add(amountInNextTier);
     }
-
-    // Update the eligible amount for the user
     eligibleAmount[user] = eligibleAmount[user].add(newEligibleAmount);
+    totalEligibleAmount = totalEligibleAmount.add(newEligibleAmount);
 }
 
-
-
-
 function claimGiveawayReserve() public {
-    require(eligibleAmount[msg.sender] > 0, "Not eligible for giveaway");
+    require(eligibleAmount[msg.sender] > 0, "You have no eligible tokens for giveaway. You have to timelock tokens first.");
 
     uint256 amount = eligibleAmount[msg.sender];
-    eligibleAmount[msg.sender] = 0; // Reset the eligible amount
+    eligibleAmount[msg.sender] = 0;
+    totalClaimed = totalClaimed.add(amount);
 
-    // Prepare the data for the markTokensForGiveaway function
     address[] memory receivers = new address[](1);
     uint256[] memory amounts = new uint256[](1);
     receivers[0] = msg.sender;
     amounts[0] = amount;
-
-    // Call the markTokensForGiveaway function on the timelockContract
     timelockContract.markTokensForGiveaway(receivers, amounts);
 }
 
-
-
-
-function checkEligible(address user) public view returns (uint256) {
-    if (hasClaimed[user]) {
-        return 0;
-    }
-    return eligibleAmount[user];
-}
 
 function ownerTimelockTokens(uint256 tokens, bytes memory data) public onlyOwner {
         require(tokenContract.approveAndCall(address(timelockContract), tokens, data), "Token approval failed");

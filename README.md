@@ -14,8 +14,6 @@ Timelock BSOV Tokens and receive giveaway rewards.
 - CODE COSMETIC - Code Cleanup of GiveawayReserve Contract needed.
 - CODE COSMETIC - Code Cleanup of TimelockContract needed.
 - UI COSMETIC - Implement responsive design fitting for phones and tablets.
-- UI INFO - Add error message when timelocking 100 Mundos or less.
-- UI INFO - Add error message when timelocking more than 145,000 tokens in a single transaction.
 - UI INFO - Add dynamic info from giveawayReserve contract and unlock info when entering amount in the timelocking amount field. 
 - FUNCTIONALITY IDEAS - Determine if users also can add tokens the reserve contract balance, instead of the current "ownerOnly". If so, then change logic on tier advancement, so that the tiers reflect how many tokens have been donated to the Giveaway Reserve contract.
 - FUNCTIONALITY IDEAS - Determine what happens when we reach the final tier, and when the tokens in the Giveaway Reserve contract are used up.

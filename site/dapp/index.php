@@ -63,7 +63,7 @@
   <a href="/docs/index.php/#smart-contract" target="_blank" data-toggle="tooltip" title="Deployed in August 2019. Click 'More Info' to see info about Smart-Contract Details.">More Info</a>
 </p>
 <p id="contract2Explanation">
-  Contract 2: Timelock, Withdraw & Giveaway Timelocked BSOV Tokens. 
+  Contract 2: Timelock, Withdraw & Send Timelocked BSOV Tokens. 
   <a href="/docs/index.php/#smart-contract" target="_blank" data-toggle="tooltip" title="Deployed in December 2023. Click 'More Info' to see info about Smart-Contract Details.">More Info</a>
 </p>
 
@@ -100,7 +100,7 @@ $(document).ready(function(){
                 <input type="radio" id="withdraw2" name="contract2Action" value="withdraw">
                 <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Unlock Date is reached, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
                 <input type="radio" id="giveaway" name="contract2Action" value="giveaway">
-                <label for="giveaway" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Giveaway Account'. When these tokens are claimed using the 'Claim Giveaway' button, their Unlock Date resets to 1000 days.">Send Locked Tokens</label>
+                <label for="giveaway" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Unlock Date resets to 1000 days.">Send Locked Tokens</label>
             </div>
             <input type="number" id="amount2" placeholder="Amount of BSOV">
 <div class="checkbox-container">		
@@ -119,24 +119,81 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-<div id="errorMessage" style="color: red;"></div>
+<div id="errorMessage" style="color: red;"></div><span id="clearError" style="cursor: pointer; padding: 0 5px; display:none;">X</span>
+
+
+<script>
+document.getElementById('clearError').addEventListener('click', function() {
+    document.getElementById('errorMessage').innerText = '';
+    document.getElementById('clearError').style.display = 'none';
+});
+
+</script>
 
 
 <div id="contractInfoContainer">
+    
     <div id="contract1InfoSection">
         <h3 class="contract1infoheader" style="display:none;">Contract 1 Info:</h3>
         <span id="contract1DynamicInfo"></span>
     </div>
+
     <div id="contract2InfoSection">
-        <h3 class="contract2infoheader" style="display:none;">Contract 2 Info:</h3>
-        <span id="contract2DynamicInfo"></span>
-	<button id="claimGiveawayButton" data-toggle="tooltip" title="Please note: Accepting Incoming Tokens will reset the lock period of any existing balance in your Receive Account to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
-    
-<button id="claimGiveawayReserveButton" data-toggle="tooltip" title="If you have eligible tokens from the Giveaway, then be quick to claim them before anyone else! The tokens will be transferred to your 'Unaccepted Incoming Tokens'">Claim Giveaway Tokens</button>
-</div>
+    <h3 class="contract2infoheader" style="display:none;">Contract 2 Info:</h3>
+	      <div id="mainContractInfo">
+	      </div>
+	<div class="contract-info-container">
+	      
+		<div class="second-line-container">
+	     <div class="contract-info-style" id="regularAccountContainer">
+	      <div id="regularAccount">
+	      </div>
+		</div>
+
+	      <div class="contract-info-style" id="incomingAccountContainer">
+               <div id="incomingTokensAccount">   
+	      </div>	
+	              <button id="claimGiveawayButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existingtimelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
+		</div>
+	</div>
+
+	      <div class="contract-info-style" id="giveawayAccountContainer">
+               <div id="giveawayAccount">
+	      </div>	
+              <button id="claimGiveawayReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Giveaway rewards! The tokens will be transferred to your 'Incoming Tokens' balance">Claim Giveaway Tokens</button>
+		</div>
+	</div>
+         
+     </div>
+
+ <p style="font-size:7pt; text-align:center; letter-spacing:1.5px;">Balances update every 15 seconds</p>
+
 </div>
 
-<p class="terms">Everything on this site is provided "as-is" and SovCube.com has no responsibilities. Everything you do and see on this website is 100% your responsibility. This is because SovCube is purely a voluntary community initiative.</p>
+<div class="terms-container">
+    <p class="terms">Everything on this site is provided "as-is" and SovCube.com has no responsibilities. Everything you do and see on this website is 100% your responsibility. This is because SovCube is purely a voluntary community initiative.</p>
+ <a href="#" id="toggleTerms" class="toggle-terms">Disclaimer</a>
+</div>
+<script>
+document.getElementById('toggleTerms').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default anchor behavior
+    var terms = document.querySelector('.terms');
+
+    if (terms.style.display === "none" || terms.style.display === "") {
+        terms.style.display = "block";
+        setTimeout(function() {
+            terms.style.opacity = 1;
+        }, 10); // Timeout ensures the opacity transition occurs
+    } else {
+        terms.style.opacity = 0;
+        setTimeout(function() {
+            terms.style.display = "none";
+        }, 100); // Matches the duration of the fade effect
+    }
+});
+
+</script>
+
 <!--<script src="/dapp/connect.js"> </script>-->
 <!--<script src="/dapp/bignumber.js"></script>-->
 <script src="/dapp/app.js"></script>

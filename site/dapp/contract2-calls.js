@@ -58,8 +58,19 @@ async function getContract2TimelockedTokens(account) {
     const unclaimedGiveawayTokens = await contract2.methods.getUnclaimedGiveawayBalance(account).call();
     const timelockedTokens = await contract2.methods.getBalance(account).call();
     const timelockedGiveawayTokens = await contract2.methods.getGiveawayBalance(account).call();
-    const timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
-    const giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
+    // const timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
+    // const giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
+
+let timeLeftInSeconds, giveawayUnlockTimeInSeconds;
+          try {
+            timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
+            giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
+        } catch (error) {
+            console.error("Time Left Error:", error.message);
+            timeLeftInSeconds = 0; // Set to 0 or a suitable default value
+            giveawayUnlockTimeInSeconds = 0; // Set to 0 or a suitable default value
+        }
+
     return { timelockedTokens, timelockedGiveawayTokens, unclaimedGiveawayTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds };
 }
 
@@ -71,7 +82,7 @@ async function fetchGiveawayReserveInfo(account) {
         console.error('Giveaway Reserve contract is not initialized');
 	    return;
     }
-        const eligibleTokens = await giveawayReserve.methods.checkEligible(account).call();
+        const eligibleTokens = await giveawayReserve.methods.eligibleAmount(account).call();
         return eligibleTokens;
 	
 }	
@@ -110,12 +121,14 @@ async function fetchContract2Info(account) {
         const { timelockedTokens, timelockedGiveawayTokens, unclaimedGiveawayTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds } = await getContract2TimelockedTokens(account);
         const eligibleTokens = await fetchGiveawayReserveInfo(account);
 
-        const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(8);
-        const formattedGiveawayTokens = (Number(timelockedGiveawayTokens) / 100000000).toFixed(8);
-        const formattedUnclaimedGiveawayTokens = (Number(unclaimedGiveawayTokens) / 100000000).toFixed(8);
+        const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(2);
+        const formattedGiveawayTokens = (Number(timelockedGiveawayTokens) / 100000000).toFixed(2);
+        const formattedUnclaimedGiveawayTokens = (Number(unclaimedGiveawayTokens) / 100000000).toFixed(2);
         const formattedTimeLeft = formatTimeLeft(Number(timeLeftInSeconds));
         const formattedGiveawayUnlockTime = formatTimeLeft(Number(giveawayUnlockTimeInSeconds));
-        const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(8);
+        const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
+
+	    
 
         updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens);
     } catch (error) {
@@ -128,44 +141,73 @@ async function fetchContract2Info(account) {
 
 
 function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, unlockTime, withdrawRate, formattedEligibleTokens) {
-    const infoElement = document.getElementById('contract2DynamicInfo');
+	
+	const mainContractInfoElement = document.getElementById('mainContractInfo');
+    mainContractInfoElement.innerHTML = `
+<p id="contractDescription"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
+        `;
 
-infoElement.innerHTML = `
-        <p style="text-align:center;"><b>Slow-Release Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
-    <div class="contract-info-container">
-    <div class="contract-info-style">
+
+	const giveawayAccountElement = document.getElementById('giveawayAccount');
+    giveawayAccountElement.innerHTML = `
+	<h3 style="color:orange; border-bottom:1px solid orange;">Giveaway</h3>	
+	<p><b>Unclaimed Giveaway Rewards:</b> ${formattedEligibleTokens} BSOV</p>
+	`;
+
+
+
+	const regularAccountElement = document.getElementById('regularAccount');
+    regularAccountElement.innerHTML = `
         <h3>Regular Account</h3>
-        <p><b>Timelocked Tokens:</b> <span id="yourTokensText">${tokensLocked} BSOV</span></p>
-        <p><b>Unlock Date:</b> ${formattedTimeLeft}</p>
-        
-    </div>
-    <div class="contract-info-style">
+        <p><b>Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Unlock Date:</b><br>${formattedTimeLeft}</p>
+    `;
+
+    // Update Incoming Tokens Account Info
+    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
+    incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Tokens Received:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
-	<p><b>Unlock Time:</b> ${formattedGiveawayUnlockTime}</p>
-        <p style="margin-top:10px;"><b>Unaccepted Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
-	   <p><b>Eligible Giveaway Tokens:</b> ${formattedEligibleTokens} BSOV</p>
-    </div>
-    </div>
-    <p style="font-size:7pt; text-align:center;">Balances update every 15 seconds</p>
-`;
-
-
+        <p><b>Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p><b>Unlock Time:</b> ${formattedGiveawayUnlockTime}</p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+    `;
 }
 
 
 
 
+
+/*
 setInterval(function() {
     if (selectedAccount) {
         fetchContract2Info(selectedAccount);
     fetchContract1Info(selectedAccount);
     }
-}, 5000);
-
-
-/*
-setInterval(function() {
-    fetchContract2Info(account);
 }, 15000);
 */
+
+let fetchInterval;
+
+function startFetching() {
+    fetchInterval = setInterval(function() {
+        if (!document.hidden && selectedAccount) {
+            fetchContract2Info(selectedAccount);
+            fetchContract1Info(selectedAccount);
+        }
+    }, 5000);
+}
+
+function stopFetching() {
+    clearInterval(fetchInterval);
+}
+
+// Start fetching when the window gains focus
+window.onfocus = startFetching;
+
+// Stop fetching when the window loses focus
+window.onblur = stopFetching;
+
+// Also start fetching when the page initially loads
+startFetching();
+
+

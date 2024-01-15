@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-const contract1Address = '0xb045F5aa2A057ab5CA8bcbd70D23f06E3409Ba77'; // Replace with actual Contract 1 address
-const contract2Address = '0xfD3b9D89240bE2Dcb6451e62D937a00cd3CDa394'; // Replace with actual Contract 2 address
-const tokenContractAddress = '0xbe407333e636365ec5c630Ba2862f0DB004fc1F6';
-const giveawayReserveContractAddress = '0x19Ceb2d4E18f4ff7FE03A9bA5f1a527A159f3250';
+const contract1Address = '0xEb70EE5a2a46F186C966C3c877Dbdc4a47cD07aD'; // Replace with actual Contract 1 address
+const contract2Address = '0x96AD86E3Cf2f0fFf3F8A96155Fd8c87A096F7a8d'; // Replace with actual Contract 2 address
+const tokenContractAddress = '0x40019c75dd9fF27d5cD182F9034D67a6b754308B';
+const giveawayReserveContractAddress = '0x704a9A74eB690b337E4A72376c5E6CFF0d9AAA6E';
 
 let web3;
 let selectedAccount;
@@ -74,7 +74,7 @@ console.log('updateUIForDisconnectedWallet Function started');
     const contract1InfoHeader = document.querySelector('.contract1infoheader');
     const contract2InfoHeader = document.querySelector('.contract2infoheader');
     const contract1DynamicInfo = document.getElementById('contract1DynamicInfo');
-    const contract2DynamicInfo = document.getElementById('contract2DynamicInfo');
+  //  const contract2DynamicInfo = document.getElementById('contract2DynamicInfo');
     const contractInfoContainer = document.getElementById('contractInfoContainer');
     const connectYourWalletText = document.getElementById('connectYourWalletText');
     const withdraw1 = document.getElementById('withdraw1');
@@ -85,7 +85,7 @@ console.log('updateUIForDisconnectedWallet Function started');
     if (contract1InfoHeader) contract1InfoHeader.style.display = 'none';
     if (contract2InfoHeader) contract2InfoHeader.style.display = 'none';
     if (contract1DynamicInfo) contract1DynamicInfo.style.display = 'none';
-    if (contract2DynamicInfo) contract2DynamicInfo.style.display = 'none';
+  //  if (contract2DynamicInfo) contract2DynamicInfo.style.display = 'none';
     if (contractInfoContainer) contractInfoContainer.style.display = 'none';
     if (connectYourWalletText) connectYourWalletText.style.display = 'block';
 
@@ -152,7 +152,7 @@ console.log('updateUIOnConnection Function started');
     const contract1InfoHeader = document.querySelector('.contract1infoheader');
     const contract2InfoHeader = document.querySelector('.contract2infoheader');
     const contract1DynamicInfo = document.getElementById('contract1DynamicInfo');
-    const contract2DynamicInfo = document.getElementById('contract2DynamicInfo');
+ //   const contract2DynamicInfo = document.getElementById('contract2DynamicInfo');
     const contractInfoContainer = document.getElementById('contractInfoContainer');
     const withdraw1 = document.getElementById('withdraw1');
     const withdraw2 = document.getElementById('withdraw2');
@@ -180,7 +180,8 @@ document.getElementById(`fieldContainer`).style.display = 'none';
 	contract1InfoHeader.style.display = 'none';
         contract2InfoHeader.style.display = 'none';
         contract1DynamicInfo.style.display = 'none';
-        contract2DynamicInfo.style.display = 'none';
+        document.getElementById('contract2InfoSection').style.display = 'none';
+    //    contract2DynamicInfo.style.display = 'none';
         contractInfoContainer.style.display = 'none';
 	contractSelect.style.display = 'block';
 	document.getElementById(`fieldContainer`).style.display = 'block';
@@ -210,7 +211,8 @@ document.getElementById('contract-explanation').style.display = 'block';
             fetchContract1Info(account);
         } else if (selectedContract === 'contract2') {
             contract2InfoHeader.style.display = 'block';
-            contract2DynamicInfo.style.display = 'block';
+		document.getElementById('contract2InfoSection').style.display = 'block';
+        //    contract2DynamicInfo.style.display = 'block';
 		document.getElementById('contract-explanation').style.display = 'none';
 	    withdraw2.style.display = 'block';
 	    timelock2.style.display = 'block';
@@ -238,7 +240,7 @@ document.getElementById('contract-explanation').style.display = 'block';
 	document.getElementById(`fieldContainer`).style.display = 'block';
             contract2InfoHeader.style.display = 'block';
 		document.getElementById('contract-explanation').style.display = 'none';
-            contract2DynamicInfo.style.display = 'block';
+        //    contract2DynamicInfo.style.display = 'block';
 		document.getElementById(`claimGiveawayButton`).style.display = 'block';
             fetchContract2Info(account);
         }
@@ -327,7 +329,7 @@ timelock2Button.addEventListener('click', function() {
 const withdraw2Button = document.getElementById('withdraw2Button')
 if (withdraw2Button) {
 withdraw2Button.addEventListener('click', function() {
-    const amountInput = Number(document.getElementById('amount2').value) * 100000000;
+    const amountInput = Number(document.getElementById('amount2').value);
     const amount = Math.floor(amountInput * 100000000); // Ensures it is an integer
     withdrawTokensContract2(amount);
 });
@@ -342,8 +344,9 @@ giveaway2Button.addEventListener('click', function() {
     const amounts = amountsText.map(amount => Number(amount) * 100000000);
     if (addresses.length !== amounts.length) {
         console.error('The number of addresses and amounts does not match.');
-	document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. The number of addresses and amounts does not match.`;
-        return;
+	document.getElementById('errorMessage').innerText = `The number of addresses and amounts does not match.`;
+	    document.getElementById('clearError').style.display = 'block';
+return;
     }
     earmarkTokensForGiveaway(addresses, amounts);
 });
@@ -387,8 +390,9 @@ async function claimGiveawayReserveTokens() {
         console.log("Transaction receipt: ", receipt);
     } catch (error) {
         console.error("Error in transaction: ", error);
-        document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. ${error.message}`;
-    }
+        document.getElementById('errorMessage').innerText = `${error.message}`;
+	    document.getElementById('clearError').style.display = 'block';
+}
 }
 
 
@@ -413,16 +417,18 @@ async function claimGiveawayTokens() {
         console.log("Transaction receipt: ", receipt);
     } catch (error) {
         console.error("Error in transaction: ", error);
-        document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. ${error.message}`;
-    }
+        document.getElementById('errorMessage').innerText = `${error.message}`;
+	    document.getElementById('clearError').style.display = 'block';
+ }
 }
 
 
 async function timelockTokens(contractAddress, amount) {
-    try {
+    
         const bsovTokenContract = new web3.eth.Contract(bsovTokenABI, bsovTokenAddress);
         const transaction = bsovTokenContract.methods.approveAndCall(contractAddress, amount, "0x");
-
+    try {
+throw new Error("Test Error");
         // Use the executeTransactionIfFeeIsAcceptable function to execute the transaction
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
         console.log("Transaction receipt: ", receipt);
@@ -430,11 +436,13 @@ async function timelockTokens(contractAddress, amount) {
         // Check if the error is the custom "HighFees" error
         if (error.message.includes("HighFees")) {
             document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected.';
+		document.getElementById('clearError').style.display = 'block';
         } else {
             // Handle other errors
             console.error("Error in transaction: ", error);
-            document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. ${error.message}`;
-        }
+            document.getElementById('errorMessage').innerText = `${error.message}`;
+		document.getElementById('clearError').style.display = 'block';
+}
     }
 }
 
@@ -454,10 +462,12 @@ async function withdrawTokensContract1(amount) {
     } catch (error) {
         if (error.message.includes("HighFees")) {
             document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the unlock date has been reached, or you are trying to withdraw/timelock too many tokens.';
-        } else {
+		document.getElementById('clearError').style.display = 'block';
+ } else {
             console.error("Error in transaction: ", error);
-            document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. ${error.message}`;
-        }
+            document.getElementById('errorMessage').innerText = `${error.message}`;
+	 document.getElementById('clearError').style.display = 'block';
+}
     }
 }
 
@@ -479,10 +489,12 @@ async function withdrawTokensContract2(amount) {
     } catch (error) {
         if (error.message.includes("HighFees")) {
             document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the unlock date has been reached, or you are trying to withdraw/timelock too many tokens.';
-        } else {
+		document.getElementById('clearError').style.display = 'block';
+} else {
             console.error("Error in transaction: ", error);
-            document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. ${error.message}`;
-        }
+            document.getElementById('errorMessage').innerText = `${error.message}`;
+	document.getElementById('clearError').style.display = 'block';
+}
     }
 }
 
@@ -500,7 +512,8 @@ async function earmarkTokensForGiveaway(addresses, amounts) {
 
     if (!isValidAddresses || !isValidAmounts) {
         document.getElementById('errorMessage').innerText = 'Please enter valid Ethereum addresses and amounts.';
-        return;
+	    document.getElementById('clearError').style.display = 'block';
+ return;
     }
 
     const transaction = window.contract2.methods.markTokensForGiveaway(addresses, amounts);
@@ -510,8 +523,9 @@ async function earmarkTokensForGiveaway(addresses, amounts) {
         console.log("Earmark transaction receipt: ", receipt);
     } catch (error) {
         console.error("Error in earmarking transaction: ", error);
-        document.getElementById('errorMessage').innerText = `Transaction failed. Please try again. ${error.message}`;
-    }
+        document.getElementById('errorMessage').innerText = `${error.message}`;
+	    document.getElementById('clearError').style.display = 'block';
+}
 }
 
 
@@ -531,6 +545,7 @@ console.log('resetContractUI Function started');
     document.getElementById('giveaway2Button').style.display = 'none';
 document.getElementById('contract-explanation').style.display = 'none';
 	document.getElementById('errorMessage').innerText = '';
+	document.getElementById(`clearError`).style.display = 'none';
 	document.getElementById(`account-checkbox`).style.display = 'none';
         document.getElementById(`account-checkbox-label`).style.display = 'none';
 

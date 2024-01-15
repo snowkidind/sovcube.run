@@ -41,10 +41,19 @@ async function getContract1TimelockedTokens(account) {
     }
     try {
         const timelockedTokens = await contract1.methods.getBalance(account).call();
-        const timeLeftInSeconds = await contract1.methods.getTimeLeft().call();
+
+        let timeLeftInSeconds;
+        try {
+            timeLeftInSeconds = await contract1.methods.getTimeLeft().call();
+        } catch (error) {
+            console.error("Time Left Error in Contract 1:", error.message);
+            timeLeftInSeconds = 0; // Set to 0 or a suitable default value indicating that tokens are unlocked
+        }
+
         return { timelockedTokens, timeLeftInSeconds }; // Return as an object
     } catch (error) {
-        console.error('Error fetching timelocked tokens: ', error);
+        console.error('Error fetching timelocked tokens from Contract 1: ', error);
+        return null; // Return null or handle this error appropriately
     }
 }
 
