@@ -1,117 +1,81 @@
 [
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			}
-		],
-		"name": "getLastWithdrawal",
-		"outputs": [
-			{
-				"name": "_lastWithdrawal",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			}
-		],
-		"name": "getGiveawayBalance",
-		"outputs": [
-			{
-				"name": "_balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_receivers",
-				"type": "address[]"
+				"name": "spender",
+				"type": "address"
 			},
 			{
-				"name": "_amounts",
-				"type": "uint256[]"
+				"name": "tokens",
+				"type": "uint256"
 			}
 		],
-		"name": "markTokensForGiveaway",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
+		"name": "approve",
+		"outputs": [
 			{
-				"name": "_amount",
-				"type": "uint256"
-			},
-			{
-				"name": "fromGiveaway",
+				"name": "success",
 				"type": "bool"
 			}
 		],
-		"name": "withdraw",
-		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "pendingGiveaways",
+		"inputs": [],
+		"name": "totalSupply",
 		"outputs": [
 			{
-				"name": "amount",
+				"name": "",
 				"type": "uint256"
-			},
-			{
-				"name": "newLockTime",
-				"type": "uint256"
-			},
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
 			{
 				"name": "from",
 				"type": "address"
 			},
 			{
-				"name": "isPending",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"name": "success",
 				"type": "bool"
 			}
 		],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "giveawayReserveAddress",
+		"inputs": [
+			{
+				"name": "tokenOwner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
 		"outputs": [
 			{
-				"name": "",
-				"type": "address"
+				"name": "balance",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -122,146 +86,47 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_sender",
+				"name": "to",
 				"type": "address"
 			},
 			{
-				"name": "_value",
+				"name": "tokens",
 				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "tokenOwner",
+				"type": "address"
 			},
 			{
-				"name": "_tokenContract",
-				"type": "address"
-			},
-			{
-				"name": "_extraData",
-				"type": "bytes"
-			}
-		],
-		"name": "receiveApproval",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_addr",
+				"name": "spender",
 				"type": "address"
 			}
 		],
-		"name": "getGiveawayTimeLeft",
+		"name": "allowance",
 		"outputs": [
 			{
-				"name": "_timeLeft",
+				"name": "remaining",
 				"type": "uint256"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_user",
-				"type": "address"
-			}
-		],
-		"name": "getUnclaimedGiveawayBalance",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			}
-		],
-		"name": "getLastGiveawayWithdrawal",
-		"outputs": [
-			{
-				"name": "_lastWithdrawalTime",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getTimeLeft",
-		"outputs": [
-			{
-				"name": "_timeLeft",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "claimGiveawayTokens",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"name": "setGiveawayReserveAddress",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			}
-		],
-		"name": "getBalance",
-		"outputs": [
-			{
-				"name": "_balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
 	},
 	{
 		"anonymous": false,
@@ -278,11 +143,11 @@
 			},
 			{
 				"indexed": false,
-				"name": "amount",
+				"name": "tokens",
 				"type": "uint256"
 			}
 		],
-		"name": "GiveawayMarked",
+		"name": "Transfer",
 		"type": "event"
 	},
 	{
@@ -290,60 +155,21 @@
 		"inputs": [
 			{
 				"indexed": true,
-				"name": "to",
+				"name": "tokenOwner",
 				"type": "address"
 			},
-			{
-				"indexed": false,
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "TokensClaimed",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
 			{
 				"indexed": true,
-				"name": "addr",
+				"name": "spender",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "amt",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "time",
+				"name": "tokens",
 				"type": "uint256"
 			}
 		],
-		"name": "TokensFrozen",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "addr",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "amt",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "time",
-				"type": "uint256"
-			}
-		],
-		"name": "TokensUnfrozen",
+		"name": "Approval",
 		"type": "event"
 	}
 ]

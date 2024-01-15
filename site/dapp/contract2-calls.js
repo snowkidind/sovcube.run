@@ -161,7 +161,7 @@ setInterval(function() {
         fetchContract2Info(selectedAccount);
     fetchContract1Info(selectedAccount);
     }
-}, 15000);
+}, 5000);
 
 
 /*
