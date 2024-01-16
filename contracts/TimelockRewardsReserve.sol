@@ -1,7 +1,7 @@
 pragma solidity 0.5.9;
 
 /*
-The function of this smart-contract is to act as a Giveaway reserve and distributor of timelocked tokens.
+The function of this smart-contract is to act as a Timelock Rewards reserve/treasury and distributor of timelocked tokens to users to timelock their BSOV Tokens.
 It interacts with a timelocking contract (timelockContract).
 https://SovCube.com
 
@@ -122,7 +122,7 @@ function updateEligibility(address user, uint256 amountTimelocked) external {
 }
 
 function claimGiveawayReserve() public {
-    require(eligibleAmount[msg.sender] > 0, "You have no eligible tokens for giveaway. You have to timelock tokens first.");
+    require(eligibleAmount[msg.sender] > 0, "You have no eligible tokens for Timelock Rewards. You have to timelock tokens first.");
 
     uint256 amount = eligibleAmount[msg.sender];
     eligibleAmount[msg.sender] = 0;

@@ -6,8 +6,6 @@
     <title>SovCube dApp</title>
 
 
-<!-- Bootstrap CSS -->
-<!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
 
 <!-- Bootstrap JS and its dependencies -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -21,8 +19,6 @@
 <link rel="icon" href="/images/favicon-logo.png" type="image/x-icon">
     <!-- Include web3.js or other necessary scripts -->
 
-<!--<script src="/dapp/web3@4.3.0.js"> </script> -->
-<!--<script src="https://cdn.jsdelivr.net/npm/web3@4.2.2/lib/commonjs/web3.min.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 
 
@@ -32,31 +28,18 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>
 <h1 class="dapp-heading">SovCube Timelocking dApp</h1>
 <p id="connectYourWalletText"><span class="connectWalletTextClass">Connect your wallet to continue.<br></span>Use a browser like <a href="https://brave.com" target="_blank">Brave Browser</a> or Google Chrome and download the <a href="https://metamask.io/download/" target="_blank">Metamask wallet extension</a> to be able to connect.<br><br><span style="color:red;">Strongly Recommended to read up at <a href="/docs" target="_blank">Docs & Help</a> before you timelock any tokens.</span></p>
-<!--<div id="contractInfoContainer">
-    <div id="contract1InfoSection">
-        <h3 class="contract1infoheader" style="display:none;">Contract 1 Info:</h3>
-        <span id="contract1DynamicInfo"></span>
-    </div>
-    <div id="contract2InfoSection">
-        <h3 class="contract2infoheader" style="display:none;">Contract 2 Info:</h3>
-        <span id="contract2DynamicInfo"></span>
-    </div>
-</div>
--->
     <div class="container">
         <div class="contract-selection" style="display: none;">
             <select id="contractSelect" class="contractSelect">
 		<option value="select">Select Contract &#x21B4</option>
                 <option value="contract1">Contract 1</option>
-                <option value="contract2">Contract 2</option>
+                <option value="contract2">Contract 2 &#127873;</option>
             </select>
         </div>
 
 <p id="contract-explanation">To begin using the SovCube dApp you have to select a contract to interact with. The contracts have different parameters, and you should read the documentation before you timelock your tokens.</p>
 
 <div id="fieldContainer">
-<!--<p id="contract1Explanation">Contract 1 was deployed in August, 2019 and allows you to timelock and withdraw BSOV Tokens. See <a href="/docs">Docs & Help</a> for more info.</p> -->
-<!--<p id="contract2Explanation">Contract 2 was deployed in December, 2023 and allows you to timelock, withdraw and giveaway timelocked BSOV Tokens. See <a href="/docs">Docs & Help</a> for more info.</p>-->
 
 <p id="contract1Explanation">
   Contract 1: Timelock & Withdraw BSOV Tokens. 
@@ -96,7 +79,7 @@ $(document).ready(function(){
             
             <div class="radio-buttons">
                 <input type="radio" id="timelock2" name="contract2Action" value="timelock">
-                <label for="timelock2" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time. Tokens cannot be accessed until the Unlock Date is reached.">Timelock</label>
+                <label for="timelock2" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time and receive Timelock Rewards. Tokens cannot be accessed until the Unlock Date is reached.">Timelock</label>
                 <input type="radio" id="withdraw2" name="contract2Action" value="withdraw">
                 <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Unlock Date is reached, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
                 <input type="radio" id="giveaway" name="contract2Action" value="giveaway">
@@ -105,14 +88,14 @@ $(document).ready(function(){
             <input type="number" id="amount2" placeholder="Amount of BSOV">
 <div class="checkbox-container">		
 <input type="checkbox" id="account-checkbox">
-<label for="account-checkbox" id="account-checkbox-label">Withdraw from <b>Incoming Tokens Account?</b></label>
+<label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Tokens Account?</b></label>
 </div>
-            <textarea id="ethAddresses" placeholder="Enter ETH addresses to giveaway timelocked tokens to (one address per line)"></textarea>
+            <textarea id="ethAddresses" placeholder="Enter ETH addresses to send timelocked tokens to (one address per line)"></textarea>
 	    <textarea id="giveawayAmounts" placeholder="Enter BSOV amounts (one amount per line)"></textarea>
           <!-- Contract 2 - Timelock, Withdraw, and Giveaway Buttons -->
 <button class="button" id="timelock2Button">Timelock Now</button>
 <button class="button" id="withdraw2Button">Withdraw Now</button>
-<button class="button" id="giveaway2Button">Giveaway Now</button>
+<button class="button" id="giveaway2Button">Send Locked Tokens Now</button>
 
 
 
@@ -153,20 +136,20 @@ document.getElementById('clearError').addEventListener('click', function() {
 	      <div class="contract-info-style" id="incomingAccountContainer">
                <div id="incomingTokensAccount">   
 	      </div>	
-	              <button id="claimGiveawayButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existingtimelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
+	              <button id="claimGiveawayButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
 		</div>
 	</div>
 
 	      <div class="contract-info-style" id="giveawayAccountContainer">
                <div id="giveawayAccount">
 	      </div>	
-              <button id="claimGiveawayReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Giveaway rewards! The tokens will be transferred to your 'Incoming Tokens' balance">Claim Giveaway Tokens</button>
+              <button id="claimGiveawayReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Timelock Rewards! The tokens will be transferred to your 'Incoming Tokens' balance">Claim Timelock Rewards</button>
 		</div>
 	</div>
          
      </div>
 
- <p style="font-size:7pt; text-align:center; letter-spacing:1.5px;">Balances update every 15 seconds</p>
+ <p style="font-size:7pt; text-align:center; letter-spacing:1.5px;">Balances update every 5 seconds</p>
 
 </div>
 
@@ -194,8 +177,6 @@ document.getElementById('toggleTerms').addEventListener('click', function(event)
 
 </script>
 
-<!--<script src="/dapp/connect.js"> </script>-->
-<!--<script src="/dapp/bignumber.js"></script>-->
 <script src="/dapp/app.js"></script>
 <script src="/dapp/contract1-calls.js"> </script>
 <script src="/dapp/contract2-calls.js"> </script>

@@ -7,6 +7,7 @@ Timelock BSOV Tokens and receive giveaway rewards.
 - CRITICAL - [WORKING ON IT] The window variables interfere with Uniswap.
 - INFO - Stats are not made.
 - INFO - Docs & Help page needs to be filled.
+- INFO - Create "My Account" page.
 - CODE COSMETIC - Code Cleanup of app.js needed.
 - CODE COSMETIC - Code Cleanup of contract2-calls.js needed.
 - CODE COSMETIC - Code Cleanup of contract1-calls.js needed.
@@ -17,8 +18,8 @@ Timelock BSOV Tokens and receive giveaway rewards.
 - UI INFO - Add dynamic info from giveawayReserve contract and unlock info when entering amount in the timelocking amount field. 
 - FUNCTIONALITY IDEAS - Determine if users also can add tokens the reserve contract balance, instead of the current "ownerOnly". If so, then change logic on tier advancement, so that the tiers reflect how many tokens have been donated to the Giveaway Reserve contract.
 - FUNCTIONALITY IDEAS - Determine what happens when we reach the final tier, and when the tokens in the Giveaway Reserve contract are used up.
-- TESTING - Test the contract without lock limits
 - TESTING - Test timelocking from several different wallets to see if gas usage changes.
+
 
 ### Order of actions when deploying the contracts for testing:
 - Use "Remix - Ethereum IDE"

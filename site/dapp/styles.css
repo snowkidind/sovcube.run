@@ -404,6 +404,14 @@ font-size:9pt;
  -webkit-animation: fadeIn 0.5s;
     animation: fadeIn 0.5s;
 }
+
+#contractSelect option {
+padding: 25px;
+}
+.contractSelect option {
+padding: 25px;
+}
+
 #contractSelect:hover {
 outline: 1px solid white;
 }

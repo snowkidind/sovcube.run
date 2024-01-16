@@ -26,17 +26,7 @@ if (web3) {
     window.giveawayReserve = new web3.eth.Contract(abi, giveawayReserveContractAddress);
     });
 }
-/*
-function secondsToDays(seconds) {
-    return Math.floor(seconds / (24 * 60 * 60));
-}
-*/
 
-/*function secondsToDays(seconds) {
-    const oneDayInSeconds = BigInt(24 * 60 * 60);
-    return Number(seconds / oneDayInSeconds);
-}
-*/
 
 function formatTimeLeft(seconds) {
     const days = Math.floor(seconds / (24 * 60 * 60));
@@ -82,38 +72,24 @@ async function fetchGiveawayReserveInfo(account) {
         console.error('Giveaway Reserve contract is not initialized');
 	    return;
     }
+
+
         const eligibleTokens = await giveawayReserve.methods.eligibleAmount(account).call();
         return eligibleTokens;
 	
 }	
 
-/*
-function fetchContract2Info(account) {
-    console.log("Fetching Contract 2 info for account:", account);
-    getContract2TimelockedTokens(account).then(({ timelockedTokens, timelockedGiveawayTokens, unclaimedGiveawayTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds, eligibleTokens }) => {
-        console.log("Contract 2 Timelocked Tokens:", timelockedTokens);
-        console.log("Contract 2 Giveaway Timelocked Tokens:", timelockedGiveawayTokens);
-	const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(8); // Format to 8 decimal places
-        const formattedGiveawayTokens = (Number(timelockedGiveawayTokens) / 100000000).toFixed(8); // Format to 8 decimal places
-	const formattedUnclaimedGiveawayTokens = (Number(unclaimedGiveawayTokens) / 100000000).toFixed(8); // Format to 8 decimal places
-	//const timeLeftInDays = secondsToDays(timeLeftInSeconds);
-        const formattedTimeLeft = formatTimeLeft(Number(timeLeftInSeconds));
-	const formattedGiveawayUnlockTime = formatTimeLeft(Number(giveawayUnlockTimeInSeconds));
+function updateProgressBar(totalTimelocked, totalEligibleAmount) {
+    const progressBarElement = document.getElementById('giveawayProgressBar');
+    const currentProgressElement = progressBarElement.querySelector('.current-progress');
 
-	 //   updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens);
-    }).catch(error => {
-        console.error("Error in fetching Contract 2 Timelocked Tokens:", error);
-    });
-    
-    fetchGiveawayReserveInfo(account).then (({ eligibleTokens }) => {
-	const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(8); // Format to 8 decimal places
-    }).catch(error => {
-	console.error("Error in fetching Giveaway Reserve Contract's Eligible Tokens", error);
-    });
+    // Calculate the width of the progress bar based on the total timelocked and eligible amount
+    const progressPercent = (totalTimelocked / totalEligibleAmount) * 100;
+    currentProgressElement.style.width = progressPercent + '%';
 
-updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens);
-
-}*/
+    // Update the tooltip with the current progress
+    progressBarElement.setAttribute('data-tooltip', `Current Progress: ${totalTimelocked.toLocaleString()} / ${totalEligibleAmount.toLocaleString()} BSOV`);
+}
 
 async function fetchContract2Info(account) {
     console.log("Fetching Contract 2 info for account:", account);
@@ -128,16 +104,11 @@ async function fetchContract2Info(account) {
         const formattedGiveawayUnlockTime = formatTimeLeft(Number(giveawayUnlockTimeInSeconds));
         const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
 
-	    
-
         updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens);
     } catch (error) {
         console.error("Error in fetching Contract 2 info:", error);
     }
 }
-
-
-
 
 
 function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, unlockTime, withdrawRate, formattedEligibleTokens) {
@@ -150,8 +121,8 @@ function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiv
 
 	const giveawayAccountElement = document.getElementById('giveawayAccount');
     giveawayAccountElement.innerHTML = `
-	<h3 style="color:orange; border-bottom:1px solid orange;">Giveaway</h3>	
-	<p><b>Unclaimed Giveaway Rewards:</b> ${formattedEligibleTokens} BSOV</p>
+	<h3 style="color:orange; border-bottom:1px solid orange;">Rewards</h3>	
+	<p><b>Unclaimed Timelock Rewards:</b> <span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
 	`;
 
 
@@ -174,25 +145,15 @@ function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiv
 }
 
 
-
-
-
-/*
-setInterval(function() {
-    if (selectedAccount) {
-        fetchContract2Info(selectedAccount);
-    fetchContract1Info(selectedAccount);
-    }
-}, 15000);
-*/
-
 let fetchInterval;
 
 function startFetching() {
     fetchInterval = setInterval(function() {
         if (!document.hidden && selectedAccount) {
-            fetchContract2Info(selectedAccount);
-            fetchContract1Info(selectedAccount);
+            getContract2TimelockedTokens(selectedAccount);
+		fetchContract2Info(selectedAccount);
+
+		fetchContract1Info(selectedAccount);
         }
     }, 5000);
 }

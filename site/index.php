@@ -22,7 +22,6 @@
     </script>
 <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 
-<!--<script src="/dapp/connect.js"> </script>-->
 
 
 </head>
@@ -30,14 +29,12 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
 <body>
 
-<!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>-->
-<!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>-->
+
+<center><img class="img-fade"  src="/images/Sovcube-BSOV-no-text.png" height=300px width=auto style="opacity:0.9; position:fixed; z-index:-1; margin-left:-17%; margin-top:400px;"></img> </center>
 
 <div class="body-container">
-<!--<p style="color:red;">This site is currently under construction. Do not use the dApp yet.</p>-->
 
 <div class="blurred-background"></div>
-<!--<div class="text-container">-->
     <div class="text-container">
 <center><h1 class="brand-name">SovCube</h1></center>
     <center><h2>Freedom to Save</h2></center>
@@ -46,8 +43,8 @@ Keep your BSOV tokens safe and help them grow with SovCube. In a market that's a
 SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on.
 Use SovCube's web3 dApp to make your BSOV tokens stronger and more stable for the future.
 </p>
-<br><br><br>
-  <center><h3>Use SovCube's Web3 dApp<br>and Time-Lock Your BSOV Tokens</h3></center>
+<br><br>
+  <center><h3>Earn Rewards While Securing Your BSOV Tokens with SovCube's Time-Lock Feature</h3></center>
     <p>
 SovCube offers a smart way to time-lock your BSOV tokens using the web3 interface, demonstrating your commitment to BSOV Token's long-term value.
 The unique Slow-Release feature gradually reintroduces BSOV tokens to the market after the time-lock period,
@@ -62,7 +59,6 @@ This responsible approach fosters trust and sustains long-term value, making Sov
 </div>
 
 
-<!--<script src="/dapp/app.js"></script> -->
 </div>
 </div>
 <script>

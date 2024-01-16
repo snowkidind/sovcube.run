@@ -22,17 +22,6 @@ if (web3) {
     });
 }
 
-/*async function getContract1TimelockedTokens(account) {
-    if (!contract1) {
-        console.error('Contract1 is not initialized when fetching timelocked tokens');
-        return;
-    }
-    const timelockedTokens = await contract1.methods.getBalance(account).call();
-    const timeLeftInSeconds = await contract1.methods.getTimeLeft().call();
-
-	return timelockedTokens, timeLeftInSeconds;
-}
-*/
 
 async function getContract1TimelockedTokens(account) {
     if (!contract1) {
@@ -98,10 +87,8 @@ function updateContract1Details(tokensLocked, unlockTime, withdrawRate, formatte
             <p><b>Unlock Date:</b> ${formattedTimeLeft}</p>
         </div>
     </div>
-    <p style="font-size:7pt; text-align:center;">Balances update every 15 seconds</p>
+    <!--<p style="font-size:7pt; text-align:center;">Balances update every 5 seconds</p>-->
 `;
-	/*    infoElement.innerHTML = `<b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensLocked} BSOV</span>, <br><br><b>Unlock Date:</b> ${unlockTime}, <br><b>Slow-Release Withdrawal Rate:</b> ${withdrawRate} tokens/week`;
-*/
 
 }
 

@@ -1,3 +1,8 @@
+#totalTimelockedAmount, #totalRewardsSentAmount, #currentTier {
+    text-align:center;
+}
+
+
 .giveaway-progress-container {
     width: 100%;
     padding: 15px;
@@ -86,18 +91,24 @@ z-index:5;
     background: rgba(0, 0, 0, 0.3);
     opacity
     border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 20px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top:3px;
+    padding-bottom:3px;
+    margin-bottom: 5px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .giveaway h2 {
     color: white;
+    margin-bottom:0px;
+
 }
 
 .giveaway p {
     font-size: 14px;
+    margin-top: 3px;
 }
 
 .giveaway strong {
@@ -159,13 +170,19 @@ body {
 font-family: Lato, Arial;
 margin:auto;
 opacity:1;
-background-size:cover;
 background: #171717 url('/images/bg.jpg') no-repeat center center fixed;
 
+background-size:auto 100%;
 }
 
 h1, h2, h3, h4, h5, h6, p {
 color: white;
+margin-left: 10px;
+margin-right:10px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+text-align:center;
 }
 
 .text-container {
@@ -179,6 +196,7 @@ height:50%;
 width:50%;
 margin:auto;
 margin-top:100px;
+margin-bottom:-50px;
 background-color: rgba(50, 50, 50, 0.6);
 border-radius:10px;
 transition: opacity 5s ease-in-out;
@@ -193,8 +211,9 @@ transition: opacity 5s ease-in-out;
     right: 0;
     bottom: 0;
     background: url('/images/bg.jpg') no-repeat center center fixed;
-    /*background-size: cover;*/
-    filter: blur(8px); /* Adjust the blur level as needed */
+background-size:auto 100%;
+
+    filter: blur(10px); /* Adjust the blur level as needed */
     z-index: -1;
 /*    background-color: rgba(50, 50, 50, 0.5);*/
 }

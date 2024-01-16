@@ -67,7 +67,7 @@ contract LockMyBSOV {
     address public giveawayReserveAddress;
     IGiveawayReserve giveawayReserve;
     uint constant PRECISION = 100000000;
-    uint constant timeUntilUnlocked = 0 days;            // All tokens locked for 1000 days after contract creation.
+    uint constant timeUntilUnlocked = 1000 days;            // All tokens locked for 1000 days after contract creation.
     uint constant maxWithdrawalAmount = 100 * PRECISION;  // Max withdrawal of 100 tokens per week per user once 1000 days is hit.
     uint constant timeBetweenWithdrawals = 7 days;
     uint unfreezeDate;
@@ -133,7 +133,7 @@ function claimGiveawayTokens() public {
     require(pendingGiveaways[msg.sender].isPending, "You have no Incoming Tokens to accept!");
     Giveaway memory giveaway = pendingGiveaways[msg.sender];
     giveawayBalance[msg.sender] += giveaway.amount; 
-    giveawayLockExpiration[msg.sender] = now + 0 days; // When Incoming Tokens are accepted, the unlock date resets to 1000 days.
+    giveawayLockExpiration[msg.sender] = now + 1000 days; // When Incoming Tokens are accepted, the unlock date resets to 1000 days.
     delete pendingGiveaways[msg.sender]; 
     emit TokensClaimed(msg.sender, giveaway.amount);
 }
@@ -144,6 +144,7 @@ function withdraw(uint _amount, bool fromGiveaway) public {
     uint256 lockExpiration = fromGiveaway ? giveawayLockExpiration[msg.sender] : unfreezeDate;
     require(now >= lockExpiration, "Tokens are locked!");
     require(balanceToCheck >= _amount, "Insufficient timelocked balance for withdrawal");    
+
     require(_amount <= maxWithdrawalAmount, "Exceeds max withdrawal amount");
 
     if (fromGiveaway) {
