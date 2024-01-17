@@ -7,6 +7,7 @@ if (typeof window.ethereum !== 'undefined') {
     web3 = new Web3(window.ethereum);
 } else {
     console.log('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+	alert ('You need to install Metamask to read the updated data. Please consider installing it: https://metamask.io/download.html');
 }
 
 
@@ -57,6 +58,13 @@ function updateProgressBar(totalTimelocked, totalEligibleAmount) {
     // Update the Total Rewards Sent display
     const totalRewardsSentDisplayElement = document.getElementById('totalRewardsSentAmount');
     totalRewardsSentDisplayElement.textContent = (Number(totalEligibleAmount) / 1e8).toLocaleString() + ` BSOV`; // Assuming 8 decimal places for your token
+  
+	// Update the Rewards Left display
+    const rewardsLeftElement = document.getElementById('rewardsLeft');
+// Assuming 8 decimal places for your token
+const rewardsLeft = 300000 - (Number(totalEligibleAmount) / 1e8);
+rewardsLeftElement.textContent = rewardsLeft.toLocaleString() + ` BSOV`;
+
 }
 
 async function updateCurrentTierDisplay() {
@@ -67,10 +75,17 @@ async function updateCurrentTierDisplay() {
 
     try {
         const currentTier = await giveawayReserve.methods.currentTier().call();
+        // Ensure currentTier is interpreted as a number
+        const currentTierNumber = Number(currentTier);
+
 
         // Update the Current Tier display
         const currentTierDisplayElement = document.getElementById('currentTier');
         currentTierDisplayElement.textContent = currentTier;
+
+	            // Calculate and display ROI based on the current tier
+        calculateAndDisplayROI(currentTierNumber);
+
     } catch (error) {
         console.error("Error fetching the current tier from the Giveaway Reserve contract:", error);
         const currentTierDisplayElement = document.getElementById('currentTier');
@@ -78,6 +93,50 @@ async function updateCurrentTierDisplay() {
     }
 }
 
+function calculateAndDisplayROI(tier) {
+    let roi;
+    switch (tier) {
+        case 1:
+            roi = 1; // 100%
+            break;
+        case 2:
+            roi = 0.5; // 50%
+            break;
+        case 3:
+            roi = 0.25; // 25%
+            break;
+        case 4:
+            roi = 0.125; // 12.5%
+            break;
+        case 5:
+            roi = 0.0625; // 6.25%
+            break;
+        case 6:
+            roi = 0.03125; // 3.125%
+            break;
+        case 7:
+            roi = 0.015625; // 1.5625%
+            break;
+        case 8:
+            roi = 0.0078125; // 0.78125%
+            break;
+        case 9:
+            roi = 0.00390625; // 0.390625%
+            break;
+        case 10:
+            roi = 0.00390625; // 0.390625%
+            break;
+        default:
+            roi = 0; // Default case if the tier is not recognized
+    }
+
+    // Convert ROI to percentage format
+    const roiPercentage = (roi * 100).toFixed(2); // To fix it to two decimal places
+
+    // Update the ROI display in the HTML
+    const roiDisplayElement = document.getElementById('roiPercentage');
+    roiDisplayElement.textContent = roiPercentage;
+}
 
 // Function to fetch and update the progress bar information
 async function fetchAndUpdateProgressBar() {
@@ -98,12 +157,12 @@ async function fetchAndUpdateProgressBar() {
 
 // Load the Giveaway Reserve ABI and initialize the contract
 loadABI('/dapp/giveawayReserve.abi', function(abi) {
-    initGiveawayReserveContract(abi, '0x42cD04F973B73b459376fAb0af364fDE86899eAe'); // Replace with your actual contract address
+    initGiveawayReserveContract(abi, giveawayReserveContractAddress); // Replace with your actual contract address
     fetchAndUpdateProgressBar(); // Fetch and update progress bar after initializing the contract
     updateCurrentTierDisplay();
 });
 
 // Set an interval to regularly update the progress bar
-setInterval(fetchAndUpdateProgressBar, 30000); // Update every 30 seconds
-setInterval(updateCurrentTierDisplay, 30000); // Update every 30 seconds
+setInterval(fetchAndUpdateProgressBar, 5000); // Update every 5 seconds
+setInterval(updateCurrentTierDisplay, 5000); // Update every 5 seconds
 

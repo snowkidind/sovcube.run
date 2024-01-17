@@ -61,11 +61,31 @@ $(document).ready(function(){
 <div id="contract1Details" class="contract-details" style="display: none;">
     <div class="radio-buttons">
         <input type="radio" id="timelock1" name="contract1Action" value="timelock">
-        <label for="timelock1" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time. Tokens cannot be accessed until the Unlock Date is reached.">Timelock</label>
+        <label for="timelock1" data-toggle="tooltip" title="Lock your tokens to your 'Regular Account' for a pre-set period of time. Tokens cannot be accessed until the Unlock Date is reached.">Timelock</label>
         <input type="radio" id="withdraw1" name="contract1Action" value="withdraw">
         <label for="withdraw1" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Unlock Date is reached, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
     </div>
     <input type="number" id="amount1" placeholder="Amount of BSOV">
+    <p id="timelockedtokens1">0 BSOV will be timelocked.</p>
+    <p id="withdrawaltime1">Withdrawal Time after Unlock Date: 0 weeks (or 0 years)</p>
+
+<script>
+    // Function to update the text
+        function updateText() {
+            var amount = document.getElementById('amount1').value;
+            var timelocked = amount * 0.99; // 1% burn
+            var weeks = timelocked / 1000;
+            var years = weeks / 52;
+
+            document.getElementById('timelockedtokens1').textContent = timelocked + " BSOV will be timelocked.";
+            document.getElementById('withdrawaltime1').textContent = "Withdrawal Time after Unlock Date: " + weeks.toFixed(0) + " weeks (" + years.toFixed(2) + " years)";
+        }
+
+        // Event listener for changes in the input field
+        document.getElementById('amount1').addEventListener('input', updateText);
+
+</script>
+
 <!-- Contract 1 - Timelock and Withdraw Buttons -->
 <button class="button" id="timelock1Button">Timelock Now</button>
 <button class="button" id="withdraw1Button">Withdraw Now</button>
@@ -86,6 +106,27 @@ $(document).ready(function(){
                 <label for="giveaway" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Unlock Date resets to 1000 days.">Send Locked Tokens</label>
             </div>
             <input type="number" id="amount2" placeholder="Amount of BSOV">
+
+    <p id="timelockedtokens2">0 BSOV will be timelocked.</p>
+    <p id="withdrawaltime2">Withdrawal Time after Unlock Date: 0 weeks (or 0 years)</p>
+
+<script>
+    // Function to update the text
+        function updateText() {
+            var amount = document.getElementById('amount2').value;
+            var timelocked = amount * 0.99; // 1% burn
+            var weeks = timelocked / 100;
+            var years = weeks / 52;
+
+            document.getElementById('timelockedtokens2').textContent = timelocked + " BSOV will be timelocked.";
+            document.getElementById('withdrawaltime2').textContent = "Withdrawal Time after Unlock Date: " + weeks.toFixed(0) + " weeks (" + years.toFixed(2) + " years)";
+        }
+
+        // Event listener for changes in the input field
+        document.getElementById('amount2').addEventListener('input', updateText);
+
+</script>
+
 <div class="checkbox-container">		
 <input type="checkbox" id="account-checkbox">
 <label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Tokens Account?</b></label>
@@ -177,6 +218,7 @@ document.getElementById('toggleTerms').addEventListener('click', function(event)
 
 </script>
 
+<script src="/dapp/config.js"></script>
 <script src="/dapp/app.js"></script>
 <script src="/dapp/contract1-calls.js"> </script>
 <script src="/dapp/contract2-calls.js"> </script>

@@ -1,6 +1,28 @@
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Style for list items */
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Style for links */
+       .linklist a {
+            
+            color: #0076CF;
+            font-weight: bold;
+        }
+
+        /* Style for links on hover */
+        .linklist a:hover {
+            text-decoration: underline;
+        }
+/*
 a {
 color:white;
-}
+}*/
 
 .body-container {
 width: 1000px;

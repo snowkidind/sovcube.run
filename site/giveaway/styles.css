@@ -1,4 +1,20 @@
-#totalTimelockedAmount, #totalRewardsSentAmount, #currentTier {
+.per1000bsov {
+font-size:8pt;
+}
+
+.stats-container {
+    background-color: rgba(0,0,0,0.2);
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left:30px;
+    padding-right:30px;
+    border-radius: 10px;
+    margin: 10px;
+    min-width: 300px;
+
+}
+
+#totalTimelockedAmount, #totalRewardsSentAmount, #currentTier, #rewardsLeft {
     text-align:center;
 }
 
@@ -17,11 +33,13 @@
 .giveaway-progress-bar {
     position: relative;
     width: 100%;
-    height: 20px;
-    background-color: #ddd;
+    height: 40px;
+    background-color: #242424;
     border-radius: 10px;
     overflow: visible;
 z-index:5;
+    border: 1px solid #191919; /* Thick golden border */
+    box-shadow: inset 0 0 10px grey; /* Gray inner shadow */
 }
 
 .current-progress {
@@ -142,7 +160,7 @@ z-index:5;
 
 
 .brand-name {
-    font-size: 45pt; /* Large size for the brand name */
+    font-size: 42pt; /* Large size for the brand name */
     font-weight: bold; /* Optional: if you want the brand name to be bold */
     margin-bottom: 0.5em; /* Adjust the space below the brand name */
     text-align:center;

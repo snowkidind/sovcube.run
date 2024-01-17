@@ -4,7 +4,6 @@ Timelock BSOV Tokens and receive giveaway rewards.
 
 ### Known issues:
 
-- CRITICAL - [WORKING ON IT] The window variables interfere with Uniswap.
 - INFO - Stats are not made.
 - INFO - Docs & Help page needs to be filled.
 - INFO - Create "My Account" page.

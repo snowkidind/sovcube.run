@@ -32,20 +32,36 @@
 <div class="text-container">
     <h1>About SovCube</h1>
     <p>
-        SovCube is the name for a collection of smart-contracts that were made by voluntary contributors from the BSOV Token community, and was initially started with the deployment of a timelocking contract in August, 2019.
+        SovCube is the name for a collection of smart-contracts that were made by voluntary contributors from the BSOV Token community, 
+and was initially started with the deployment of a timelocking contract in August, 2019.
     </p>
 	<p>
-		The "Sov" part of the name "SovCube", representing "Store-of-Value," directly aligns with the core function of the system, which is to preserve the value of the BSOV Token. The "Cube" portion of the name suggests structure, stability, and containment, which fits well with the idea of securely timelocking tokens.
+		The "Sov" part of the name "SovCube", representing "Store-of-Value," 
+directly aligns with the core function of the system, which is to preserve the value of the BSOV Token.
+ The "Cube" portion of the name suggests structure, stability, and containment, 
+which fits well with the idea of securely timelocking tokens.
 	</p>
 	<h2>Contact and support</h2>
-    <p>
-        You can go to the <a href="https://t.me/SovCube">SovCube Telegram group</a> and ask for help, or if you have any issues or find any bugs.
+    <p class="linklist">
+        You can go to the <a class="linklist" href="https://t.me/SovCube">SovCube Telegram group</a> and ask for help, or if you have any issues or find any bugs.
     </p>
     <h2>What is BSOV Token</h2>
-<p>
-BSOV Token is a deflationary cryptocurrency and a PoW (Proof of Work) mineable ERC20 Token built on the Ethereum Blockchain. It features a supply schedule and halvings reminiscent of Bitcoin. However, the mining functionality of BSOV Token has ceased, halting any further inflation. Consequently, no additional BSOV Tokens will be created under that specific contract. You can find more info about BSOV Token on their website at <a href="https://bsovtoken.com">bsovtoken.com</a>
+<p class="linklist">
+BSOV Token is a deflationary cryptocurrency and a PoW (Proof of Work) mineable ERC20 Token built on the Ethereum Blockchain.
+ It features a supply schedule and halvings reminiscent of Bitcoin. 
+However, the mining functionality of BSOV Token has ceased, halting any further inflation.
+ Consequently, no additional BSOV Tokens will be created under that specific contract. You can find more info about BSOV Token
+ on their website at <a class="linklist" href="https://bsovtoken.com">bsovtoken.com</a>
 </p>
-   
+
+<h2 style="text-align:center;">Links</h2>
+   <ul class="linklist" style="text-align:center;">
+        <li><a href="https://github.com/realrouse/sovcube.com" target="_blank">SovCube - Github</a></li>
+        <li><a href="https://t.me/SovCube" target="_blank">SovCube - Telegram</a></li>
+        <li><a href="https://bsovtoken.com" target="_blank">BSOV Token - Website</a></li>
+        <li><a href="https://t.me/BitcoinSoVCommunity" target="_blank">BSOV Token - Telegram</a></li>
+        <li><a href="https://bsovtoken.com/trade" target="_blank">Buy BSOV Tokens</a></li>
+    </ul>
 </div>
 
 <!--<script src="/dapp/app.js"></script> -->

@@ -20,7 +20,7 @@
             document.getElementById('message').style.display = 'block';
         }
     </script>
-<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>-->
 
 
 
@@ -37,8 +37,8 @@
 <div class="blurred-background"></div>
     <div class="text-container">
 <center><h1 class="brand-name">SovCube</h1></center>
-    <center><h2>Freedom to Save</h2></center>
-    <p><strong>Freedom to Save is Financial Freedom.</strong>
+    <center><h2>Freedom to Save Money</h2></center>
+    <p><strong>Freedom to Save Money is Financial Freedom.</strong>
 Keep your BSOV tokens safe and help them grow with SovCube. In a market that's always changing, thinking long-term is really important.
 SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on.
 Use SovCube's web3 dApp to make your BSOV tokens stronger and more stable for the future.

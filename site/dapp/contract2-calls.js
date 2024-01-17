@@ -131,7 +131,7 @@ function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiv
     regularAccountElement.innerHTML = `
         <h3>Regular Account</h3>
         <p><b>Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-        <p style="margin-top:10px;"><b>Unlock Date:</b><br>${formattedTimeLeft}</p>
+        <p style="margin-top:10px;"><b>Unlock Time:</b><br>${formattedTimeLeft}</p>
     `;
 
     // Update Incoming Tokens Account Info
@@ -150,9 +150,8 @@ let fetchInterval;
 function startFetching() {
     fetchInterval = setInterval(function() {
         if (!document.hidden && selectedAccount) {
-            getContract2TimelockedTokens(selectedAccount);
+            
 		fetchContract2Info(selectedAccount);
-
 		fetchContract1Info(selectedAccount);
         }
     }, 5000);

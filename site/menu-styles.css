@@ -19,6 +19,10 @@ position: relative;
     font-size: 15px;
     transition-duration: 0.3s;
 }
+.menu-item a{
+color:white;
+font-weight:normal;
+}
 
 .menu-item-img img {
     height: 50px; /* Or your preferred size */
