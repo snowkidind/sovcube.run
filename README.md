@@ -5,7 +5,6 @@ Timelock BSOV Tokens and receive giveaway rewards.
 ### Known issues:
 
 - Rename giveaway-variables to timelockreward
-- INFO - Create "My Account" page.
 - CODE COSMETIC - Code Cleanup of app.js needed.
 - CODE COSMETIC - Code Cleanup of contract2-calls.js needed.
 - CODE COSMETIC - Code Cleanup of contract1-calls.js needed.

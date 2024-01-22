@@ -78,7 +78,7 @@ function formatNumber($value) {
  
 
  
-        <center><h1>SovCube Stats</h1></center>
+        <center><h1>SovCube Global Stats</h1></center>
    
 
 
