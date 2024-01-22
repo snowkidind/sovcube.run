@@ -1,3 +1,6 @@
 .htaccess
 site/dapp/trash
 server/config.js
+site/stats/trash
+site/config.php
+node_modules

@@ -1,9 +1,3 @@
-<?php
-
-?>
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,26 +14,179 @@
     </script>
 <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 
-<!--<script src="/dapp/connect.js"> </script>-->
 
 
 </head>
 <body>
+<script src="/dapp/config.js"></script>
+<?php
+
+
+
+// Include the configuration file
+ global $conn, $giveawayReserveContractAddress;
+    //   $giveawayReserveContractAddress = '';
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Assuming giveawayReserveContractAddress is sent via POST
+    $giveawayReserveContractAddress = $_POST['giveawayReserveContractAddress'] ?? '';
+} 
+// You can now use $giveawayReserveContractAddress in this script
+
+
+/*if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Retrieve the address from the POST request
+    $giveawayReserveContractAddress = $_POST['giveawayReserveContractAddress'] ?? '';
+echo "POST Address immediately after setting: " . $giveawayReserveContractAddress . "<br>";
+}*/
+
+
+
+include('../config.php');
+
+// Include the functions file
+include('../functions.php');
+
+
+
+// Define the table names for different HTML elements
+$tableName1 = 'timelock_contract_1';
+$tableName2 = 'timelock_contract_2';
+// Add more table names as needed
+
+$totalTimelocked1 = getTotalTimelockedValue($tableName1);
+$totalTimelocked2 = getTotalTimelockedValue($tableName2);
+// Fetch the total timelocked values for other table names as needed
+
+// echo "POST Address before calling function: " . $giveawayReserveContractAddress . "<br>";
+$leaderboard1 = timelockLeaderboard($tableName1);
+$leaderboard2 = timelockLeaderboard($tableName2);
+
+
+// Function to format the number
+function formatNumber($value) {
+    return number_format($value, 0, '.', ',');
+}
+
+?>
+
+
 <div class="body-container">
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
 <!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>-->
+ 
 
-<div class="text-container">
-    <center><h1>SovCube Stats</h1></center>
-    <p>Stats is under development</p>
+ 
+        <center><h1>SovCube Stats</h1></center>
+   
+
+
+
+    <div class="container">
+
+
+        <div class="contract-section">
+            <h2>Contract 1</h2>
+            <div class="info-container" id="contract1TimeLeft">
+                Time Left: Loading...
+            </div>
+            <div class="info-container" id="contract1TotalTimelocked">
+                <p><b>Total Timelocked:</b><br><?php echo formatNumber($totalTimelocked1) . " BSOV"; ?></p>
+            </div>
+            <div class="info-container" id="contract1UsersInfo">
+                <div class="leaderboard-container" id="contract1Leaderboard">
+    <h2>Leaderboard</h2>
+    <table>
+        <tr>
+            <th>Address</th>
+            <th>Total Timelocked</th>
+            <th>Total Withdrawn</th>
+            <th>Net Amount</th>
+        </tr>
+        <?php foreach ($leaderboard1 as $entry): ?>
+            <tr>
+                <td><?php echo $entry['address']; ?></td>
+                <td><?php echo $entry['totalFrozen']; ?></td>
+                <td><?php echo $entry['totalUnfrozen']; ?></td>
+                <td><?php echo $entry['netAmount']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+
+            </div>
+        </div>
+
+        <div class="contract-section">
+            <h2>Contract 2</h2>
+            <div class="info-container" id="contract2TimeLeft">
+                Time Left: Loading...
+            </div>
+            <div class="info-container" id="contract2TotalTimelocked">
+                <p><b>Total Timelocked:</b><br><?php echo formatNumber($totalTimelocked2) . " BSOV"; ?></p>
+            </div>
+            <div class="info-container" id="contract2UsersInfo">
+                <div class="leaderboard-container" id="contract2Leaderboard">
+    <h2>Leaderboard</h2>
+    <table>
+        <tr>
+            <th>Address</th>
+            <th>Total Timelocked</th>
+            <th>Total Withdrawn</th>
+            <th>Net Amount</th>
+        </tr>
+        <?php foreach ($leaderboard2 as $entry): ?>
+            <tr>
+                <td><?php echo $entry['address']; ?></td>
+                <td><?php echo $entry['totalFrozen']; ?></td>
+                <td><?php echo $entry['totalUnfrozen']; ?></td>
+                <td><?php echo $entry['netAmount']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+
+        <div class="contract-section">
+            <h2>Timelock Rewards</h2>
+            <div class="info-container" id="giveawayReserveCurrentTier">
+                Current Tier: Loading...
+            </div>
+            <div class="info-container" id="giveawayReserveTotalClaimed">
+                Total Claimed: Loading...
+            </div>
+            <div class="info-container" id="giveawayReserveTotalEligibleAmount">
+                Total Eligible Amount: Loading...
+            </div>
+            <div class="info-container" id="giveawayReserveTotalTimelocked">
+                Total Timelocked: Loading...
+            </div>
+	</div>
+        <div class="contract-section">
+            <h2>BSOV Token</h2>
+            <div class="info-container" id="tokensMinted">
+                Tokens Minted: Loading...
+            </div>
+            <div class="info-container" id="burnAmount">
+                Tokens Minted: Loading...
+            </div>
+        </div>
+
+
+</div>
 <br><br><br>
-<!--  <center>  <h2>Time-Lock Your BSOV Tokens with SovCube dApp</h2> </center>
-    <p>SovCube offers a smart way to time-lock your BSOV tokens, demonstrating your commitment to BSOV Token's long-term value. The unique Slow-Release feature gradually reintroduces BSOV tokens to the market after the time-lock period, preventing market shocks$
--->
 </div>
 
 <!--<script src="/dapp/app.js"></script> -->
 
 </div>
+<!-- <script src="/dapp/config.js"></script>-->
+<script src="stats.js"></script>
 </body>
 </html>

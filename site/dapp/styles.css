@@ -1,8 +1,10 @@
 /*styles.css*/
 
-#timelockedtokens1, #withdrawaltime1, #timelockedtokens2, #withdrawaltime2 {
+#advanceTierMessage, #timelockedtokens1, #withdrawaltime1, #timelockedtokens2, #withdrawaltime2, #timelockRewardCalculation {
 font-size: 9pt;
 text-align:center;
+margin:2px;
+color:#5E798C;
 }
 
 #contractDescription {
@@ -40,6 +42,13 @@ margin-bottom:0px;
 
 #unclaimedTokens {
 color:yellow;
+ -webkit-animation: fadeIn 0.25s;
+    animation: fadeIn 0.25s;
+}
+
+#regularUnlockTime, #incomingUnlockTime {
+ -webkit-animation: fadeIn 0.25s;
+    animation: fadeIn 0.25s;
 }
 
 .contract-info-container {
@@ -134,7 +143,7 @@ a {
 color:white;
 }
 
-#regularAccount p, #regularAccount h3 {
+#regularAccount p, #regularAccount h3, #regularAccount1 p, #regularAccount1 h3 {
 font-size:1.2em;
 text-align:center;
 }
@@ -230,7 +239,7 @@ display: block;
     padding: 8px 15px; /* Example: adjust padding */
 }
 
-.container {
+#container {
     max-width: 600px;
     margin: auto;
     padding: 10px;
@@ -350,9 +359,9 @@ color:white;
 
 textarea {
     width: 60%;
-    height: 40px;
+    height: 30px;
     margin-bottom: 0px;
-    font-size:7pt;
+    font-size:6pt;
     border-radius: 5px;
     padding:5px;
  -webkit-animation: fadeIn 0.5s;
@@ -481,6 +490,7 @@ padding-bottom:6px;
 background-color:#171717;
  -webkit-animation: fadeIn 0.5s;
     animation: fadeIn 0.5s;
+outline: 1px solid #003661;
 }
 
 .radio-buttons input[type="radio"]:hover {
@@ -583,8 +593,8 @@ display:none;
 color: #2CB723;
 font-size:11pt;
 font-weight:regular;
- -webkit-animation: fadeIn 0.5s;
-    animation: fadeIn 0.5s;
+ -webkit-animation: fadeIn 0.25s;
+    animation: fadeIn 0.25s;
 }
 
 #yourTokensTextRegular {
@@ -592,8 +602,8 @@ color: #2CB723;
 font-size:14pt;
 font-weight:regular;
 margin-bottom:15px;
- -webkit-animation: fadeIn 0.5s;
-    animation: fadeIn 0.5s;
+ -webkit-animation: fadeIn 0.25s;
+    animation: fadeIn 0.25s;
 }
 
 

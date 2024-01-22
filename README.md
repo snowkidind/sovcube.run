@@ -4,8 +4,7 @@ Timelock BSOV Tokens and receive giveaway rewards.
 
 ### Known issues:
 
-- INFO - Stats are not made.
-- INFO - Docs & Help page needs to be filled.
+- Rename giveaway-variables to timelockreward
 - INFO - Create "My Account" page.
 - CODE COSMETIC - Code Cleanup of app.js needed.
 - CODE COSMETIC - Code Cleanup of contract2-calls.js needed.
@@ -14,10 +13,7 @@ Timelock BSOV Tokens and receive giveaway rewards.
 - CODE COSMETIC - Code Cleanup of GiveawayReserve Contract needed.
 - CODE COSMETIC - Code Cleanup of TimelockContract needed.
 - UI COSMETIC - Implement responsive design fitting for phones and tablets.
-- UI INFO - Add dynamic info from giveawayReserve contract and unlock info when entering amount in the timelocking amount field. 
-- FUNCTIONALITY IDEAS - Determine if users also can add tokens the reserve contract balance, instead of the current "ownerOnly". If so, then change logic on tier advancement, so that the tiers reflect how many tokens have been donated to the Giveaway Reserve contract.
-- FUNCTIONALITY IDEAS - Determine what happens when we reach the final tier, and when the tokens in the Giveaway Reserve contract are used up.
-- TESTING - Test timelocking from several different wallets to see if gas usage changes.
+- CONTRACT TESTING - Test timelocking from several different wallets to see if gas usage changes.
 
 
 ### Order of actions when deploying the contracts for testing:
@@ -43,7 +39,12 @@ contract2Address = '0xD93355C3e7E1cB4B8e6bafe39c45a4B204DD2843'; // Insert addre
 tokenContractAddress = '0x09136144d9E442314051735DCa3Ead1a705f1546'; // Insert address of BSOV token contract
 giveawayReserveContractAddress = '0x8a6c076C67685230fb5e63EBF00943DCD32d09BC'; // Insert address of Giveaway Reserve contract.
 
-
+(Optional: To test the stats page: First setup the sovcube-apps repository (https://github.com/realrouse/sovcube-apps) and follow the instructions there)
+- Copy /site/config.php-sample and rename it to config.php, and fill in MySQL data.
+- Edit /site/functions.php and add the Timelock Reward Reserve Contract here: `$timelockRewardReserveContractAddress = "0xFC88e4103A5e3647cF3661e2ef41C985b73585DB";
+`
 - Done! Now you are able to test the website, the dApp, and the contracts.
 
+### Backend (sovcube-apps repository)
+- Run ´sudo apt-get install php-mysqli´
 

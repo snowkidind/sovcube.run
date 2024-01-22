@@ -49,21 +49,21 @@ function updateProgressBar(totalTimelocked, totalEligibleAmount) {
     currentProgressElement.style.width = progressPercent + '%';
     
     // Update the tooltip with the current progress
-    progressBarElement.setAttribute('data-tooltip', `This many tokens have been timelocked already: ${formattedTotalTimelockedNum.toLocaleString()} BSOV of a maximum of ${formattedTimelockLimit.toLocaleString()} BSOV. The red markers indicate the advancement to the next tier.`);
+    progressBarElement.setAttribute('data-tooltip', `This many tokens have been timelocked already: ${formattedTotalTimelockedNum.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} BSOV of a maximum of ${formattedTimelockLimit.toLocaleString()} BSOV.`);
 
  // Update the Total Timelocked Tokens display
     const totalTimelockedDisplayElement = document.getElementById('totalTimelockedAmount');
-    totalTimelockedDisplayElement.textContent = (Number(totalTimelocked) / 1e8).toLocaleString() + ` BSOV`; // Assuming 8 decimal places for your token
+    totalTimelockedDisplayElement.textContent = (Number(totalTimelocked) / 1e8).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ` BSOV`; // Assuming 8 decimal places for your token
 
     // Update the Total Rewards Sent display
     const totalRewardsSentDisplayElement = document.getElementById('totalRewardsSentAmount');
-    totalRewardsSentDisplayElement.textContent = (Number(totalEligibleAmount) / 1e8).toLocaleString() + ` BSOV`; // Assuming 8 decimal places for your token
+    totalRewardsSentDisplayElement.textContent = (Number(totalEligibleAmount) / 1e8).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ` BSOV`; // Assuming 8 decimal places for your token
   
 	// Update the Rewards Left display
     const rewardsLeftElement = document.getElementById('rewardsLeft');
 // Assuming 8 decimal places for your token
 const rewardsLeft = 300000 - (Number(totalEligibleAmount) / 1e8);
-rewardsLeftElement.textContent = rewardsLeft.toLocaleString() + ` BSOV`;
+rewardsLeftElement.textContent = rewardsLeft.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ` BSOV`;
 
 }
 

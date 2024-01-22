@@ -20,10 +20,10 @@
             <h1 class="brand-name">Timelock Rewards</h1>
             <h2>Be Early To Maximize Your Rewards</h2>
 
-            <p>Welcome to SovCube Timelock Rewards! We're inviting the community to participate in a unique event where early users have the chance to double their BSOV token holdings. Here's how you can be a part of it:</p>
+            <p>Welcome to SovCube Timelock Rewards! We're inviting the community to participate in a unique event that will last for years, where early users have the chance to double their <a href="https://bsovtoken.com" target="_blank">BSOV token</a> holdings. Here's how you can be a part of it:</p>
 <div class="stats-container">
 <div id="roiDisplay">
-    <h4>Receive <span id="roiPercentage">0</span>% ROI of your investment if you timelock tokens in the current tier</h4>
+    <h4>Receive <span id="roiPercentage">[Not Loaded...]</span>% ROI of your investment if you timelock tokens in the current tier</h4>
 </div>
 </div>
 
@@ -37,10 +37,10 @@
 <div class="body-container">
 <div class="text-container">     
 	    <h3>Understanding the Reward Tiers</h3>
-
+<p>The following numbers provide statistical insights applicable to all SovCube users.</p>
 <div class="giveaway-progress-container">
-    <div class="giveaway-progress-bar" id="giveawayProgressBar" data-tooltip="Current Progress: 1,000 / 1,500,000 BSOV">
-        <div class="current-progress" style="width: calc(500000 / 1500000 * 100%);"></div>
+    <div class="giveaway-progress-bar" id="giveawayProgressBar" data-tooltip="Current Progress: [Not Loaded...] / 1,500,000 BSOV">
+        <div class="current-progress" style="width: calc(0 / 1500000 * 100%);"></div>
         <!-- Markers for every 150,000 tokens -->
         <div class="marker" style="left: calc(150000 / 1500000 * 100%);" title="150,000 Tokens"></div>
         <div class="marker" style="left: calc(300000 / 1500000 * 100%);" title="300,000 Tokens"></div>
@@ -54,6 +54,7 @@
         <!--<div class="marker" style="left: calc(1500000 / 1500000 * 100%);" title="1,500,000 Tokens"></div>-->
     </div>
 </div>
+<p>This progress bar above represents the total timelocked tokens from all users. The red markers indicate progress towards the next tier, achieved every time our users timelock 150,000 BSOV tokens.</p>
 <div class="stats-container">
 <div id="totalTimelockedDisplayElement" class="stats-container">
     <h3>Total Timelocked Tokens by Users:</h3>
@@ -132,6 +133,6 @@
     
 </div>
 <script src="/dapp/config.js"></script>
-<script src="/giveaway/giveaway-progress.js"></script>
+<script src="/rewards/giveaway-progress.js"></script>
 </body>
 </html>

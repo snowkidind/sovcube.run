@@ -56,7 +56,8 @@ let timeLeftInSeconds, giveawayUnlockTimeInSeconds;
             timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
             giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
         } catch (error) {
-            console.error("Time Left Error:", error.message);
+           // console.error("Time Left Error:", error.message);
+	
             timeLeftInSeconds = 0; // Set to 0 or a suitable default value
             giveawayUnlockTimeInSeconds = 0; // Set to 0 or a suitable default value
         }
@@ -104,14 +105,14 @@ async function fetchContract2Info(account) {
         const formattedGiveawayUnlockTime = formatTimeLeft(Number(giveawayUnlockTimeInSeconds));
         const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
 
-        updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens);
+        updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds);
     } catch (error) {
         console.error("Error in fetching Contract 2 info:", error);
     }
 }
 
 
-function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, unlockTime, withdrawRate, formattedEligibleTokens) {
+function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, unlockTime, withdrawRate, formattedEligibleTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds) {
 	
 	const mainContractInfoElement = document.getElementById('mainContractInfo');
     mainContractInfoElement.innerHTML = `
@@ -121,30 +122,52 @@ function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiv
 
 	const giveawayAccountElement = document.getElementById('giveawayAccount');
     giveawayAccountElement.innerHTML = `
-	<h3 style="color:orange; border-bottom:1px solid orange;">Rewards</h3>	
+	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>	
 	<p><b>Unclaimed Timelock Rewards:</b> <span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
 	`;
 
 
-
+if (timeLeftInSeconds > 0) {
 	const regularAccountElement = document.getElementById('regularAccount');
     regularAccountElement.innerHTML = `
         <h3>Regular Account</h3>
-        <p><b>Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-        <p style="margin-top:10px;"><b>Unlock Time:</b><br>${formattedTimeLeft}</p>
+        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime">${formattedTimeLeft}</span></p>
     `;
 
+}
+if (timeLeftInSeconds === 0) {
+	const regularAccountElement = document.getElementById('regularAccount');
+    regularAccountElement.innerHTML = `
+        <h3>Regular Account</h3>
+        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
+    `;
+}
+
+if (giveawayUnlockTimeInSeconds > 0) {
     // Update Incoming Tokens Account Info
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
-        <p><b>Unlock Time:</b> ${formattedGiveawayUnlockTime}</p>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedGiveawayUnlockTime}</span></p>
         <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
     `;
 }
+if (giveawayUnlockTimeInSeconds === 0) {
+    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
+    incomingTokensAccountElement.innerHTML = `
+        <h3>Incoming Tokens Account</h3>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
+	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+    `;
+}
 
+}
 
+/*
 let fetchInterval;
 
 function startFetching() {
@@ -154,7 +177,7 @@ function startFetching() {
 		fetchContract2Info(selectedAccount);
 		fetchContract1Info(selectedAccount);
         }
-    }, 5000);
+    }, 10000);
 }
 
 function stopFetching() {
@@ -169,5 +192,82 @@ window.onblur = stopFetching;
 
 // Also start fetching when the page initially loads
 startFetching();
+*/
 
+/*
+let fetchInterval;
+
+function startFetching() {
+const contractSelect = document.getElementById('contractSelect');
+
+contractSelect.addEventListener('change', function(event) {
+        const selectedContract = event.target.value;
+
+	fetchInterval = setInterval(function() {
+        if (!document.hidden && selectedAccount) {
+            if (selectedContract === 'contract1') {
+                fetchContract1Info(selectedAccount);
+            } else if (selectedContract === 'contract2') {
+                fetchContract2Info(selectedAccount);
+            }
+            // You can add additional conditions for other contracts as needed.
+        }
+    }, 10000);
+
+});
+}
+
+
+function stopFetching() {
+    clearInterval(fetchInterval);
+}
+
+// Start fetching when the window gains focus
+window.onfocus = startFetching;
+
+// Stop fetching when the window loses focus
+window.onblur = stopFetching;
+
+// Also start fetching when the page initially loads
+startFetching();
+*/
+
+
+let fetchInterval;
+function startFetching() {
+const contractSelect = document.getElementById('contractSelect');
+
+contractSelect.addEventListener('change', function(event) {
+    const selectedContract = event.target.value;
+
+    clearInterval(fetchInterval); // Clear the previous interval
+
+    fetchInterval = setInterval(function() {
+        if (!document.hidden && selectedAccount) {
+            if (selectedContract === 'contract1') {
+                fetchContract1Info(selectedAccount);
+            } else if (selectedContract === 'contract2') {
+                fetchContract2Info(selectedAccount);
+            }
+            // You can add additional conditions for other contracts as needed.
+        }
+    }, 10000);
+});
+}
+
+function stopFetching() {
+    clearInterval(fetchInterval);
+}
+
+// Start fetching when the window gains focus
+window.onfocus = function() {
+    startFetching();
+    contractSelect.dispatchEvent(new Event('change')); // Trigger change event on window focus to update based on the selected contract immediately.
+};
+
+// Stop fetching when the window loses focus
+window.onblur = stopFetching;
+
+// Also start fetching when the page initially loads
+startFetching();
 

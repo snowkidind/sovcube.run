@@ -60,7 +60,7 @@
         <li><a href="#legal">Legal and Compliance</a></li>
     </ul>
 </div>
-<p style="color:red;">This page is currently under construction. Some of the content has been automatically generated, and is just acting as a placeholder.</p>
+<!--<p style="color:red;">This page is currently under construction. Some of the content has been automatically generated, and is just acting as a placeholder.</p>-->
     <!-- Introduction -->
     <section id="introduction">
         <h2>Introduction</h2>
@@ -70,6 +70,21 @@
 <p>
 This documentation aims to provide a comprehensive understanding of SovCube's functionalities, its integration with the BSOV ecosystem,
  and how it enhances token value and stability. Whether you're a new user or an experienced one, this guide will assist you in making the most out of SovCube's features.
+</p>
+
+<h3>Why Timelock Tokens?</h3>
+<p>
+In a crypto landscape plagued by countless rugpulls and uncertainties, we introduce a system that guarantees 100% unruggability.
+Our innovation is not just about security; it's designed to potentially usher in a new era of hyperdeflation.
+</p>
+<p>
+BSOV Token, known for its inherent deflationary nature, forms the cornerstone of this concept.
+By introducing SovCube Timelock Rewards and enabling users to lock their tokens, we set in motion a cascade effect.
+The circulating supply of BSOV Token will dramatically decrease, potentially reaching unprecedented lows.
+</p><p>
+In a world where traditional fiat currencies are characterized by inflation or even hyperinflation, we stand in stark contrast.
+BSOV Token with SovCube Timelocking is a testament to our commitment to creating a currency that defies the norm, 
+offering a secure, anti-inflationary alternative in the cryptocurrency realm.
 </p>
     </section>
 
@@ -102,7 +117,7 @@ and BSOV Tokens. You can either buy ETH and BSOV using the Metamask Wallet,
 or if you have already bought them, you can transfer them from another wallet or cryptocurrency exchange.</p>	
 	<h3>How to buy BSOV Tokens</h3>
 	<p>First you will need ETH which works as gasoline for the Ethereum Blockchain.
-Then you can go to <a href="https://bsovtoken.com/trade">Trade BSOV</a> page, and buy BSOV Tokens. 
+Then you can go to <a target="_blank" href="https://bsovtoken.com/trade">Trade BSOV</a> page, and buy BSOV Tokens. 
 With ETH you can send transactions and interact with smart-contracts on Ethereum. 
 BSOV Token is a smart-contract built on Ethereum, so you will need ETH to interact with BSOV Token.</p>
 	<p>You can see more info about buying BSOV Token at this page:</p>
@@ -225,7 +240,7 @@ featuring explanations of contract functions, security measures, and how to inte
                 <td>2nd of August 2019</td>
             </tr>
             <tr>
-                <th>Current Amount</th>
+                <th>Current Amount Timelocked</th>
                 <td>[web3 call]</td>
             </tr>
             <tr>
@@ -233,7 +248,7 @@ featuring explanations of contract functions, security measures, and how to inte
                 <td>29th of January 2020</td>
             </tr>
             <tr>
-                <th>Release Rate</th>
+                <th>Withdrawal Rate</th>
                 <td>1000 BSOV per week</td>
             </tr>
         </tbody>
@@ -246,7 +261,7 @@ featuring explanations of contract functions, security measures, and how to inte
         <tbody>
             <tr>
                 <th>Function</th>
-                <td>Timelock, Withdraw & Giveaway BSOV Tokens</td>
+                <td>Timelock, Timelock Rewards, Withdraw & Send Locked BSOV Tokens</td>
             </tr>
             <tr>
                 <th>Contract Address</th>
@@ -257,7 +272,7 @@ featuring explanations of contract functions, security measures, and how to inte
                 <td>21st of December 2023</td>
             </tr>
             <tr>
-                <th>Current Amount</th>
+                <th>Current Amount Timelocked</th>
                 <td>[web3 call]</td>
             </tr>
             <tr>
@@ -265,7 +280,7 @@ featuring explanations of contract functions, security measures, and how to inte
                 <td>16th of September 2026</td>
             </tr>
             <tr>
-                <th>Release Rate</th>
+                <th>Withdrawal Rate</th>
                 <td>100 BSOV per week</td>
             </tr>
         </tbody>
@@ -311,12 +326,12 @@ SovCube interacts with BSOV Token and uses it as its base currency for timelocki
 A lot of the BSOV Token supply is locked in SovCube, making BSOV Token even more deflationary.
 Another thing that makes BSOV Token even more deflationary is that the PoW-mining has stopped
  due to a "Bricking-bug" in the smart-contract code of BSOV, that completely stopped PoW-mining forever.
-You can read more about the "Bricking-bug" <a href="https://real-rouse.medium.com/bsov-token-has-stopped-minting-new-tokens-20b19bbf5eae">here</a>.
+You can read more about the "Bricking-bug" <a target="_blank" href="https://real-rouse.medium.com/bsov-token-has-stopped-minting-new-tokens-20b19bbf5eae">here</a>.
         </p>
 	<h3>BSOV Token Contract Address:</h3>
 <p>0x26946ada5ecb57f3a1f91605050ce45c482c9eb1</p>
 <h3>How to buy BSOV Token</h3>
-<p>To buy BSOV Tokens go to the <a href="https://bsovtoken.com">BSOV Token website</a> or directly to the <a href="https://bsovtoken.com/trade">Trade BSOV page</a> for more info.</p>
+<p>To buy BSOV Tokens go to the <a target="_blank" href="https://bsovtoken.com">BSOV Token website</a> or directly to the <a target="_blank" href="https://bsovtoken.com/trade">Trade BSOV page</a> for more info.</p>
  </section>
 
 

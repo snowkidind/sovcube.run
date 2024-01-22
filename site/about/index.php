@@ -43,7 +43,7 @@ which fits well with the idea of securely timelocking tokens.
 	</p>
 	<h2>Contact and support</h2>
     <p class="linklist">
-        You can go to the <a class="linklist" href="https://t.me/SovCube">SovCube Telegram group</a> and ask for help, or if you have any issues or find any bugs.
+        You can go to the <a class="linklist" target="_blank" href="https://t.me/SovCube">SovCube Telegram group</a> and ask for help, or if you have any issues or find any bugs.
     </p>
     <h2>What is BSOV Token</h2>
 <p class="linklist">
@@ -51,7 +51,7 @@ BSOV Token is a deflationary cryptocurrency and a PoW (Proof of Work) mineable E
  It features a supply schedule and halvings reminiscent of Bitcoin. 
 However, the mining functionality of BSOV Token has ceased, halting any further inflation.
  Consequently, no additional BSOV Tokens will be created under that specific contract. You can find more info about BSOV Token
- on their website at <a class="linklist" href="https://bsovtoken.com">bsovtoken.com</a>
+ on their website at <a class="linklist" target="_blank" href="https://bsovtoken.com">bsovtoken.com</a>
 </p>
 
 <h2 style="text-align:center;">Links</h2>
