@@ -22,66 +22,11 @@
 		"constant": true,
 		"inputs": [
 			{
-				"name": "_addr",
-				"type": "address"
-			}
-		],
-		"name": "getGiveawayBalance",
-		"outputs": [
-			{
-				"name": "_balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_receivers",
-				"type": "address[]"
-			},
-			{
-				"name": "_amounts",
-				"type": "uint256[]"
-			}
-		],
-		"name": "markTokensForGiveaway",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_amount",
-				"type": "uint256"
-			},
-			{
-				"name": "fromGiveaway",
-				"type": "bool"
-			}
-		],
-		"name": "withdraw",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
 				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "pendingGiveaways",
+		"name": "pendingIncoming",
 		"outputs": [
 			{
 				"name": "amount",
@@ -105,13 +50,73 @@
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"name": "fromIncomingTokensAccount",
+				"type": "bool"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "setTimelockRewardReserveAddress",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "acceptIncomingTokens",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
-		"name": "giveawayReserveAddress",
+		"name": "timelockRewardReserveAddress",
 		"outputs": [
 			{
 				"name": "",
 				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_addr",
+				"type": "address"
+			}
+		],
+		"name": "getLastIncomingAccountWithdrawal",
+		"outputs": [
+			{
+				"name": "_lastWithdrawalTime",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -152,7 +157,58 @@
 				"type": "address"
 			}
 		],
-		"name": "getGiveawayTimeLeft",
+		"name": "getIncomingAccountTimeLeft",
+		"outputs": [
+			{
+				"name": "_timeLeft",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_addr",
+				"type": "address"
+			}
+		],
+		"name": "getIncomingAccountBalance",
+		"outputs": [
+			{
+				"name": "_balance",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_receivers",
+				"type": "address[]"
+			},
+			{
+				"name": "_amounts",
+				"type": "uint256[]"
+			}
+		],
+		"name": "markTimelockedTokensForSend",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getTimeLeft",
 		"outputs": [
 			{
 				"name": "_timeLeft",
@@ -171,7 +227,7 @@
 				"type": "address"
 			}
 		],
-		"name": "getUnclaimedGiveawayBalance",
+		"name": "getUntakenIncomingBalance",
 		"outputs": [
 			{
 				"name": "",
@@ -180,62 +236,6 @@
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			}
-		],
-		"name": "getLastGiveawayWithdrawal",
-		"outputs": [
-			{
-				"name": "_lastWithdrawalTime",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getTimeLeft",
-		"outputs": [
-			{
-				"name": "_timeLeft",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "claimGiveawayTokens",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"name": "setGiveawayReserveAddress",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -282,7 +282,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "GiveawayMarked",
+		"name": "sendTimelockedMarked",
 		"type": "event"
 	},
 	{

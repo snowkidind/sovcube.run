@@ -17,7 +17,7 @@ function formatBigInt($value) {
 
 
 function timelockLeaderboard($tableName) {
-$timelockRewardReserveContractAddress = "0xFC88e4103A5e3647cF3661e2ef41C985b73585DB"; // Put Timelock Reward Reserve Contract Address here
+$timelockRewardReserveContractAddress = "0x891A82776FDF33851A4C676C39b5082467A805b6"; // insert Timelock Reward Reserve Contract Address here
  	global $conn, $giveawayReserveContractAddress;
 // echo "POST Address inside function: " . $giveawayReserveContractAddress . "<br>";
 
@@ -51,14 +51,19 @@ $timelockRewardReserveContractAddress = "0xFC88e4103A5e3647cF3661e2ef41C985b7358
  */
             // Calculate the netAmount and format it
             $netAmount = $row['netAmount'];
-         //   $formattedNetAmount = number_format($netAmount, 0, '.', ',');
-$formattedNetAmount = formatBigInt($row['netAmount']);
+	    $totalFrozen = $row['totalFrozen'];
+	    $totalUnfrozen = $row['totalUnfrozen'];
 
+         //   $formattedNetAmount = number_format($netAmount, 0, '.', ',');
+
+$formattedNetAmount = formatBigInt($row['netAmount']);
+$formattedTotalFrozen = formatBigInt($row['totalFrozen']);
+$formattedTotalUnfrozen = formatBigInt($row['totalUnfrozen']);
 
             $leaderboard[] = [
                 'address' => $formattedAddress,
-                'totalFrozen' => $row['totalFrozen'],
-                'totalUnfrozen' => $row['totalUnfrozen'],
+                'totalFrozen' => $formattedTotalFrozen,
+                'totalUnfrozen' => $formattedTotalUnfrozen,
                 'netAmount' => $formattedNetAmount,
             ];
         }

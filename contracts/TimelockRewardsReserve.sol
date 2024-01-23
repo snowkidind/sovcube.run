@@ -27,7 +27,7 @@ library SafeMath {
 }
 
 interface ITimelockContract {
-    function markTokensForGiveaway(address[] calldata receivers, uint256[] calldata amounts) external;
+    function markTimelockedTokensForSend(address[] calldata receivers, uint256[] calldata amounts) external;
     function getBalance(address _addr) external view returns (uint256);
 }
 
@@ -35,7 +35,7 @@ interface ITokenContract {
     function approveAndCall(address spender, uint tokens, bytes calldata data) external returns (bool);
 }
 
-contract GiveawayReserve {
+contract TimelockRewardsReserve {
     using SafeMath for uint256;
     address owner;
     ITimelockContract timelockContract;
@@ -77,7 +77,7 @@ function setupTiers() internal {
         
     }
 
-function getGiveawayRatioForTier(uint256 tier) internal pure returns (uint256) {
+function getRewardRatioForTier(uint256 tier) internal pure returns (uint256) {
 
     if (tier == 1) return 1 * 10**8;
     if (tier == 2) return 0.5 * 10**8;
@@ -100,20 +100,20 @@ function updateEligibility(address user, uint256 amountTimelocked) external {
     uint256 newEligibleAmount = 0;
     uint256 nextTierThreshold = currentTier.mul(15000000000000);
     if (totalTimelocked < nextTierThreshold || currentTier == 10) {
-        uint256 giveawayRatio = getGiveawayRatioForTier(currentTier);
-        newEligibleAmount = amountTimelocked.mul(giveawayRatio).div(10**8);
+        uint256 rewardRatio = getRewardRatioForTier(currentTier);
+        newEligibleAmount = amountTimelocked.mul(rewardRatio).div(10**8);
         totalTimelockedInTier[currentTier] = totalTimelockedInTier[currentTier].add(amountTimelocked);
         userTimelockedInTier[user][currentTier] = userTimelockedInTier[user][currentTier].add(amountTimelocked);
     } else {
         uint256 amountInCurrentTier = nextTierThreshold.sub(totalTimelocked.sub(amountTimelocked));
-        uint256 giveawayRatioCurrent = getGiveawayRatioForTier(currentTier);
-        newEligibleAmount = amountInCurrentTier.mul(giveawayRatioCurrent).div(10**8);
+        uint256 rewardRatioCurrent = getRewardRatioForTier(currentTier);
+        newEligibleAmount = amountInCurrentTier.mul(rewardRatioCurrent).div(10**8);
         totalTimelockedInTier[currentTier] = totalTimelockedInTier[currentTier].add(amountInCurrentTier);
         userTimelockedInTier[user][currentTier] = userTimelockedInTier[user][currentTier].add(amountInCurrentTier);
         currentTier++;
         uint256 amountInNextTier = amountTimelocked.sub(amountInCurrentTier);
-        uint256 giveawayRatioNext = getGiveawayRatioForTier(currentTier);
-        newEligibleAmount = newEligibleAmount.add(amountInNextTier.mul(giveawayRatioNext).div(10**8));
+        uint256 rewardRatioNext = getRewardRatioForTier(currentTier);
+        newEligibleAmount = newEligibleAmount.add(amountInNextTier.mul(rewardRatioNext).div(10**8));
         totalTimelockedInTier[currentTier] = totalTimelockedInTier[currentTier].add(amountInNextTier);
         userTimelockedInTier[user][currentTier] = userTimelockedInTier[user][currentTier].add(amountInNextTier);
     }
@@ -121,7 +121,7 @@ function updateEligibility(address user, uint256 amountTimelocked) external {
     totalEligibleAmount = totalEligibleAmount.add(newEligibleAmount);
 }
 
-function claimGiveawayReserve() public {
+function claimTimelockRewards() public {
     require(eligibleAmount[msg.sender] > 0, "You have no eligible tokens for Timelock Rewards. You have to timelock tokens first.");
 
     uint256 amount = eligibleAmount[msg.sender];
@@ -132,7 +132,7 @@ function claimGiveawayReserve() public {
     uint256[] memory amounts = new uint256[](1);
     receivers[0] = msg.sender;
     amounts[0] = amount;
-    timelockContract.markTokensForGiveaway(receivers, amounts);
+    timelockContract.markTimelockedTokensForSend(receivers, amounts);
 }
 
 

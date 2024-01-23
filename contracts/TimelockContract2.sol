@@ -1,7 +1,7 @@
 
 pragma solidity 0.5.9;
 
-// Sovcube TimeLock, & Slow Release & Timelocked Giveaway Contract
+// Sovcube TimeLock, & Slow Release & Send Timelocked Tokens Contract
 // https://SovCube.com
 // 
 //
@@ -11,8 +11,8 @@ pragma solidity 0.5.9;
 //
 // This contract locks deposited BSOV Tokens for 1000 days from the day the contract is deployed. Tokens can be added at any TimeLock
 // within that period without resetting the timer.
-// Once the users have timelocked their tokens, they are able to giveaway timelocked tokens to anyone,
-// they can even batch several addresses into one giveaway-transaction.
+// Once the users have timelocked their tokens, they are able to send timelocked tokens to anyone,
+// they can even batch several addresses into one "Send Timelocked Tokens" transaction.
 //
 // After the desired date is reached, users can withdraw tokens with a rate limit to prevent all holders
 // from withdrawing and selling at the same time. The limit is 100 BSoV per week per user once the 1000 days is hit.
@@ -46,38 +46,38 @@ contract ERC20Interface {
     event Transfer(address indexed from, address indexed to, uint tokens);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 }
-interface IGiveawayReserve {
+interface ITimelockRewardReserve {
     function updateEligibility(address user, uint256 amount) external;
 }
 
 
-contract LockMyBSOV {
+contract TimelockContract2 {
     address owner;
     using SafeMath for uint;
 
-    struct Giveaway {
+    struct incomingTimelockStruct {
     uint256 amount;
     uint256 newLockTime;
     address from;
     bool isPending;
 }
 
-    address constant tokenContract = 0x40019c75dd9fF27d5cD182F9034D67a6b754308B; // The BSOV Token contract
+    address constant tokenContract = 0x240E059d1B46159d74f103ab7dC63c0478DEE8Dc; // The BSOV Token contract
 
-    address public giveawayReserveAddress;
-    IGiveawayReserve giveawayReserve;
+    address public timelockRewardReserveAddress;
+    ITimelockRewardReserve timelockRewardReserve;
     uint constant PRECISION = 100000000;
-    uint constant timeUntilUnlocked = 1000 days;            // All tokens locked for 1000 days after contract creation.
+    uint constant timeUntilUnlocked = 0 days;            // All tokens locked for 1000 days after contract creation.
     uint constant maxWithdrawalAmount = 100 * PRECISION;  // Max withdrawal of 100 tokens per week per user once 1000 days is hit.
     uint constant timeBetweenWithdrawals = 7 days;
     uint unfreezeDate;
-    mapping (address => uint) giveawayBalance;
-    mapping (address => uint) giveawayLockExpiration;
+    mapping (address => uint) incomingAccountBalance;
+    mapping (address => uint) incomingAccountLockExpiration;
 	mapping (address => uint) balance;
 	mapping (address => uint) lastWithdrawal;
-    mapping (address => uint) lastGiveawayWithdrawal;
-    mapping(address => Giveaway) public pendingGiveaways;
-    event GiveawayMarked(address indexed from, address indexed to, uint256 amount);
+    mapping (address => uint) lastIncomingAccountWithdrawal;
+    mapping(address => incomingTimelockStruct) public pendingIncoming;
+    event sendTimelockedMarked(address indexed from, address indexed to, uint256 amount);
     event TokensClaimed(address indexed to, uint256 amount);
     event TokensFrozen (
         address indexed addr,
@@ -101,12 +101,12 @@ contract LockMyBSOV {
         _;
     }
 
-function setGiveawayReserveAddress(address _address) public onlyOwner {
-    giveawayReserveAddress = _address;
-    giveawayReserve = IGiveawayReserve(giveawayReserveAddress);
+function setTimelockRewardReserveAddress(address _address) public onlyOwner {
+    timelockRewardReserveAddress = _address;
+    timelockRewardReserve = ITimelockRewardReserve(timelockRewardReserveAddress);
 }
 
-function markTokensForGiveaway(address[] memory _receivers, uint[] memory _amounts) public {
+function markTimelockedTokensForSend(address[] memory _receivers, uint[] memory _amounts) public {
     require(_receivers.length == _amounts.length, "Mismatched array lengths");
 
     uint totalAmount = 0;
@@ -120,37 +120,37 @@ function markTokensForGiveaway(address[] memory _receivers, uint[] memory _amoun
         address receiver = _receivers[i];
         uint amount = _amounts[i];
         
-        pendingGiveaways[receiver].amount += amount;
-        pendingGiveaways[receiver].from = msg.sender;
-        pendingGiveaways[receiver].isPending = true;
+        pendingIncoming[receiver].amount += amount;
+        pendingIncoming[receiver].from = msg.sender;
+        pendingIncoming[receiver].isPending = true;
 
-        emit GiveawayMarked(msg.sender, receiver, amount);
+        emit sendTimelockedMarked(msg.sender, receiver, amount);
     }
     balance[msg.sender] -= totalAmount;
 }
 
-function claimGiveawayTokens() public {
-    require(pendingGiveaways[msg.sender].isPending, "You have no Incoming Tokens to accept!");
-    Giveaway memory giveaway = pendingGiveaways[msg.sender];
-    giveawayBalance[msg.sender] += giveaway.amount; 
-    giveawayLockExpiration[msg.sender] = now + 1000 days; // When Incoming Tokens are accepted, the unlock date resets to 1000 days.
-    delete pendingGiveaways[msg.sender]; 
-    emit TokensClaimed(msg.sender, giveaway.amount);
+function acceptIncomingTokens() public {
+    require(pendingIncoming[msg.sender].isPending, "You have no Incoming Tokens to accept!");
+    incomingTimelockStruct memory incomingTokens = pendingIncoming[msg.sender];
+    incomingAccountBalance[msg.sender] += incomingTokens.amount; 
+    incomingAccountLockExpiration[msg.sender] = now + 1 days; // When Incoming Tokens are accepted, the unlock date resets to 1000 days.
+    delete pendingIncoming[msg.sender]; 
+    emit TokensClaimed(msg.sender, incomingTokens.amount);
 }
 
-function withdraw(uint _amount, bool fromGiveaway) public {
+function withdraw(uint _amount, bool fromIncomingTokensAccount) public {
     require(_amount > 0, "Withdraw amount must be greater than zero");
-    uint256 balanceToCheck = fromGiveaway ? giveawayBalance[msg.sender] : balance[msg.sender];
-    uint256 lockExpiration = fromGiveaway ? giveawayLockExpiration[msg.sender] : unfreezeDate;
+    uint256 balanceToCheck = fromIncomingTokensAccount ? incomingAccountBalance[msg.sender] : balance[msg.sender];
+    uint256 lockExpiration = fromIncomingTokensAccount ? incomingAccountLockExpiration[msg.sender] : unfreezeDate;
     require(now >= lockExpiration, "Tokens are locked!");
     require(balanceToCheck >= _amount, "Insufficient timelocked balance for withdrawal");    
 
     require(_amount <= maxWithdrawalAmount, "Exceeds max withdrawal amount");
 
-    if (fromGiveaway) {
-        require(now >= lastGiveawayWithdrawal[msg.sender] + timeBetweenWithdrawals, "Trying to withdraw too frequently!");
-        giveawayBalance[msg.sender] -= _amount;
-        lastGiveawayWithdrawal[msg.sender] = now;
+    if (fromIncomingTokensAccount) {
+        require(now >= lastIncomingAccountWithdrawal[msg.sender] + timeBetweenWithdrawals, "Trying to withdraw too frequently!");
+        incomingAccountBalance[msg.sender] -= _amount;
+        lastIncomingAccountWithdrawal[msg.sender] = now;
     } else {
         require(now >= lastWithdrawal[msg.sender] + timeBetweenWithdrawals, "Trying to withdraw too frequently!");
         balance[msg.sender] -= _amount;
@@ -165,8 +165,8 @@ function withdraw(uint _amount, bool fromGiveaway) public {
         return balance[_addr];
     }
 
-function getLastGiveawayWithdrawal(address _addr) public view returns (uint256 _lastWithdrawalTime) {
-    return lastGiveawayWithdrawal[_addr];
+function getLastIncomingAccountWithdrawal(address _addr) public view returns (uint256 _lastWithdrawalTime) {
+    return lastIncomingAccountWithdrawal[_addr];
 }
 
     function getLastWithdrawal(address _addr) public view returns (uint256 _lastWithdrawal) {
@@ -178,24 +178,24 @@ function getLastGiveawayWithdrawal(address _addr) public view returns (uint256 _
         return unfreezeDate - now;
     } 
 
-    function getGiveawayTimeLeft(address _addr) public view returns (uint256 _timeLeft) {
-    if (giveawayLockExpiration[_addr] <= now) {
+    function getIncomingAccountTimeLeft(address _addr) public view returns (uint256 _timeLeft) {
+    if (incomingAccountLockExpiration[_addr] <= now) {
         return 0; // Tokens are already unlocked
     } else {
-        return giveawayLockExpiration[_addr] - now;
+        return incomingAccountLockExpiration[_addr] - now;
     }
 }
 
-function getUnclaimedGiveawayBalance(address _user) public view returns (uint256) {
-    if(pendingGiveaways[_user].isPending) {
-        return pendingGiveaways[_user].amount;
+function getUntakenIncomingBalance(address _user) public view returns (uint256) {
+    if(pendingIncoming[_user].isPending) {
+        return pendingIncoming[_user].amount;
     } else {
         return 0;
     }
 }
 
-function getGiveawayBalance(address _addr) public view returns (uint256 _balance) {
-    return giveawayBalance[_addr];
+function getIncomingAccountBalance(address _addr) public view returns (uint256 _balance) {
+    return incomingAccountBalance[_addr];
 }
 
     function receiveApproval(address _sender, uint256 _value, address _tokenContract, bytes memory _extraData) public {
@@ -206,9 +206,9 @@ function getGiveawayBalance(address _addr) public view returns (uint256 _balance
         uint _adjustedValue = _value.mul(99).div(100);
         balance[_sender] += _adjustedValue;
         emit TokensFrozen(_sender, _adjustedValue, now);
-        if (_sender != giveawayReserveAddress) {
-        if (giveawayReserveAddress != address(0)) {
-        giveawayReserve.updateEligibility(_sender, _adjustedValue);
+        if (_sender != timelockRewardReserveAddress) {
+        if (timelockRewardReserveAddress != address(0)) {
+        timelockRewardReserve.updateEligibility(_sender, _adjustedValue);
      }
   }
     }

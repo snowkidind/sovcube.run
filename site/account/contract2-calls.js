@@ -45,16 +45,16 @@ async function getContract2TimelockedTokens(account) {
         console.error('Contract2 is not initialized when fetching timelocked tokens');
         return;
     }
-    const unclaimedGiveawayTokens = await contract2.methods.getUnclaimedGiveawayBalance(account).call();
+    const unclaimedGiveawayTokens = await contract2.methods.getUntakenIncomingBalance(account).call();
     const timelockedTokens = await contract2.methods.getBalance(account).call();
-    const timelockedGiveawayTokens = await contract2.methods.getGiveawayBalance(account).call();
+    const timelockedGiveawayTokens = await contract2.methods.getIncomingAccountBalance(account).call();
     // const timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
     // const giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
 
 let timeLeftInSeconds, giveawayUnlockTimeInSeconds;
           try {
             timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
-            giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
+            giveawayUnlockTimeInSeconds = await contract2.methods.getIncomingAccountTimeLeft(account).call();
         } catch (error) {
            // console.error("Time Left Error:", error.message);
 	

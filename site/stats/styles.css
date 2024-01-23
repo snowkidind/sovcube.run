@@ -1,5 +1,18 @@
 /* General Styles */
 
+.governance-text-container {
+background-color:#060F1C;
+}
+.governance-text {
+background-color:#0E223F;
+color:white;
+margin-left:50px;
+margin-right:50px;
+padding:20px;
+border-radius:10px;
+
+}
+
 .container {
     display: flex;
     justify-content: space-evenly;

@@ -118,11 +118,11 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
             
             <div class="radio-buttons">
                 <input type="radio" id="timelock2" name="contract2Action" value="timelock">
-                <label for="timelock2" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time and receive Timelock Rewards. Tokens cannot be accessed until the Unlock Date is reached.">Timelock</label>
+                <label for="timelock2" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time and receive Timelock Rewards. Tokens cannot be accessed until the Lock Time has expired.">Timelock</label>
                 <input type="radio" id="withdraw2" name="contract2Action" value="withdraw">
-                <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Unlock Date is reached, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
+                <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Lock Time has expired, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
                 <input type="radio" id="giveaway" name="contract2Action" value="giveaway">
-                <label for="giveaway" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Unlock Date resets to 1000 days.">Send Locked Tokens</label>
+                <label for="giveaway" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Lock Time resets to 1000 days.">Send Locked Tokens</label>
             </div>
             <input type="number" id="amount2" placeholder="Amount of BSOV">
 

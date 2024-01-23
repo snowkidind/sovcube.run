@@ -135,7 +135,7 @@ you now have everything you need to interact with SovCube.</p>
     <h2>Timelocking Tokens</h2>
     <p>
 	The "Timelock Tokens" function allows users to lock a specified amount of tokens for a period set by the contract.
-If the user timelocks their tokens, the tokens will be locked until the Unlock Date is reached. The Unlock Date is determined by when the contract was deployed, and the lock time parameter in the contract.
+If the user timelocks their tokens, the tokens will be locked until the Lock Time has expired. The Lock Time is determined by when the contract was deployed, and the lock time parameter in the contract.
 <p>Contract 1 was deployed the 2nd of August, 2019, and had only a 180 days lock time, which happened the 29th of January, 2020.
 Contract 1 has a weekly withdrawal rate of 1000 tokens per week, but even so, very few tokens have been withdrawn as of writing this (17th of January, 2024).
 </p>
@@ -149,7 +149,7 @@ Contract 2 has a weekly withdrawal rate of 100 tokens per week, but also had an 
 <section id="withdrawal">
     <h2>Withdrawal Process</h2>
     <p>
-	The "Withdrawal Process" enables users to retrieve their locked tokens after the Unlock Date has been reached.
+	The "Withdrawal Process" enables users to retrieve their locked tokens after the Lock Time has expired.
  This function provides a seamless way to unlock and access the previously timelocked tokens, making them available for further use or transfer.</p>
 <p>
 Contract 1 has a weekly withdrawal rate of 1000 tokens
@@ -180,21 +180,21 @@ After you click this button, the balance of "Unclaimed Timelock Rewards" will be
     <p>
 	"Accept Incoming Tokens" is a button that refers to the process of receiving tokens after claiming the Timelock Rewards or if you have been sent timelocked tokens from  other users who used the "Send Locked Tokens" function.
 After clicking "Accept Incoming Tokens" button, the balance in "Incoming Tokens" will be transferred to the "Timelocked Tokens" balance in the "Incoming Tokens Account".
-After the tokens have been transferred, the Unlock Time of the "Incoming Tokens Account" will reset to the initial 1000 days, regardless of how much time you have left of your Unlock Time in the Incoming Tokens Account. 
+After the tokens have been transferred, the Lock Time of the "Incoming Tokens Account" will reset to the initial 1000 days, regardless of how much time you have left of your Lock Time in the Incoming Tokens Account. 
     </p>
 </section>
 
 <section id="regularaccount">
     <h2>Regular Account</h2>
     <p>
-	The "Regular Account" is where the user-initiated timelocked balance ends up, so whenever you use the "Timelock" function, the tokens end up here. They are locked until the contracts Unlock Date is reached, and can only be withdrawn according to the weekly withdrawal rate set by the contract.
+	The "Regular Account" is where the user-initiated timelocked balance ends up, so whenever you use the "Timelock" function, the tokens end up here. They are locked until the contracts' Lock Time has expired, and can only be withdrawn according to the weekly withdrawal rate set by the contract.
     </p>
 </section>
 
 <section id="incomingaccount">
     <h2>Incoming Tokens Account</h2>
     <p>
-	The "Incoming Tokens Account" is where all claimed Timelock Rewards and timelocked tokens that were sent by other users end up. If users send you tokens through the "Send Locked Tokens" function, they end up here, and after you click Accept Incoming Tokens button, they end up here. Note that when accepting incoming tokens, the Unlock Date of the Timelocked Tokens in the "Incoming Tokens Account" is reset to 1000 days, regardless of how much time you have left on it. 
+	The "Incoming Tokens Account" is where all claimed Timelock Rewards and timelocked tokens that were sent by other users end up. If users send you tokens through the "Send Locked Tokens" function, they end up here, and after you click Accept Incoming Tokens button, they end up here. Note that when accepting incoming tokens, the Lock Time of the Timelocked Tokens in the "Incoming Tokens Account" is reset to 1000 days, regardless of how much time you have left on it. 
    </p>
 </section>
 

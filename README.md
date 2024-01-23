@@ -2,18 +2,26 @@
 
 Timelock BSOV Tokens and receive giveaway rewards.
 
-### Known issues:
+### Known issues and to-do:
 
-- Rename giveaway-variables to timelockreward
-- CODE COSMETIC - Code Cleanup of app.js needed.
-- CODE COSMETIC - Code Cleanup of contract2-calls.js needed.
-- CODE COSMETIC - Code Cleanup of contract1-calls.js needed.
-- CODE COSMETIC - Code Cleanup of styles.css needed.
-- CODE COSMETIC - Code Cleanup of GiveawayReserve Contract needed.
-- CODE COSMETIC - Code Cleanup of TimelockContract needed.
+- Rename giveaway-variables to timelockreward [done in visible texts, contracts and methods, the other variables remain]
+- Add more info to My Account page.
+- Add more info to Stats page.
+- Write finishing touches to Docs & Help page.
+
+- CODE COSMETIC - Code Cleanup of app.js
+- CODE COSMETIC - Code Cleanup of contract2-calls.js
+- CODE COSMETIC - Code Cleanup of contract1-calls.js
+- CODE COSMETIC - Code Cleanup of styles.css
+- CODE COSMETIC - Code Cleanup of account.js.
+- CODE COSMETIC - Code Cleanup of functions.php
+- CODE COSMETIC - Code Cleanup of /stats/index.php
+- CODE COSMETIC - Code Cleanup of /dapp/index.php
+
 - UI COSMETIC - Implement responsive design fitting for phones and tablets.
 - CONTRACT TESTING - Test timelocking from several different wallets to see if gas usage changes.
 
+- Fix withdraw function on dApp page
 
 ### Order of actions when deploying the contracts for testing:
 - Use "Remix - Ethereum IDE"

@@ -64,7 +64,7 @@ function fetchContract1Info(account) {
     console.log("Fetching Contract 1 info for account:", account);
     getContract1TimelockedTokens(account).then(({ timelockedTokens, timeLeftInSeconds }) => {
         console.log("Contract 1 Timelocked Tokens:", timelockedTokens);
-        console.log("Contract 1 Unlock Time-Seconds:", timeLeftInSeconds);
+        console.log("Contract 1 Lock Time-Seconds:", timeLeftInSeconds);
 	const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(2);
 	const formattedTimeLeft = formatTimeLeft2(Number(timeLeftInSeconds));
         updateContract1Details(formattedTokens, '29 January 2020', 1000, formattedTimeLeft, timeLeftInSeconds);
@@ -79,7 +79,7 @@ function updateContract1Details(tokensLocked, unlockTime, withdrawRate, formatte
     const infoElement = document.getElementById('contract1DynamicInfo');
 if (timeLeftInSeconds > 0) {
 	infoElement.innerHTML = `
-	<p style="text-align:center;"><b>Slow-Release Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
+	<p style="text-align:center;"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
     <div class="contract-info-container">
         <div class="contract-info-style">
 <div id="regularAccount1">

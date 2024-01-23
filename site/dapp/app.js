@@ -1004,7 +1004,7 @@ async function claimGiveawayReserveTokens() {
         console.error('GiveawayReserve is not initialized for claiming tokens');
         return;
     }
-    const transaction = window.giveawayReserve.methods.claimGiveawayReserve();
+    const transaction = window.giveawayReserve.methods.claimTimelockRewards();
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
@@ -1031,7 +1031,7 @@ async function claimGiveawayTokens() {
         console.error('Contract 2 is not initialized for claiming tokens');
         return;
     }
-    const transaction = window.contract2.methods.claimGiveawayTokens();
+    const transaction = window.contract2.methods.acceptIncomingTokens();
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
@@ -1083,7 +1083,7 @@ async function withdrawTokensContract1(amount) {
         console.log("Transaction receipt: ", receipt);
     } catch (error) {
         if (error.message.includes("HighFees")) {
-            document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the unlock date has been reached, or you are trying to withdraw/timelock too many tokens.';
+            document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the Lock Time has expired, or you are trying to withdraw/timelock too many tokens.';
 		document.getElementById('clearError').style.display = 'block';
  } else {
             console.error("Error in transaction: ", error);
@@ -1110,7 +1110,7 @@ async function withdrawTokensContract2(amount) {
         console.log("Transaction receipt: ", receipt);
     } catch (error) {
         if (error.message.includes("HighFees")) {
-            document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the unlock date has been reached, or you are trying to withdraw/timelock too many tokens.';
+            document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the Lock Time has expired, or you are trying to withdraw/timelock too many tokens.';
 		document.getElementById('clearError').style.display = 'block';
 } else {
             console.error("Error in transaction: ", error);
@@ -1138,7 +1138,7 @@ async function earmarkTokensForGiveaway(addresses, amounts) {
  return;
     }
 
-    const transaction = window.contract2.methods.markTokensForGiveaway(addresses, amounts);
+    const transaction = window.contract2.methods.markTimelockedTokensForSend(addresses, amounts);
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);

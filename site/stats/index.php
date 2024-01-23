@@ -97,6 +97,7 @@ function formatNumber($value) {
             <div class="info-container" id="contract1UsersInfo">
                 <div class="leaderboard-container" id="contract1Leaderboard">
     <h2>Leaderboard</h2>
+<h3>Top Timelockers</h3>
     <table>
         <tr>
             <th>Address</th>
@@ -129,6 +130,7 @@ function formatNumber($value) {
             <div class="info-container" id="contract2UsersInfo">
                 <div class="leaderboard-container" id="contract2Leaderboard">
     <h2>Leaderboard</h2>
+<h3>Top Timelockers</h3>
     <table>
         <tr>
             <th>Address</th>
@@ -151,7 +153,12 @@ function formatNumber($value) {
         </div>
 
     </div>
-    <div class="container">
+
+<div class="governance-text-container">
+<div class="governance-text">In the future, we are considering the implementation of a governance function specifically for the Top Timelockers featured on the leaderboard. Therefore, maintaining your tokens timelocked in a single address could become an important aspect of leveraging this potential new feature.</div>
+   </div>
+
+ <div class="container">
 
         <div class="contract-section">
             <h2>Timelock Rewards</h2>
