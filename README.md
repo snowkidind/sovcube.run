@@ -41,10 +41,10 @@ Timelock BSOV Tokens and receive Timelock Rewards.
 - Install apache2 and php and setup apache to direct to localhost, and the folder of sovcube.com/site
 - Edit /dapp/app.js and edit the addresses of:
 
-`contract1Address = '0xb045F5aa2A057ab5CA8bcbd70D23f06E3409Ba77'; // Insert address of Original Timelock Contract`
-`contract2Address = '0xD93355C3e7E1cB4B8e6bafe39c45a4B204DD2843'; // Insert address of TimelockContract`
-`tokenContractAddress = '0x09136144d9E442314051735DCa3Ead1a705f1546'; // Insert address of BSOV token contract`
-`timelockReserveContractAddress = '0x8a6c076C67685230fb5e63EBF00943DCD32d09BC'; // Insert address of Timelock Rewards Reserve contract.`
+`contract1Address = '0x...'; // Insert address of Original Timelock Contract`
+`contract2Address = '0x...'; // Insert address of TimelockContract`
+`tokenContractAddress = '0x...'; // Insert address of BSOV token contract`
+`timelockReserveContractAddress = '0x...'; // Insert address of Timelock Rewards Reserve contract.`
 
 (Optional: To test the stats page: First setup the sovcube-apps repository (https://github.com/realrouse/sovcube-apps) and follow the instructions there)
 - Copy /site/config.php-sample and rename it to config.php, and fill in MySQL data.
@@ -53,5 +53,6 @@ Timelock BSOV Tokens and receive Timelock Rewards.
 - Done! Now you are able to test the website, the dApp, and the contracts.
 
 ### Backend (sovcube-apps repository)
-- Run ´sudo apt-get install php-mysqli´
+- First clone the Github repository of "sovcube-apps" at https://github.com/realrouse/sovcube-apps
+- Follow the instructions of that repository
 
