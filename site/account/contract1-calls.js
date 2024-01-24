@@ -95,7 +95,7 @@ if (timeLeftInSeconds > 0) {
 
 if (timeLeftInSeconds === 0) {
         infoElement.innerHTML = `
-        <p style="text-align:center;"><b>Slow-Release Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
+        <p style="text-align:center;"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
     <div class="contract-info-container">
         <div class="contract-info-style">
 <div id="regularAccount1">

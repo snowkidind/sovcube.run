@@ -52,15 +52,22 @@ async function getContract2TimelockedTokens(account) {
     // const giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
 
 let timeLeftInSeconds, giveawayUnlockTimeInSeconds;
+
           try {
             timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
-            giveawayUnlockTimeInSeconds = await contract2.methods.getIncomingAccountTimeLeft(account).call();
         } catch (error) {
            // console.error("Time Left Error:", error.message);
-	
+
             timeLeftInSeconds = 0; // Set to 0 or a suitable default value
-            giveawayUnlockTimeInSeconds = 0; // Set to 0 or a suitable default value
         }
+try {
+            giveawayUnlockTimeInSeconds = await contract2.methods.getIncomingAccountTimeLeft(account).call();
+} catch (error) {
+
+            giveawayUnlockTimeInSeconds = 0; // Set to 0 or a suitable default value
+}
+
+
 
     return { timelockedTokens, timelockedGiveawayTokens, unclaimedGiveawayTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds };
 }
@@ -144,7 +151,7 @@ if (timeLeftInSeconds === 0) {
         <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
     `;
 }
-
+/*
 if (giveawayUnlockTimeInSeconds > 0) {
     // Update Incoming Tokens Account Info
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
@@ -164,8 +171,47 @@ if (giveawayUnlockTimeInSeconds === 0) {
 	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
     `;
 }
+*/
+
+console.log(giveawayUnlockTimeInSeconds);
+if (giveawayUnlockTimeInSeconds > 0) {
+    // Update Incoming Tokens Account Info
+    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
+    incomingTokensAccountElement.innerHTML = `
+        <h3>Incoming Tokens Account</h3>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedGiveawayUnlockTime}</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+    `;
+
+   }
+
+else if (parseFloat(tokensGiveawayLocked) == 0)  {
+
+    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
+    incomingTokensAccountElement.innerHTML = `
+        <h3>Incoming Tokens Account</h3>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p><b>Lock Time:</b> <span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+    `;
+
+
+    }
+
+else if (giveawayUnlockTimeInSeconds == 0) {
+    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
+    incomingTokensAccountElement.innerHTML = `
+        <h3>Incoming Tokens Account</h3>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime" style="color:green;">Unlocked!</span></p>
+	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+    `;
+}
 
 }
+
+
 
 
 let fetchInterval;

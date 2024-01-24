@@ -174,7 +174,7 @@ else if (parseFloat(tokensGiveawayLocked) == 0)  {
 
     }
 
-else if (giveawayUnlockTimeInSeconds === 0) {
+else if (giveawayUnlockTimeInSeconds == 0) {
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>

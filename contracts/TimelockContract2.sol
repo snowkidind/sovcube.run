@@ -7,12 +7,16 @@ pragma solidity 0.5.9;
 //
 // DO NOT SEND TOKENS DIRECTLY TO THIS CONTRACT!!!
 // THEY WILL BE LOST FOREVER!!!
-// YOU HAVE TO MAKE A CALL TO THE CONTRACT TO BE ABLE TO DEPOSIT & WITHDRAW!!!
+// YOU HAVE TO MAKE A CALL TO THE CONTRACT TO BE ABLE TO TIMELOCK & WITHDRAW!!!
 //
-// This contract locks deposited BSOV Tokens for 1000 days from the day the contract is deployed. Tokens can be added at any TimeLock
-// within that period without resetting the timer.
+// This contract timelocks BSOV Tokens for 1000 days from the day the contract is deployed.
+// Tokens can be timelocked within that period without resetting the timer.
+// The timelocked tokens will be sent to the user's "Regular Account"
+//
 // Once the users have timelocked their tokens, they are able to send timelocked tokens to anyone,
-// they can even batch several addresses into one "Send Timelocked Tokens" transaction.
+// they can even batch several addresses and amounts into one "Send Timelocked Tokens" transaction. 
+// If you receive timelocked tokens from someone, they will be sent to your "Untaken Incoming Balance".
+// If you accept the incoming tokens using the "acceptIncomingTokens" method, the Lock Time of your Incoming Tokens Account will reset to 1000 days.
 //
 // After the desired date is reached, users can withdraw tokens with a rate limit to prevent all holders
 // from withdrawing and selling at the same time. The limit is 100 BSoV per week per user once the 1000 days is hit.
@@ -67,9 +71,10 @@ contract TimelockContract2 {
     address public timelockRewardReserveAddress;
     ITimelockRewardReserve timelockRewardReserve;
     uint constant PRECISION = 100000000;
-    uint constant timeUntilUnlocked = 0 days;            // All tokens locked for 1000 days after contract creation.
+    uint constant timeUntilUnlocked = 1000 days;            // All tokens locked for 1000 days after contract creation.
     uint constant maxWithdrawalAmount = 100 * PRECISION;  // Max withdrawal of 100 tokens per week per user once 1000 days is hit.
-    uint constant timeBetweenWithdrawals = 7 days;
+    uint constant timeBetweenWithdrawals = 7 days;        // Time between withdrawals
+    uint constant resetIncomingAccountTimeLeft = 1000 days; // When Untaken Incoming Tokens are accepted, the Lock Time of the Incoming Account Balance will reset to 1000 days.
     uint unfreezeDate;
     mapping (address => uint) incomingAccountBalance;
     mapping (address => uint) incomingAccountLockExpiration;
@@ -79,6 +84,7 @@ contract TimelockContract2 {
     mapping(address => incomingTimelockStruct) public pendingIncoming;
     event sendTimelockedMarked(address indexed from, address indexed to, uint256 amount);
     event TokensClaimed(address indexed to, uint256 amount);
+    
     event TokensFrozen (
         address indexed addr,
         uint256 amt,
@@ -101,11 +107,13 @@ contract TimelockContract2 {
         _;
     }
 
+// This function sets the Timelock Reward Reserve contract's address. Can only be done by owner.
 function setTimelockRewardReserveAddress(address _address) public onlyOwner {
     timelockRewardReserveAddress = _address;
     timelockRewardReserve = ITimelockRewardReserve(timelockRewardReserveAddress);
 }
 
+// This function sends timelocked tokens to one or several addresses' "Untaken Incoming Balance".
 function markTimelockedTokensForSend(address[] memory _receivers, uint[] memory _amounts) public {
     require(_receivers.length == _amounts.length, "Mismatched array lengths");
 
@@ -129,15 +137,17 @@ function markTimelockedTokensForSend(address[] memory _receivers, uint[] memory 
     balance[msg.sender] -= totalAmount;
 }
 
+// This function accepts Untaken Incoming Balance - the Lock Time will reset for the Incoming Tokens Account.
 function acceptIncomingTokens() public {
     require(pendingIncoming[msg.sender].isPending, "You have no Incoming Tokens to accept!");
     incomingTimelockStruct memory incomingTokens = pendingIncoming[msg.sender];
     incomingAccountBalance[msg.sender] += incomingTokens.amount; 
-    incomingAccountLockExpiration[msg.sender] = now + 1 days; // When Incoming Tokens are accepted, the unlock date resets to 1000 days.
+    incomingAccountLockExpiration[msg.sender] = now + resetIncomingAccountTimeLeft; // When Incoming Tokens are accepted, the unlock date resets to the days specified in resetIncomingAccountTimeLeft.
     delete pendingIncoming[msg.sender]; 
     emit TokensClaimed(msg.sender, incomingTokens.amount);
 }
 
+// This function withdraws timelocked tokens once the Lock Time has expired. You can choose which account you want to withdraw from.
 function withdraw(uint _amount, bool fromIncomingTokensAccount) public {
     require(_amount > 0, "Withdraw amount must be greater than zero");
     uint256 balanceToCheck = fromIncomingTokensAccount ? incomingAccountBalance[msg.sender] : balance[msg.sender];
@@ -161,23 +171,27 @@ function withdraw(uint _amount, bool fromIncomingTokensAccount) public {
     emit TokensUnfrozen(msg.sender, _amount, now);
 }
 
+// This function gets the balance of the regular account.
     function getBalance(address _addr) public view returns (uint256 _balance) {
         return balance[_addr];
     }
 
+// This function gets the time (seconds) since the last withdrawal from the Incoming Tokens Account
 function getLastIncomingAccountWithdrawal(address _addr) public view returns (uint256 _lastWithdrawalTime) {
     return lastIncomingAccountWithdrawal[_addr];
 }
 
+// This function gets the time (in seconds) since the last withdrawal from the Regular Account
     function getLastWithdrawal(address _addr) public view returns (uint256 _lastWithdrawal) {
         return lastWithdrawal[_addr];
     }
    
+// This function gets the time left (in seconds) of the Lock Time of the Regular Account   
     function getTimeLeft() public view returns (uint256 _timeLeft) {
         require(unfreezeDate > now, "Tokens are unlocked and ready for withdrawal");
         return unfreezeDate - now;
     } 
-
+// This function gets the time left (in seconds) of the Lock Time of the Incoming Tokens Account
     function getIncomingAccountTimeLeft(address _addr) public view returns (uint256 _timeLeft) {
     if (incomingAccountLockExpiration[_addr] <= now) {
         return 0; // Tokens are already unlocked
@@ -186,6 +200,7 @@ function getLastIncomingAccountWithdrawal(address _addr) public view returns (ui
     }
 }
 
+// This function gets the balance of the Untaken Incoming Tokens
 function getUntakenIncomingBalance(address _user) public view returns (uint256) {
     if(pendingIncoming[_user].isPending) {
         return pendingIncoming[_user].amount;
@@ -194,6 +209,7 @@ function getUntakenIncomingBalance(address _user) public view returns (uint256) 
     }
 }
 
+// This function gets the balance of the Incoming Tokens Account
 function getIncomingAccountBalance(address _addr) public view returns (uint256 _balance) {
     return incomingAccountBalance[_addr];
 }

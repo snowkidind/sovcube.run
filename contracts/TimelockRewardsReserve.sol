@@ -62,6 +62,7 @@ constructor(address _timelockContractAddress, address _tokenContractAddress) pub
         setupTiers();
     }
  
+ // This function sets up the amount of tokens that are being rewarded in total, in each tier.
 function setupTiers() internal {
     tiers[1] = 15000000000000;
     tiers[2] = 7500000000000;
@@ -77,6 +78,7 @@ function setupTiers() internal {
         
     }
 
+// This function sets up the Reward Ratio for each tier.
 function getRewardRatioForTier(uint256 tier) internal pure returns (uint256) {
 
     if (tier == 1) return 1 * 10**8;
@@ -93,6 +95,11 @@ function getRewardRatioForTier(uint256 tier) internal pure returns (uint256) {
 
 }
 
+
+// This function is called by the Timelock Contract whenever users timelock tokens. 
+// It calculates the Rewarded Tokens.
+// If the amount in the timelock transaction exceeds to the next tier, it will calculate the correct amount from both tiers,
+// and it will advance to the next tier, and update the user's eligibleAmount.
 function updateEligibility(address user, uint256 amountTimelocked) external {
     require(msg.sender == address(timelockContract), "Not timelock contract");
     require(amountTimelocked <= 14500000000000, "Cannot timelock more than 145,000 tokens at once");
@@ -121,6 +128,8 @@ function updateEligibility(address user, uint256 amountTimelocked) external {
     totalEligibleAmount = totalEligibleAmount.add(newEligibleAmount);
 }
 
+// This function is called by the user who has already received rewards in the eligibleAmount by timelocking tokens.
+// The tokens are sent using Timelock Contract's markTimelockedTokensForSend method and is sent to the user's Untaken Incoming Tokens balance.
 function claimTimelockRewards() public {
     require(eligibleAmount[msg.sender] > 0, "You have no eligible tokens for Timelock Rewards. You have to timelock tokens first.");
 
@@ -135,7 +144,9 @@ function claimTimelockRewards() public {
     timelockContract.markTimelockedTokensForSend(receivers, amounts);
 }
 
-
+// This function is for the contract owner to timelock the initial 300,000 tokens for rewards.
+// The timelocked tokens are then not owned by the owner anymore. The tokens are then owned by this contract,
+// and is only distributed to users who timelock tokens in the Timelock Contract.
 function ownerTimelockTokens(uint256 tokens, bytes memory data) public onlyOwner {
         require(tokenContract.approveAndCall(address(timelockContract), tokens, data), "Token approval failed");
     }
