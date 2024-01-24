@@ -1,8 +1,8 @@
 
-const contract1Address = '0x729c1ED996e852698D88129da0780749a9E6F707'; // Replace with actual Contract 1 address
-const contract2Address = '0xa02AF0DdF188A5dC3495Da2eFDBD614Ae7A21018'; // Replace with actual Contract 2 address
-const tokenContractAddress = '0x240E059d1B46159d74f103ab7dC63c0478DEE8Dc';
-const giveawayReserveContractAddress = '0x782412935A7A4AfD222FB3693cb0eF0a3255FA78';
+const contract1Address = '0xD7acf55092d7d25377b3b590Bf52F721DFf05f58'; // Replace with actual Contract 1 address
+const contract2Address = '0x5e8A7CC22330475763A8C5e0cEDDF7Da7d10F377'; // Replace with actual Contract 2 address
+const tokenContractAddress = '0x71882b39531992Bb18a3896D65Bae93A26932336';
+const giveawayReserveContractAddress = '0x5cb12448576b69061ED35963AE45A29b6a712bb8';
 console.log("config.js is starting...");
 
 /*
