@@ -41,10 +41,10 @@ Timelock BSOV Tokens and receive Timelock Rewards.
 - Install apache2 and php and setup apache to direct to localhost, and the folder of sovcube.com/site
 - Edit /dapp/app.js and edit the addresses of:
 
-`contract1Address = '0x...'; // Insert address of Original Timelock Contract`
-`contract2Address = '0x...'; // Insert address of TimelockContract`
-`tokenContractAddress = '0x...'; // Insert address of BSOV token contract`
-`timelockReserveContractAddress = '0x...'; // Insert address of Timelock Rewards Reserve contract.`
+- `contract1Address = '0x...'; // Insert address of Original Timelock Contract`
+- `contract2Address = '0x...'; // Insert address of TimelockContract`
+- `tokenContractAddress = '0x...'; // Insert address of BSOV token contract`
+- `timelockReserveContractAddress = '0x...'; // Insert address of Timelock Rewards Reserve contract.`
 
 (Optional: To test the stats page: First setup the sovcube-apps repository (https://github.com/realrouse/sovcube-apps) and follow the instructions there)
 - Copy /site/config.php-sample and rename it to config.php, and fill in MySQL data.
