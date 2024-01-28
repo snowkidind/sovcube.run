@@ -22,7 +22,7 @@
 <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 
 <!--<script src="/dapp/connect.js"> </script>-->
-
+<script src="/dapp/config.js"></script>
 
 </head>
 <body>
@@ -50,7 +50,8 @@
         <li><a href="#smart-contract">Smart Contract Details</a>
 <ul>
                 <li><a href="#contract-1">Contract 1</a></li>
-                <li><a href="#contract-2">Contract 2</a></li>
+		<li><a href="#contract-2">Contract 2</a></li>
+		<li><a href="#rewardreserve">Rewards Reserve Contract</a></li>
             </ul>
 </li>
         <li><a href="#faqs">FAQs</a></li>
@@ -236,7 +237,7 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Contract Address</th>
-                <td><a href="https://etherscan.io/address/0x19E6BF254aBf5ABC925ad72d32bac44C6c03d3a4" target="_blank">0x19E6BF254aBf5ABC925ad72d32bac44C6c03d3a4</a></td>
+                <td><a id="contract1Link" href="#" target="_blank"></a></td>
             </tr>
             <tr>
                 <th>Deploy Date</th>
@@ -268,7 +269,7 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Contract Address</th>
-                <td><a href="https://etherscan.io/address/0x73C5c8F335abdA336d55b69169F5FFdb9d61550b" target="_blank">0x73C5c8F335abdA336d55b69169F5FFdb9d61550b</a></td>
+                <td><a id="contract2Link" href="#" target="_blank"></a></td>
             </tr>
             <tr>
                 <th>Deploy Date</th>
@@ -290,9 +291,49 @@ featuring explanations of contract functions, security measures, and how to inte
     </table>
 </section>
 
-
+<section id="rewardreserve" class="table-section">
+    <h2>Rewards Reserve Contract Details</h2>
+    <table class="contract-table">
+        <tbody>
+            <tr>
+                <th>Function</th>
+                <td>Distribute BSOV Tokens to the users who timelock tokens, according to the current tier.</td>
+            </tr>
+            <tr>
+                <th>Contract Address</th>
+                <td><a id="rewardsReserveLink" href="#" target="_blank"></a></td>
+            </tr>
+            <tr>
+                <th>Deploy Date</th>
+                <td>15th of February 2024</td>
+            </tr>
+           
+            <tr>
+                <th>Total BSOV Rewards Distributed</th>
+                <td>[web3 call]</td>
+            </tr>
+        
+        </tbody>
+    </table>
+</section>
 
     </section>
+<script>
+var rewardsReserveLink = document.getElementById("rewardsReserveLink");
+var contract1Link = document.getElementById("contract1Link");
+var contract2Link = document.getElementById("contract2Link");
+
+rewardsReserveLink.href = "https://etherscan.io/address/" + giveawayReserveContractAddress;
+contract1Link.href = "https://etherscan.io/address/" + contract1Address;
+contract2Link.href = "https://etherscan.io/address/" + contract2Address;
+
+rewardsReserveLink.textContent = giveawayReserveContractAddress;
+contract1Link.textContent = contract1Address;
+contract2Link.textContent = contract2Address;
+
+
+
+</script>
 
 
     <!-- FAQs -->
