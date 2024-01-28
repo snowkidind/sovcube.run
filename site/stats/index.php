@@ -87,8 +87,11 @@ function formatNumber($value) {
 
 
         <div class="contract-section">
-            <h2>Contract 1</h2>
-            <div class="info-container" id="contract1TimeLeft">
+            <h2 id="contract-heading">Contract 1</h2>
+<a id="external-link1" href='#' target="_blank"><img src="/images/external-link.png" width="15px" alt="External Link Icon"> Etherscan</a>
+           
+
+ <div class="info-container" id="contract1TimeLeft">
                 Time Left: Loading...
             </div>
             <div class="info-container" id="contract1TotalTimelocked">
@@ -120,7 +123,9 @@ function formatNumber($value) {
         </div>
 
         <div class="contract-section">
-            <h2>Contract 2</h2>
+            <h2 id="contract-heading">Contract 2</h2>
+		<a id="external-link2" href='#' target="_blank"><img src="/images/external-link.png" width="15px" alt="External Link Icon"> Etherscan</a>
+
             <div class="info-container" id="contract2TimeLeft">
                 Time Left: Loading...
             </div>
@@ -153,7 +158,16 @@ function formatNumber($value) {
         </div>
 
     </div>
+<script>
 
+    // Get the link element by its ID
+    const externalLink1 = document.getElementById('external-link1');
+    const externalLink2 = document.getElementById('external-link2');
+
+    // Set the href attribute of the link using the contract1Address
+    externalLink1.href = `https://goerli.etherscan.io/address/${contract1Address}`;
+    externalLink2.href = `https://goerli.etherscan.io/address/${contract2Address}`;
+</script>
 <div class="governance-text-container">
 <div class="governance-text">In the future, we are considering the implementation of a governance function specifically for the Top Timelockers featured on the leaderboard. Therefore, maintaining your tokens timelocked in a single address could become an important aspect of leveraging this potential new feature.</div>
    </div>
