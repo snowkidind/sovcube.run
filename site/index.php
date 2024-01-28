@@ -26,7 +26,8 @@
 
 </head>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
+<?php // include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; 
+?>
 <body>
 
 
@@ -37,28 +38,7 @@
 <div class="blurred-background"></div>
     <div class="text-container">
 <center><h1 class="brand-name">SovCube</h1></center>
-    <center><h2>Freedom to Save Money</h2></center>
-    <p><strong>Freedom to Save Money is Financial Freedom.</strong>
-Keep your <a href="https://bsovtoken.com" target="_blank">BSOV Tokens</a> safe and help them grow with SovCube. In a cryptocurrency market that's risky and always changing, thinking long-term is really important.
-SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on.
-Use SovCube's web3 dApp to make your BSOV tokens stronger and more stable for the future.
-</p>
-<br><br>
-  <center><h3>Earn Rewards While Securing Your BSOV Tokens with SovCube's Time-Lock Feature</h3></center>
-    <p>
-SovCube offers a smart way to time-lock your BSOV tokens using the web3 interface, demonstrating your commitment to BSOV Token's long-term value.
-The unique Slow-Release feature gradually reintroduces BSOV tokens to the cryptocurrency market after the time-lock period,
-preventing market shocks and maintaining supply stability.
-This responsible approach fosters trust and sustains long-term value, making SovCube an ideal choice for forward-thinking token holders.
-</p>
-</div>
-
-<div class="button-container">
-	<button onclick="window.location.href='/dapp/index.php'" class="launch-button">Launch dApp</button>
-<p id="message" style="display: none; color: red; margin-top: 10px;">Under construction</p>
-</div>
-
-
+    <center><h2>Timelock and Rewards web3 dApp<br>Coming Soon</h2></center>
 </div>
 </div>
 <script>
