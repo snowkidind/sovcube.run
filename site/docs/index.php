@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SovCube</title>
+    <title>SovCube - Docs & Help</title>
 <link rel="stylesheet" href="/docs/styles.css">
 <link rel="stylesheet" href="/styles-fonts.css">
 <link rel="icon" href="/images/favicon-logo.png" type="image/x-icon">
@@ -53,11 +53,10 @@
                 <li><a href="#contract-2">Contract 2</a></li>
             </ul>
 </li>
-        <li><a href="#advanced-features">Advanced Features</a></li>
         <li><a href="#faqs">FAQs</a></li>
 	<li><a href="#bsov">BSOV Token</a></li> 
        <li><a href="#support">Support and Community</a></li>
-        <li><a href="#legal">Legal and Compliance</a></li>
+        <li><a href="#legal">Legal - Terms</a></li>
     </ul>
 </div>
 <!--<p style="color:red;">This page is currently under construction. Some of the content has been automatically generated, and is just acting as a placeholder.</p>-->
@@ -74,7 +73,7 @@ This documentation aims to provide a comprehensive understanding of SovCube's fu
 
 <h3>Why Timelock Tokens?</h3>
 <p>
-In a crypto landscape plagued by countless rugpulls and uncertainties, we introduce a system that guarantees 100% unruggability.
+In a crypto landscape plagued by countless rugpulls and uncertainties, we introduce a system that is rugpull-resistant.
 Our innovation is not just about security; it's designed to potentially usher in a new era of hyperdeflation.
 </p>
 <p>
@@ -136,10 +135,10 @@ you now have everything you need to interact with SovCube.</p>
     <p>
 	The "Timelock Tokens" function allows users to lock a specified amount of tokens for a period set by the contract.
 If the user timelocks their tokens, the tokens will be locked until the Lock Time has expired. The Lock Time is determined by when the contract was deployed, and the lock time parameter in the contract.
-<p>Contract 1 was deployed the 2nd of August, 2019, and had only a 180 days lock time, which happened the 29th of January, 2020.
+<p><strong>Contract 1</strong> was deployed the 2nd of August, 2019, and had only a 180 days lock time, which happened the 29th of January, 2020.
 Contract 1 has a weekly withdrawal rate of 1000 tokens per week, but even so, very few tokens have been withdrawn as of writing this (17th of January, 2024).
 </p>
-<p>Contract 2 was deployed the __________, and has a 1000 days lock time.
+<p><strong>Contract 2</strong> was deployed the 15th of February, 2024, and has a 1000 days lock time.
 Contract 2 has a weekly withdrawal rate of 100 tokens per week, but also had an improvement with 3 added functions called Timelock Rewards, Send Locked Tokens and Incoming Tokens Account. 
 </p>
     </p>
@@ -152,10 +151,10 @@ Contract 2 has a weekly withdrawal rate of 100 tokens per week, but also had an 
 	The "Withdrawal Process" enables users to retrieve their locked tokens after the Lock Time has expired.
  This function provides a seamless way to unlock and access the previously timelocked tokens, making them available for further use or transfer.</p>
 <p>
-Contract 1 has a weekly withdrawal rate of 1000 tokens
+<strong>Contract 1</strong> has a weekly withdrawal rate of 1000 tokens.
     </p>
 <p>
-Contract 2 has a weekly withdrawal rate of 100 tokens, and also has an additional account called "Incoming Tokens Account", that shares the same weekly withdrawal rate as the Regular Account.
+<strong>Contract 2</strong> has a weekly withdrawal rate of 100 tokens, and also has an additional account called "Incoming Tokens Account", that shares the same weekly withdrawal rate as the Regular Account.
 </p>
 </section>
 
@@ -205,8 +204,12 @@ After the tokens have been transferred, the Lock Time of the "Incoming Tokens Ac
 They can only access these tokens after clicking the "Accept Incoming Tokens" button, and after they have waited the initial 1000 days that are set after accepting.
 <p>
 You may send timelocked tokens to several different addresses, and several different amounts in a single transaction.
-To send timelocked tokens to several different addresses with several different amounts, you would need to enter one address per line, and one amount per line. The amounts and addresses correspond to the line they are at.
- For example, if line 1 is [ADDRESS1] and line 2 is [ADDRESS2] - and then in the amounts field you type in line 1 [200] and line 2 [500], it means that 200 tokens will be sent to [ADDRESS1] and 500 tokens will be sent to [ADDRESS2].
+To send timelocked tokens to several different addresses with several different amounts, you would need to enter one address per line, and one amount per line.
+</p><p>The amounts and addresses correspond to the line they are at.
+</p> <p>
+ For example, if line 1 is [ADDRESS1] and line 2 is [ADDRESS2] 
+<br>and then in the amounts field you type in line 1 [200] and line 2 [500],
+<br> it means that 200 tokens will be sent to [ADDRESS1] and 500 tokens will be sent to [ADDRESS2].
 </p>  
 
     </p>
@@ -244,7 +247,7 @@ featuring explanations of contract functions, security measures, and how to inte
                 <td>[web3 call]</td>
             </tr>
             <tr>
-                <th>Unlock Date</th>
+                <th>Lock Time Expiry Date</th>
                 <td>29th of January 2020</td>
             </tr>
             <tr>
@@ -269,14 +272,14 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Deploy Date</th>
-                <td>21st of December 2023</td>
+                <td>15th of February 2024</td>
             </tr>
             <tr>
                 <th>Current Amount Timelocked</th>
                 <td>[web3 call]</td>
             </tr>
             <tr>
-                <th>Unlock Date</th>
+                <th>Lock Time Expiry Date</th>
                 <td>16th of September 2026</td>
             </tr>
             <tr>
@@ -291,14 +294,6 @@ featuring explanations of contract functions, security measures, and how to inte
 
     </section>
 
-    <!-- Advanced Features -->
-    <section id="advanced-features">
-        <h2>Advanced Features</h2>
-        <p>
-            For experienced users, SovCube offers a range of advanced features to explore. This section delves into these sophisticated functionalities, 
-providing insights on how to leverage them for enhanced token management and engagement in SovCube's ecosystem.
-        </p>
-    </section>
 
     <!-- FAQs -->
     <section id="faqs">
@@ -308,12 +303,13 @@ providing insights on how to leverage them for enhanced token management and eng
 It covers a wide range of topics, from basic queries to more complex issues, helping you resolve common problems and understand SovCube's operations better.
         </p>
 	<h3>Question: Will I get dividends from timelocking my tokens in SovCube?</h3>
-<p>No. There aren't any dividends embedded in the timelocking contracts of SovCube. However, 
-the community can possibly reward you already timelocked tokens by using the "Giveaway-function" in Contract 2.</p>
+<p>Yes, we call them Timelock Rewards. If you timelock your BSOV Tokens in Contract 2, you will receive Timelock Rewards. The earliest users will double their BSOV investment.</p>
 <h3>Question: Is timelocking the same as staking?</h3>
-<p>No. Timelocking is not the same as staking. Timelocking in SovCube is the act of voluntarily locking your tokens for a period of time, 
-and there is a Slow-Release mechanism which has a certain withdrawal rate per week. 
-In SovCube there is no staking. Staking is the act of depositing your tokens, and receive dividends, and at any time withdraw the tokens.</p>   
+<p>
+No, in SovCube we do not stake; we timelock and receive Timelock Rewards!
+Timelocking involves voluntarily locking your tokens for a specific duration, accompanied by a Slow-Release mechanism with a predetermined withdrawal rate per week. Unlike staking, SovCube does not support traditional staking practices, where tokens are deposited to earn dividends and can be withdrawn at any time or in a very short period.
+In SovCube, Timelocks are intended for more extended durations, and the associated Timelock Rewards remain secured and inaccessible for 1000 days after being claimed and accepted by the user.
+</p>   
  </section>
 
 <section id="bsov">
@@ -329,7 +325,7 @@ Another thing that makes BSOV Token even more deflationary is that the PoW-minin
 You can read more about the "Bricking-bug" <a target="_blank" href="https://real-rouse.medium.com/bsov-token-has-stopped-minting-new-tokens-20b19bbf5eae">here</a>.
         </p>
 	<h3>BSOV Token Contract Address:</h3>
-<p>0x26946ada5ecb57f3a1f91605050ce45c482c9eb1</p>
+<p><a href="https://etherscan.io/token/0x26946ada5ecb57f3a1f91605050ce45c482c9eb1" target="_blank">0x26946ada5ecb57f3a1f91605050ce45c482c9eb1</a></p>
 <h3>How to buy BSOV Token</h3>
 <p>To buy BSOV Tokens go to the <a target="_blank" href="https://bsovtoken.com">BSOV Token website</a> or directly to the <a target="_blank" href="https://bsovtoken.com/trade">Trade BSOV page</a> for more info.</p>
  </section>
@@ -338,21 +334,56 @@ You can read more about the "Bricking-bug" <a target="_blank" href="https://real
     <!-- Support and Community -->
     <section id="support">
         <h2>Support and Community</h2>
-        <p>
+	<p>
+Join the <a href="https://t.me/SovCube">SovCube Telegram</a> for help, support and meeting the SovCube community.
             Connect with the SovCube community and get support for any challenges you face. 
-This section provides contact information for SovCube's support team and links to community forums where you can interact with other users and share experiences.
         </p>
     </section>
 
     <!-- Legal and Compliance -->
     <section id="legal">
-        <h2>Legal and Compliance</h2>
-        <p>
-            Familiarize yourself with the legal aspects of using SovCube.
- This section outlines the necessary disclaimers, terms of use, and compliance information to ensure
- that you are fully aware of the legal considerations associated with SovCube.
-        </p>
-    </section>
+        <h2>Legal - Terms</h2>
+ <p>By accessing and using the SovCube website and decentralized application (dApp), you hereby acknowledge and agree to the following terms:</p>
+
+    <ol>
+        <li>
+            <strong>No Responsibility of SovCube:</strong>
+            <p>SovCube, its developers, and associated entities disclaim any responsibility for the accuracy, completeness, or suitability of the information and materials provided on the SovCube website and dApp. The content is provided for informational purposes only and may be subject to change without notice.</p>
+        </li>
+
+        <li>
+            <strong>User Responsibilities:</strong>
+            <p>Users of the SovCube website and dApp assume all responsibility and risk for the use of the platform. This includes, but is not limited to, any reliance on the information available, the consequences of financial transactions, and interactions with smart contracts deployed on the SovCube blockchain.</p>
+        </li>
+
+        <li>
+            <strong>No Financial or Legal Advice:</strong>
+            <p>The content on the SovCube website and dApp does not constitute financial, investment, or legal advice. Users are encouraged to conduct their own research and seek professional advice before making any financial decisions or engaging in transactions on the SovCube platform.</p>
+        </li>
+
+        <li>
+            <strong>No Guarantee of Performance:</strong>
+            <p>SovCube does not guarantee the performance, availability, or functionality of the website and dApp. The platform may be subject to disruptions, downtime, or other technical issues, and SovCube is not liable for any losses or damages resulting from such occurrences.</p>
+        </li>
+
+        <li>
+            <strong>Third-Party Links:</strong>
+            <p>The SovCube website and dApp may contain links to third-party websites or resources. SovCube is not responsible for the content, accuracy, or availability of such external sites and resources. Users access and use them at their own risk.</p>
+        </li>
+
+        <li>
+            <strong>Smart Contract Risks:</strong>
+            <p>Users acknowledge the inherent risks associated with interacting with smart contracts on the SovCube blockchain. SovCube is not responsible for any losses or damages resulting from vulnerabilities, bugs, or exploits in smart contracts.</p>
+        </li>
+
+        <li>
+            <strong>No Endorsement:</strong>
+            <p>Reference to any specific commercial product, process, or service on the SovCube website and dApp does not constitute or imply an endorsement or recommendation by SovCube, unless explicitly stated.</p>
+        </li>
+    </ol>
+
+    <p>By using the SovCube website and dApp, you agree to release SovCube and its affiliates from any liability or claims arising out of your use of the platform. This disclaimer is subject to change without notice. It is your responsibility to review and understand the terms regularly. If you do not agree with these terms, please refrain from using the SovCube website and dApp.</p>    
+</section>
 </div>
 
 

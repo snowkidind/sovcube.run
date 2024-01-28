@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SovCube dApp</title>
+    <title>SovCube - dApp</title>
 
 
 
@@ -261,7 +261,7 @@ document.getElementById('clearError').addEventListener('click', function() {
 </div>
 
 <div class="terms-container">
-    <p class="terms">Everything on this site is provided "as-is" and SovCube.com has no responsibilities. Everything you do and see on this website is 100% your responsibility. This is because SovCube is purely a voluntary community initiative.</p>
+    <p class="terms">Everything on this site is provided "as-is" and SovCube.com has no responsibilities. Everything you do and see on this website is 100% your responsibility. Read more at <a target="_blank" href="/docs/index.php/#legal">Legal - Terms</a></p>
  <a href="#" id="toggleTerms" class="toggle-terms">Disclaimer</a>
 </div>
 <script>

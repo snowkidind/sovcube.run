@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SovCube</title>
+    <title>SovCube - Global Stats</title>
 <link rel="stylesheet" href="/stats/styles.css">
 <link rel="stylesheet" href="/styles-fonts.css">
 <link rel="icon" href="/images/favicon-logo.png" type="image/x-icon">
