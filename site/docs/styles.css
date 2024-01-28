@@ -50,12 +50,12 @@ margin:0px;
 
 
 
-#contract-1 h2, #contract-2 h2 {
+#contract-1 h2, #contract-2 h2, #rewardreserve h2 {
     text-align: center;
     color: #FFFFFF;
 }
 
-#contract-1 table, #contract-2 table {
+#contract-1 table, #contract-2 table, #rewardreserve table {
     width: 100%;
     max-width:100%;
     border-collapse: collapse;
@@ -67,33 +67,34 @@ margin:0px;
     box-shadow: 0 0 20px rgba(0,0,0,0.15);
 }
 
-#contract-1 th, #contract-2 th,
-#contract-1 td, #contract-2 td {
+#contract-1 th, #contract-2 th, #rewardreserve th,
+#contract-1 td, #contract-2 td, #rewardreserve td {
     padding: 12px 15px;
     text-align: left;
 }
 
-#contract-1 th, #contract-2 th {
+#contract-1 th, #contract-2 th, #rewardreserve th {
     background-color: #0A192F;
     color: #FFFFFF;
     text-transform: uppercase;
 }
 
-#contract-1 tr, #contract-2 tr {
-    border-bottom: 1px solid #dddddd;
+#contract-1 tr, #contract-2 tr, #rewardreserve tr {
+    border-bottom: 1px solid #1E3E76;
 }
 
 
-#contract-1 tr, #contract-2 tr:last-of-type {
+#contract-1 tr:last-of-type, #rewardreserve tr:last-of-type, #contract-2 tr:last-of-type {
     border-bottom: 2px solid #0A192F;
 }
 
-#contract-1 tr:hover, #contract-2 tr:hover {
+
+#contract-1 tr:hover, #contract-2 tr:hover, #rewardreserve tr:hover {
     background-color: #0E2240;
     
 }
 
-#contract-1 code, #contract-2 code {
+#contract-1 code, #contract-2 code, #rewardreserve code {
     background: #02203C;
     color: white;
     border-radius: 3px;
