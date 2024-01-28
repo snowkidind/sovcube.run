@@ -1,5 +1,13 @@
 /* General Styles */
 
+#external-link1, #external-link2, #contract-heading {
+display: inline-block;
+        vertical-align: middle;
+}
+#external-link1, #external-link2 {
+font-size:8pt;
+}
+
 .governance-text-container {
 background-color:#060F1C;
 }
