@@ -26,7 +26,9 @@
 
 </head>
 <body>
-
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/config.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . 'db.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/top.php'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
 <!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>-->
 <div class="body-container">
@@ -245,7 +247,7 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Current Amount Timelocked</th>
-                <td>[web3 call]</td>
+                <td><?php echo $row1['netAmount']; ?></td>
             </tr>
             <tr>
                 <th>Lock Time Expiry Date</th>
@@ -277,7 +279,7 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Current Amount Timelocked</th>
-                <td>[web3 call]</td>
+                <td><?php echo $row2['netAmount']; ?></td>
             </tr>
             <tr>
                 <th>Lock Time Expiry Date</th>
