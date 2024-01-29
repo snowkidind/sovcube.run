@@ -4,8 +4,9 @@
 display: inline-block;
         vertical-align: middle;
 }
-#external-link1, #external-link2 {
+#external-link1, #external-link2, #moreinfo {
 font-size:8pt;
+horizontal-align:right;
 }
 
 .governance-text-container {
