@@ -121,8 +121,8 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
                 <label for="timelock2" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time and receive Timelock Rewards. Tokens cannot be accessed until the Lock Time has expired.">Timelock</label>
                 <input type="radio" id="withdraw2" name="contract2Action" value="withdraw">
                 <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Lock Time has expired, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
-                <input type="radio" id="giveaway" name="contract2Action" value="giveaway">
-                <label for="giveaway" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Lock Time resets to 1000 days.">Send Locked Tokens</label>
+                <input type="radio" id="sendlocked" name="contract2Action" value="sendlocked">
+                <label for="sendlocked" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Lock Time resets to 1000 days.">Send Locked Tokens</label>
             </div>
             <input type="number" id="amount2" placeholder="Amount of BSOV">
 
@@ -198,11 +198,11 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
 <label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Tokens Account?</b></label>
 </div>
             <textarea id="ethAddresses" spellcheck="false" placeholder="Enter ETH addresses to send timelocked tokens to (one address per line)"></textarea>
-	    <textarea id="giveawayAmounts" spellcheck="false"  placeholder="Enter BSOV amounts (one amount per line)"></textarea>
-          <!-- Contract 2 - Timelock, Withdraw, and Giveaway Buttons -->
+	    <textarea id="sendLockedAmounts" spellcheck="false"  placeholder="Enter BSOV amounts (one amount per line)"></textarea>
+          <!-- Contract 2 - Timelock, Withdraw, and Send Locked Tokens Buttons -->
 <button class="button" id="timelock2Button">Timelock Now</button>
 <button class="button" id="withdraw2Button">Withdraw Now</button>
-<button class="button" id="giveaway2Button">Send Locked Tokens Now</button>
+<button class="button" id="sendLocked2Button">Send Locked Tokens Now</button>
 
 
 
@@ -243,14 +243,14 @@ document.getElementById('clearError').addEventListener('click', function() {
 	      <div class="contract-info-style" id="incomingAccountContainer">
                <div id="incomingTokensAccount">   
 	      </div>	
-	              <button id="claimGiveawayButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
+	              <button id="acceptIncomingButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
 		</div>
 	</div>
 
-	      <div class="contract-info-style" id="giveawayAccountContainer">
-               <div id="giveawayAccount">
+	      <div class="contract-info-style" id="rewardsAccountContainer">
+               <div id="rewardsAccount">
 	      </div>	
-              <button id="claimGiveawayReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Timelock Rewards! By clicking this button the Unclaimed Timelock Rewards will be transferred to your 'Incoming Tokens' balance">Claim Timelock Rewards</button>
+              <button id="claimRewardsReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Timelock Rewards! By clicking this button the Unclaimed Timelock Rewards will be transferred to your 'Incoming Tokens' balance">Claim Timelock Rewards</button>
 		</div>
 	</div>
          

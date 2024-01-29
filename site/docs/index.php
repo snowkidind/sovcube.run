@@ -323,11 +323,11 @@ var rewardsReserveLink = document.getElementById("rewardsReserveLink");
 var contract1Link = document.getElementById("contract1Link");
 var contract2Link = document.getElementById("contract2Link");
 
-rewardsReserveLink.href = "https://etherscan.io/address/" + giveawayReserveContractAddress;
+rewardsReserveLink.href = "https://etherscan.io/address/" + rewardsReserveContractAddress;
 contract1Link.href = "https://etherscan.io/address/" + contract1Address;
 contract2Link.href = "https://etherscan.io/address/" + contract2Address;
 
-rewardsReserveLink.textContent = giveawayReserveContractAddress;
+rewardsReserveLink.textContent = rewardsReserveContractAddress;
 contract1Link.textContent = contract1Address;
 contract2Link.textContent = contract2Address;
 

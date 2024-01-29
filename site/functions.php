@@ -18,8 +18,8 @@ function formatBigInt($value) {
 
 function timelockLeaderboard($tableName) {
 $timelockRewardReserveContractAddress = "0x782412935A7A4AfD222FB3693cb0eF0a3255FA78"; // insert Timelock Reward Reserve Contract Address here
- 	global $conn, $giveawayReserveContractAddress;
-// echo "POST Address inside function: " . $giveawayReserveContractAddress . "<br>";
+ 	global $conn, $rewardsReserveContractAddress;
+// echo "POST Address inside function: " . $rewardsReserveContractAddress . "<br>";
 
    // echo json_encode($leaderboard);
     
@@ -34,7 +34,7 @@ $timelockRewardReserveContractAddress = "0x782412935A7A4AfD222FB3693cb0eF0a3255F
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
 
-  //    echo " - POST Address inside while loop: " . $giveawayReserveContractAddress . "<br>";
+  //    echo " - POST Address inside while loop: " . $rewardsReserveContractAddress . "<br>";
  if ($row['address'] === 'TOTAL') {
                 // For "TOTAL" address, don't shorten and don't create a link
                 $formattedAddress = 'TOTAL';

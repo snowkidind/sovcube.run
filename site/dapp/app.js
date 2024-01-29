@@ -102,17 +102,6 @@ console.log('updateUIForDisconnectedWallet Function started');
      connectYourWalletText.style.display = 'block';
 }
 
-/*
-// Function to update UI after connecting the wallet
-function updateUIForConnectedWallet(account) {
-console.log('updateUIForConnectedWallet Function started');
-    const walletStatus = document.getElementById('walletStatus');
-    walletStatus.innerText = `Connected to ${account}`;
-    walletStatus.style.color = '#2CB723';
-    toggleConnectButtonText();
-    updateUIOnConnection(selectedAccount);
-}
-*/
 
 // Function to update UI after connecting the wallet
 function updateUIForConnectedWallet(account) {
@@ -188,7 +177,7 @@ console.log('updateUIOnConnection Function started');
     const withdraw2 = document.getElementById('withdraw2');
     const timelock1 = document.getElementById('timelock1');
     const timelock2 = document.getElementById('timelock2');
-    const giveaway = document.getElementById('giveaway');
+    const sendlocked = document.getElementById('sendlocked');
     document.getElementById('contract-explanation').style.display = 'block';
                 document.getElementById('container').style.display = 'block';
 
@@ -239,7 +228,7 @@ document.getElementById('contract-explanation').style.display = 'block';
 	    timelock1.style.display = 'block';
 		document.getElementById('contract-explanation').style.display = 'none';
 	document.getElementById(`fieldContainer`).style.display = 'block';
-		document.getElementById(`claimGiveawayButton`).style.display = 'none';
+		document.getElementById(`acceptIncomingButton`).style.display = 'none';
             fetchContract1Info(account);
         } else if (selectedContract === 'contract2') {
             contract2InfoHeader.style.display = 'block';
@@ -248,9 +237,9 @@ document.getElementById('contract-explanation').style.display = 'block';
 		document.getElementById('contract-explanation').style.display = 'none';
 	    withdraw2.style.display = 'block';
 	    timelock2.style.display = 'block';
-	    giveaway.style.display = 'block';
+	    sendlocked.style.display = 'block';
 	document.getElementById(`fieldContainer`).style.display = 'block';
-		document.getElementById(`claimGiveawayButton`).style.display = 'block';
+		document.getElementById(`acceptIncomingButton`).style.display = 'block';
             fetchContract2Info(account);
         }
     });
@@ -266,14 +255,14 @@ document.getElementById('contract-explanation').style.display = 'block';
             contract1InfoHeader.style.display = 'block';
 		document.getElementById('contract-explanation').style.display = 'none';
             contract1DynamicInfo.style.display = 'block';
-		document.getElementById(`claimGiveawayButton`).style.display = 'none';
+		document.getElementById(`acceptIncomingButton`).style.display = 'none';
             fetchContract1Info(account);
         } else if (contractSelect.value === 'contract2') {
 	document.getElementById(`fieldContainer`).style.display = 'block';
             contract2InfoHeader.style.display = 'block';
 		document.getElementById('contract-explanation').style.display = 'none';
         //    contract2DynamicInfo.style.display = 'block';
-		document.getElementById(`claimGiveawayButton`).style.display = 'block';
+		document.getElementById(`acceptIncomingButton`).style.display = 'block';
             fetchContract2Info(account);
         }
 
@@ -348,11 +337,11 @@ document.getElementById('timelockRewardCalculation').style.display = 'none';
             document.getElementById('withdraw2Button').style.display = 'block';
 		        document.getElementById(`account-checkbox`).style.display = 'block';
         document.getElementById(`account-checkbox-label`).style.display = 'block';
-        } else if (radio.value === 'giveaway') {
+        } else if (radio.value === 'sendlocked') {
 		stopInterval();
             document.getElementById('ethAddresses').style.display = 'block';
-            document.getElementById('giveawayAmounts').style.display = 'block';
-            document.getElementById('giveaway2Button').style.display = 'block';
+            document.getElementById('sendLockedAmounts').style.display = 'block';
+            document.getElementById('sendLocked2Button').style.display = 'block';
         }
     });
 });
@@ -400,12 +389,12 @@ withdraw2Button.addEventListener('click', function() {
 });
 }
 
-// Event listener for the Contract 2 Giveaway button
-const giveaway2Button = document.getElementById('giveaway2Button')
-if (giveaway2Button) {
-giveaway2Button.addEventListener('click', function() {
+// Event listener for the Contract 2 Send Locked Tokens button
+const sendLocked2Button = document.getElementById('sendLocked2Button')
+if (sendLocked2Button) {
+sendLocked2Button.addEventListener('click', function() {
     const addresses = document.getElementById('ethAddresses').value.trim().split('\n');
-    const amountsText = document.getElementById('giveawayAmounts').value.trim().split('\n');
+    const amountsText = document.getElementById('sendLockedAmounts').value.trim().split('\n');
     const amounts = amountsText.map(amount => Number(amount) * 100000000);
     if (addresses.length !== amounts.length) {
         console.error('The number of addresses and amounts does not match.');
@@ -413,36 +402,23 @@ giveaway2Button.addEventListener('click', function() {
 	    document.getElementById('clearError').style.display = 'block';
 return;
     }
-    earmarkTokensForGiveaway(addresses, amounts);
+    markTimelockedTokensForSend(addresses, amounts);
 });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 // WORKING CODE
 async function updateTimelockRewardCalculation() {
     // Check if contract2 and the element exist
-    if (!window.giveawayReserve || !document.getElementById('amount2')) {
+    if (!window.rewardsReserve || !document.getElementById('amount2')) {
         console.error('Required elements are not initialized.');
         return;
     }
 
 try {
-	const currentTier = await window.giveawayReserve.methods.currentTier().call();
-const totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
+	const currentTier = await window.rewardsReserve.methods.currentTier().call();
+const totalTimelockedBigInt = await window.rewardsReserve.methods.totalTimelocked().call();
 const totalTimelocked = Number(totalTimelockedBigInt);
 const totalTimelockedFormatted = totalTimelocked / 100000000;
 
@@ -467,7 +443,6 @@ if ((totalTimelockedFormatted + timelockedTokens) >= currentTierNum * 150000) {
 }
 
 
-// Now you can use currentTierNum as a mutable variable
 
 
 
@@ -507,472 +482,6 @@ function calculateAndDisplayROI(tier) {
 
 
 
-
-
-
-/*
-// Define tier thresholds
-const tierThresholds = [
-                // Tier 1 threshold (starting at 0)
-    150000,   // Tier 2 threshold (150,000 BSOV)
-    300000,   // Tier 3 threshold (300,000 BSOV)
-    450000,   // Tier 4 threshold (450,000 BSOV)
-    600000,   // Tier 5 threshold (600,000 BSOV)
-    750000,   // Tier 6 threshold (750,000 BSOV)
-    900000,   // Tier 7 threshold (900,000 BSOV)
-    1050000,  // Tier 8 threshold (1,050,000 BSOV)
-    1200000,  // Tier 9 threshold (1,200,000 BSOV)
-    1350000,
-    1500000	    // Tier 10 threshold (1,350,000 BSOV)
-    // Add more thresholds as needed
-];
-*/
-
-
-
-
-/*
-let totalTimelockedBigInt; // This variable will hold the totalTimelocked value
-
-// Function to fetch total timelocked value
-async function fetchTotalTimelocked() {
-    try {
-        if (!window.giveawayReserve) {
-            console.error('GiveawayReserve is not initialized for fetching totalTimelocked');
-            return;
-        }
-        totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
-
-        // Continue with your code to calculate and display eligibility based on totalTimelocked
-        calculateAndDisplayEligibility();
-    } catch (error) {
-        console.error("Error fetching totalTimelocked:", error);
-    }
-}
-
-// Function to calculate and display eligibility
-function calculateAndDisplayEligibility() {
-    // Get the user-entered amount
-    const amount = parseFloat(document.getElementById('amount2').value);
-
-    // Calculate the current tier based on totalTimelocked
-    let currentTier = 1;
-    for (let i = 0; i < tierThresholds.length; i++) {
-        if (totalTimelockedBigInt >= tierThresholds[i]) {
-            currentTier = i + 1;
-        } else {
-            break;
-        }
-    }
-
-    // Check if the entered amount advances the tier
-    const nextTierThreshold = tierThresholds[currentTier];
-    const amountNeededToAdvance = nextTierThreshold - totalTimelockedBigInt;
-
-    // Calculate the eligibility message
-    let eligibilityMessage = `You are currently in Tier ${currentTier}.`;
-
-    if (amount >= amountNeededToAdvance) {
-        currentTier++; // Advance to the next tier
-        eligibilityMessage += ` You will advance to Tier ${currentTier} with this amount.`;
-    } else {
-        eligibilityMessage += ` You need ${amountNeededToAdvance - amount} more to advance to Tier ${currentTier + 1}.`;
-    }
-
-    // Display the eligibility message
-    document.getElementById('timelockRewardCalculation').innerText = eligibilityMessage;
-}
-
-// Event listener for changes in the 'amount2' input field
-document.getElementById('amount2').addEventListener('input', calculateAndDisplayEligibility);
-
-// Initialize the totalTimelocked value and start the calculation
-fetchTotalTimelocked();
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// You would call this function when you need to update the reward calculation
-// updateTimelockRewardCalculation();
-
-/*
-async function updateTimelockRewardCalculation() {
-    // Check if contract2 and the element exist
-    if (!window.giveawayReserve || !document.getElementById('amount2')) {
-        console.error('Required elements are not initialized.');
-        return;
-    }
-
-    try {
-        const totalTimelocked = await window.giveawayReserve.methods.totalTimelocked().call();
-        const currentTier = calculateCurrentTier(totalTimelocked);
-
-        // Get the amount and calculate timelocked tokens
-        const amount = document.getElementById('amount2').value;
-        const timelockedTokens = Number(amount); // Assuming input is in BSOV
-
-        // Calculate ROI based on tier
-        const roi = calculateAndDisplayROI(currentTier);
-
-        // Calculate Timelock Reward Tokens
-        const timelockRewardTokens = timelockedTokens * (roi);
-
-        // Update the HTML element
-        document.getElementById('timelockRewardCalculation').innerText =
-            `You will be eligible for ${timelockRewardTokens.toString()} Timelock Reward tokens.`;
-    } catch (error) {
-        console.error('Error in updating Timelock Reward Calculation:', error);
-    }
-}
-*/
-
-
-/*
-const tierThresholds = [
-    0,                  // Tier 1 threshold (starting at 0)
-    150000,          // Tier 2 threshold (150,000 BSOV)
-    300000,          // Tier 3 threshold (300,000 BSOV)
-    450000,          // Tier 4 threshold (450,000 BSOV)
-    600000,          // Tier 5 threshold (600,000 BSOV)
-    750000,          // Tier 6 threshold (750,000 BSOV)
-    900000,          // Tier 7 threshold (900,000 BSOV)
-    1050000,         // Tier 8 threshold (1,050,000 BSOV)
-    1200000,         // Tier 9 threshold (1,200,000 BSOV)
-    1350000,         // Tier 10 threshold (1,350,000 BSOV)
-    // Add more thresholds as needed
-];
-
-
-function calculateCurrentTier(totalTimelocked) {
-
-    // Find the current tier based on totalTimelocked
-    let currentTier = 1;
-    for (let i = 0; i < tierThresholds.length; i++) {
-        if (totalTimelocked >= tierThresholds[i]) {
-            currentTier = i + 1;
-        } else {
-            break;
-        }
-    }
-
-    return currentTier;
-}
-
-
-async function updateTimelockRewardCalculation() {
-    // Check if contract2 and the element exist
-    if (!window.giveawayReserve || !document.getElementById('amount2')) {
-        console.error('Required elements are not initialized.');
-        return;
-    }
-
-    try {
-        const totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
-        const totalTimelocked = Number(totalTimelockedBigInt);
-        const currentTier = calculateCurrentTier(totalTimelocked);
-        
-        // Get the amount and calculate timelocked tokens
-        const amount = parseFloat(document.getElementById('amount2').value); // Parse the input as a float
-
-        // Calculate the tier advancement based on the new amount
-        const newTotalTimelocked = totalTimelocked + (amount * 1000000); // Convert BSOV to tokens
-        const newTier = calculateCurrentTier(newTotalTimelocked);
-
-        // Calculate the ROI for the current tier and the new tier
-        const currentROIRatio = calculateAndDisplayROI(currentTier);
-        const newROIRatio = calculateAndDisplayROI(newTier);
-
-        // Calculate the timelock reward tokens, considering tier advancement
-        let timelockRewardTokens = 0;
-
-        // Calculate the reward for the old tier (currentTier)
-        const oldTimelockedTokens = (totalTimelocked - tierThresholds[currentTier - 1]) / 1000000;
-        const oldReward = oldTimelockedTokens * currentROIRatio;
-
-        // Calculate the reward for the new tier (newTier)
-        const newTimelockedTokens = (newTotalTimelocked - tierThresholds[newTier - 1]) / 1000000;
-        const newReward = newTimelockedTokens * newROIRatio;
-
-        // Calculate the total reward
-        timelockRewardTokens = oldReward + newReward;
-
-        // Update the HTML element
-        document.getElementById('timelockRewardCalculation').innerText =
-            `You will be eligible for ${timelockRewardTokens.toFixed(2)} Timelock Reward tokens.`;
-    } catch (error) {
-        console.error('Error in updating Timelock Reward Calculation:', error);
-    }
-}
-*/
-
-/*
-async function calculateCurrentTier(totalTimelocked) {
-    // Find the current tier based on totalTimelocked
-    let currentTier = 1;
-    for (let i = 0; i < tierThresholds.length; i++) {
-        if (totalTimelocked >= tierThresholds[i]) {
-            currentTier = i + 1;
-        } else {
-            break;
-        }
-    }
-    return currentTier;
-}
-*/
-
-/*
-function calculateAndDisplayROI(tier) {
-    // Define ROI ratios for each tier
-    const tierRatios = {
-        1: 1,
-        2: 0.5,
-        3: 0.25,
-        4: 0.125,
-        5: 0.0625,
-        6: 0.03125,
-        7: 0.015625,
-        8: 0.0078125,
-        9: 0.00390625,
-        10: 0.00390625
-    };
-
-    // Return the ROI for the given tier, or 0 if the tier is not recognized
-    return tierRatios[tier] || 0;
-}
-
-const tierThresholds = [
-    0,                  // Tier 1 threshold (starting at 0)
-    15000000000000,          // Tier 2 threshold (150,000 BSOV)
-    30000000000000,          // Tier 3 threshold (300,000 BSOV)
-    45000000000000,          // Tier 4 threshold (450,000 BSOV)
-    60000000000000,          // Tier 5 threshold (600,000 BSOV)
-    75000000000000,          // Tier 6 threshold (750,000 BSOV)
-    90000000000000,          // Tier 7 threshold (900,000 BSOV)
-    105000000000000,         // Tier 8 threshold (1,050,000 BSOV)
-    120000000000000,         // Tier 9 threshold (1,200,000 BSOV)
-    135000000000000,         // Tier 10 threshold (1,350,000 BSOV)
-    // Add more thresholds as needed
-];
-
-let totalTimelockedBigInt;
-
-async function fetchTotalTimelocked() {
-  try {
-    totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
-  } catch (error) {
-    console.error("Error fetching totalTimelocked:", error);
-  }
-}
-
- //   const totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
-        const totalTimelocked = Number(totalTimelockedBigInt);
-
-// ... (previous code remains unchanged)
-fetchTotalTimelocked();
-async function updateTimelockRewardCalculation(totalTimelockedBigInt) {
-        const totalTimelocked = Number(totalTimelockedBigInt);
-var amount = document.getElementById('amount2').value;
-
-	// Find the current tier based on totalTimelocked
-    let currentTier = 1;
-    for (let i = 0; i < tierThresholds.length; i++) {
-        if (totalTimelocked >= tierThresholds[i]) {
-            currentTier = i + 1;
-        } else {
-            break;
-        }
-    }
-
-    // Convert input amount to smallest unit (amountUnits)
-    const amountUnits = amount2 * 100000000;
-
-    // Calculate the advancement to the next tier
-    const nextTierThreshold = tierThresholds[currentTier];
-    const amountFromOldTier = nextTierThreshold - totalTimelocked;
-
-    // Calculate eligible amount from the old tier
-    const currentROIRatio = calculateAndDisplayROI(currentTier);
-    const eligibleAmountFromOldTier = (amountFromOldTier * currentROIRatio);
-
-    // Advance to the new tier
-    if (currentTier < 10) {
-        currentTier++;
-    }
-
-    // Calculate the advancement to the new tier
-    const newTierThreshold = tierThresholds[currentTier];
-    const amountFromNewTier = (totalTimelocked + amountUnits) - newTierThreshold;
-
-    // Calculate eligible amount from the new tier
-    const newROIRatio = calculateAndDisplayROI(currentTier);
-    const eligibleAmountFromNewTier = (amountFromNewTier * newROIRatio);
-
-    // Calculate the total eligible amount
-    const eligibleAmount = (eligibleAmountFromOldTier + eligibleAmountFromNewTier);
-
-    return eligibleAmount;
-
-	/*
-const eligibleAmount = updateTimelockRewardCalculation(totalTimelocked, amount);
-	document.getElementById('timelockRewardCalculation').innerText =
-            `You will be eligible for ${eligibleAmount.toFixed(2)} Timelock Reward tokens.`;
-
-}
-// Rest of your code remains unchanged
-document.getElementById('amount2').addEventListener('input', updateTimelockRewardCalculation);
-const eligibleAmount = updateTimelockRewardCalculation(amount);
-        document.getElementById('timelockRewardCalculation').innerText =
-            `You will be eligible for ${eligibleAmount.toFixed(2)} Timelock Reward tokens.`;
-*/
-
-/*
-
-function calculateAndDisplayROI(tier) {
-    // Define ROI ratios for each tier
-    const tierRatios = {
-        1: 1,
-        2: 0.5,
-        3: 0.25,
-        4: 0.125,
-        5: 0.0625,
-        6: 0.03125,
-        7: 0.015625,
-        8: 0.0078125,
-        9: 0.00390625,
-        10: 0.00390625
-    };
-
-    // Return the ROI for the given tier, or 0 if the tier is not recognized
-    return tierRatios[tier] || 0;
-}
-
-const tierThresholds = [
-    0,                  // Tier 1 threshold (starting at 0)
-    15000000000000,     // Tier 2 threshold (150,000 BSOV)
-    30000000000000,     // Tier 3 threshold (300,000 BSOV)
-    45000000000000,     // Tier 4 threshold (450,000 BSOV)
-    60000000000000,     // Tier 5 threshold (600,000 BSOV)
-    75000000000000,     // Tier 6 threshold (750,000 BSOV)
-    90000000000000,     // Tier 7 threshold (900,000 BSOV)
-    105000000000000,    // Tier 8 threshold (1,050,000 BSOV)
-    120000000000000,    // Tier 9 threshold (1,200,000 BSOV)
-    135000000000000     // Tier 10 threshold (1,350,000 BSOV)
-    // Add more thresholds as needed
-];
-
-
-let totalTimelockedBigInt;
-
-// Function to fetch total timelocked value
-async function fetchTotalTimelocked() {
-  try {
-    if (!window.giveawayReserve) {
-      console.error('GiveawayReserve is not initialized for fetching totalTimelocked');
-      return;
-    }
-    totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
-    // Continue with the rest of your code that depends on totalTimelockedBigInt
-  } catch (error) {
-    console.error("Error fetching totalTimelocked:", error);
-  }
-}
-
-async function updateTimelockRewardCalculation(amount) {
-    const totalTimelocked = Number(totalTimelockedBigInt);
-  //  var amount2 = amount; // Capture the 'amount2' value
-
-    // Find the current tier based on totalTimelocked
-    let currentTier = 1;
-    for (let i = 0; i < tierThresholds.length; i++) {
-        if (totalTimelocked >= tierThresholds[i]) {
-            currentTier = i + 1;
-        } else {
-            break;
-        }
-    }
-
-    // Convert input amount to smallest unit (amountUnits)
-    const amountUnits = amount2 * 100000000;
-
-    // Calculate the advancement to the next tier
-    const nextTierThreshold = tierThresholds[currentTier];
-    const amountFromOldTier = nextTierThreshold - totalTimelocked;
-
-    // Calculate eligible amount from the old tier
-    const currentROIRatio = calculateAndDisplayROI(currentTier);
-    const eligibleAmountFromOldTier = amountFromOldTier * currentROIRatio;
-
-    // Advance to the new tier
-    if (currentTier < 10) {
-        currentTier++;
-    }
-
-    // Calculate the advancement to the new tier
-    const newTierThreshold = tierThresholds[currentTier];
-    const amountFromNewTier = totalTimelocked + amountUnits - newTierThreshold;
-
-    // Calculate eligible amount from the new tier
-    const newROIRatio = calculateAndDisplayROI(currentTier);
-    const eligibleAmountFromNewTier = amountFromNewTier * newROIRatio;
-
-console.log("eligibleAmountFromOldTier:", eligibleAmountFromOldTier);
-    console.log("eligibleAmountFromNewTier:", eligibleAmountFromNewTier);
-    console.log("currentROIRatio:", currentROIRatio);
-	    console.log("amount:", amount);
-	    console.log("totalTimelocked", totalTimelocked);
-	    console.log("totalTimelockedBigInt", totalTimelockedBigInt);
-    // Calculate the total eligible amount
-    const eligibleAmount = eligibleAmountFromOldTier + eligibleAmountFromNewTier;
-
-    return eligibleAmount;
-}
-
-window.addEventListener('load', () => {
-    fetchTotalTimelocked();
-});
-
-// Event listener for changes in the 'amount2' input field
-document.getElementById('amount2').addEventListener('input', function(event) {
-    const amount = parseFloat(event.target.value); // Capture the 'amount2' value
-    const eligibleAmount = updateTimelockRewardCalculation(amount);
-    document.getElementById('timelockRewardCalculation').innerText =
-        `You will be eligible for ${eligibleAmount.toFixed(2)} Timelock Reward tokens.`;
-});
-/*
-// Initial calculation when the page loads (you can call this with a default 'amount' if needed)
-// const defaultAmount = 0; // Replace with your default 'amount' if necessary
-const eligibleAmount = updateTimelockRewardCalculation(amount);
-document.getElementById('timelockRewardCalculation').innerText =
-    `You will be eligible for ${eligibleAmount.toFixed(2)} Timelock Reward tokens.`;
-*/
-
-
 async function executeTransactionIfFeeIsAcceptable(contractMethod, args, fromAddress) {
     const HIGH_FEE_THRESHOLD = web3.utils.toWei("0.1", "ether"); // Example threshold: 0.1 ETH
     const estimatedGas = await contractMethod.estimateGas(...args, { from: fromAddress });
@@ -991,20 +500,20 @@ async function executeTransactionIfFeeIsAcceptable(contractMethod, args, fromAdd
 }
 
 
-const claimGiveawayReserveButton = document.getElementById('claimGiveawayReserveButton');
-if (claimGiveawayReserveButton) {
-    claimGiveawayReserveButton.addEventListener('click', function() {
-        claimGiveawayReserveTokens();
+const claimRewardsReserveButton = document.getElementById('claimRewardsReserveButton');
+if (claimRewardsReserveButton) {
+    claimRewardsReserveButton.addEventListener('click', function() {
+        claimRewardsReserveTokens();
     });
 }
 
-// Function to claim giveaway tokens
-async function claimGiveawayReserveTokens() {
-    if (!window.giveawayReserve) {
-        console.error('GiveawayReserve is not initialized for claiming tokens');
+// Function to claim Rewards Reserve tokens
+async function claimRewardsReserveTokens() {
+    if (!window.rewardsReserve) {
+        console.error('rewardsReserve is not initialized for claiming tokens');
         return;
     }
-    const transaction = window.giveawayReserve.methods.claimTimelockRewards();
+    const transaction = window.rewardsReserve.methods.claimTimelockRewards();
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
@@ -1017,16 +526,16 @@ async function claimGiveawayReserveTokens() {
 }
 
 
-const claimGiveawayButton = document.getElementById('claimGiveawayButton');
-if (claimGiveawayButton) {
-    claimGiveawayButton.addEventListener('click', function() {
-        claimGiveawayTokens();
+const acceptIncomingButton = document.getElementById('acceptIncomingButton');
+if (acceptIncomingButton) {
+    acceptIncomingButton.addEventListener('click', function() {
+        acceptIncomingTokens();
     });
 }
 
 
 // Function to accept received tokens
-async function claimGiveawayTokens() {
+async function acceptIncomingTokens() {
     if (!window.contract2) {
         console.error('Contract 2 is not initialized for claiming tokens');
         return;
@@ -1043,30 +552,6 @@ async function claimGiveawayTokens() {
  }
 }
 
-/*
-async function timelockTokens(contractAddress, amount) {
-    
-        const bsovTokenContract = new web3.eth.Contract(bsovTokenABI, bsovTokenAddress);
-        const transaction = bsovTokenContract.methods.approveAndCall(contractAddress, amount, "0x");
-    try {
-throw new Error("Test Error");
-        // Use the executeTransactionIfFeeIsAcceptable function to execute the transaction
-        const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
-        console.log("Transaction receipt: ", receipt);
-    } catch (error) {
-        // Check if the error is the custom "HighFees" error
-        if (error.message.includes("HighFees")) {
-            document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected.';
-		document.getElementById('clearError').style.display = 'block';
-        } else {
-            // Handle other errors
-            console.error("Error in transaction: ", error);
-            document.getElementById('errorMessage').innerText = `${error.message}`;
-		document.getElementById('clearError').style.display = 'block';
-}
-    }
-}
-*/
 
 // Function to withdraw tokens from Contract 1
 async function withdrawTokensContract1(amount) {
@@ -1101,8 +586,8 @@ async function withdrawTokensContract2(amount) {
         console.error('Contract 2 is not initialized for withdrawal');
         return;
     }
-    const fromGiveaway = document.getElementById('account-checkbox').checked;
-    const transaction = window.contract2.methods.withdraw(amount, fromGiveaway);
+    const fromIncomingAccount = document.getElementById('account-checkbox').checked;
+    const transaction = window.contract2.methods.withdraw(amount, fromIncomingAccount);
     //const transaction = window.contract2.methods.withdraw(amount);
 
     try {
@@ -1121,8 +606,8 @@ async function withdrawTokensContract2(amount) {
 }
 
 
-// Function for earmarking tokens for giveaway
-async function earmarkTokensForGiveaway(addresses, amounts) {
+// Function for marking timelocked tokens for send
+async function markTimelockedTokensForSend(addresses, amounts) {
     if (!window.contract2) {
         console.error('Contract 2 is not initialized for earmarking tokens');
         return;
@@ -1159,12 +644,12 @@ console.log('resetContractUI Function started');
     document.getElementById('amount1').style.display = 'none';
     document.getElementById('amount2').style.display = 'none';
     document.getElementById('ethAddresses').style.display = 'none';
-    document.getElementById('giveawayAmounts').style.display = 'none';
+    document.getElementById('sendLockedAmounts').style.display = 'none';
     document.getElementById('timelock1Button').style.display = 'none';
     document.getElementById('withdraw1Button').style.display = 'none';
     document.getElementById('timelock2Button').style.display = 'none';
     document.getElementById('withdraw2Button').style.display = 'none';
-    document.getElementById('giveaway2Button').style.display = 'none';
+    document.getElementById('sendLocked2Button').style.display = 'none';
 //document.getElementById('contract-explanation').style.display = 'none';
 	document.getElementById('errorMessage').innerText = '';
 	document.getElementById(`clearError`).style.display = 'none';

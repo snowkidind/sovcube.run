@@ -4,7 +4,6 @@ Timelock BSOV Tokens and receive Timelock Rewards.
 
 ### Known issues and to-do:
 
-- Rename giveaway-variables to timelockreward [done in visible texts, contracts and methods, the other js variables remain]
 - Add more info to My Account page.
 - - Specifically:
 - - - Add "Time Left until next withdrawal"

@@ -84,8 +84,8 @@ document.getElementById('clearError').addEventListener('click', function() {
 		</div>
 	</div>
 
-	      <div class="contract-info-style" id="giveawayAccountContainer">
-               <div id="giveawayAccount">
+	      <div class="contract-info-style" id="rewardsAccountContainer">
+               <div id="rewardsAccount">
 	      </div>	
 		</div>
 	</div>

@@ -38,8 +38,8 @@
 <div class="text-container">     
 	    <h3>Understanding the Reward Tiers</h3>
 <p>The following numbers provide statistical insights applicable to all SovCube users.</p>
-<div class="giveaway-progress-container">
-    <div class="giveaway-progress-bar" id="giveawayProgressBar" data-tooltip="Current Progress: [Not Loaded...] / 1,500,000 BSOV">
+<div class="rewards-progress-container">
+    <div class="rewards-progress-bar" id="rewardsProgressBar" data-tooltip="Current Progress: [Not Loaded...] / 1,500,000 BSOV">
         <div class="current-progress" style="width: calc(0 / 1500000 * 100%);"></div>
         <!-- Markers for every 150,000 tokens -->
         <div class="marker" style="left: calc(150000 / 1500000 * 100%);" title="150,000 Tokens"></div>
@@ -81,48 +81,48 @@
 <p>With this Timelock Reward Tier Schedule, we are distributing <strong>300,000 BSOV tokens</strong> in a structured tier system. Each tier represents a phase in the Timelock Rewards System, and for every 150,000 tokens that are time-locked in total by the community, we progress through these tiers.</p>
 <p>The reward for each tier halves compared to the previous one, starting from a generous 150,000 BSOV in the first tier. This structure ensures a fair and rewarding experience for all participants, especially those who join early.</p>
 
-            <div class="giveaway-container">
+            <div class="rewards-container">
                 <!-- Individual Tier Descriptions -->
-                <!-- Repeat for other giveaways -->
+                <!-- Repeat for other rewards -->
                     
 
-<div class="giveaway" id="giveaway1">
+<div class="rewards" id="rewards1">
     <h2>Reward Tier 1</h2>
     <p>Total Tier Reward: <strong>150,000 BSOV</strong> (100.00% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 1,000 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway2">
+<div class="rewards" id="rewards2">
     <h2>Reward Tier 2</h2>
     <p>Total Tier Reward: <strong>75,000 BSOV</strong> (50.00% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 500 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway3">
+<div class="rewards" id="rewards3">
     <h2>Reward Tier 3</h2>
     <p>Total Tier Reward: <strong>37,500 BSOV</strong> (25.00% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 250 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway4">
+<div class="rewards" id="rewards4">
     <h2>Reward Tier 4</h2>
     <p>Total Tier Reward: <strong>18,750 BSOV</strong> (12.50% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 125 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway5">
+<div class="rewards" id="rewards5">
     <h2>Reward Tier 5</h2>
     <p>Total Tier Reward: <strong>9,375 BSOV</strong> (6.25% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 62.5 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway6">
+<div class="rewards" id="rewards6">
     <h2>Reward Tier 6</h2>
     <p>Total Tier Reward: <strong>4,687 BSOV</strong> (3.12% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 31.25 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway7">
+<div class="rewards" id="rewards7">
     <h2>Reward Tier 7</h2>
     <p>Total Tier Reward: <strong>2,343 BSOV</strong> (1.56% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 15.62 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway8">
+<div class="rewards" id="rewards8">
     <h2>Reward Tier 8</h2>
     <p>Total Tier Reward: <strong>1,171 BSOV</strong> (0.78% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 7.81 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway9">
+<div class="rewards" id="rewards9">
     <h2>Reward Tier 9</h2>
     <p>Total Tier Reward: <strong>585 BSOV</strong> (0.39% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 3.90 BSOV.</span></p>
 </div>
-<div class="giveaway" id="giveaway10">
+<div class="rewards" id="rewards10">
     <h2>Reward Tier 10</h2>
     <p>Total Tier Reward: <strong>585 BSOV</strong> (0.39% ROI).<br><span class="per1000bsov">Timelocking 1,000 BSOV receives approximately 3.90 BSOV.</span></p>
 </div>
@@ -134,6 +134,6 @@
     
 </div>
 <script src="/dapp/config.js"></script>
-<script src="/rewards/giveaway-progress.js"></script>
+<script src="/rewards/rewards-progress.js"></script>
 </body>
 </html>

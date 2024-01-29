@@ -1,7 +1,7 @@
 // contract2-calls.js
 
 let contract2; // Define contract2 in a broader scope
-let giveawayReserve;
+let rewardsReserve;
 
 function loadABI(file, callback) {
     const xhr = new XMLHttpRequest();
@@ -21,9 +21,9 @@ if (web3) {
         window.contract2 = new web3.eth.Contract(abi, contract2Address);
 	contract2 = new web3.eth.Contract(abi, contract2Address);
     });
-    loadABI('/dapp/giveawayReserve.abi', function(abi) {
-        giveawayReserve = new web3.eth.Contract(abi, giveawayReserveContractAddress);
-    window.giveawayReserve = new web3.eth.Contract(abi, giveawayReserveContractAddress);
+    loadABI('/dapp/rewardsReserve.abi', function(abi) {
+        rewardsReserve = new web3.eth.Contract(abi, rewardsReserveContractAddress);
+    window.rewardsReserve = new web3.eth.Contract(abi, rewardsReserveContractAddress);
     });
 }
 
@@ -45,13 +45,11 @@ async function getContract2TimelockedTokens(account) {
         console.error('Contract2 is not initialized when fetching timelocked tokens');
         return;
     }
-    const unclaimedGiveawayTokens = await contract2.methods.getUntakenIncomingBalance(account).call();
+    const untakenIncomingTokens = await contract2.methods.getUntakenIncomingBalance(account).call();
     const timelockedTokens = await contract2.methods.getBalance(account).call();
-    const timelockedGiveawayTokens = await contract2.methods.getIncomingAccountBalance(account).call();
-    // const timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
-    // const giveawayUnlockTimeInSeconds = await contract2.methods.getGiveawayTimeLeft(account).call();
+    const incomingAccountBalance = await contract2.methods.getIncomingAccountBalance(account).call();
 
-let timeLeftInSeconds, giveawayUnlockTimeInSeconds;
+let timeLeftInSeconds, incomingAccountLockTimeInSeconds;
 
           try {
             timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
@@ -61,34 +59,34 @@ let timeLeftInSeconds, giveawayUnlockTimeInSeconds;
             timeLeftInSeconds = 0; // Set to 0 or a suitable default value
         }
 try {
-            giveawayUnlockTimeInSeconds = await contract2.methods.getIncomingAccountTimeLeft(account).call();
+            incomingAccountLockTimeInSeconds = await contract2.methods.getIncomingAccountTimeLeft(account).call();
 } catch (error) {
 
-            giveawayUnlockTimeInSeconds = 0; // Set to 0 or a suitable default value
+            incomingAccountLockTimeInSeconds = 0; // Set to 0 or a suitable default value
 }
 
 
 
-    return { timelockedTokens, timelockedGiveawayTokens, unclaimedGiveawayTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds };
+    return { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds };
 }
 
 
-// Function to fetch information related to Giveaway Reserve
+// Function to fetch information related to Rewards Reserve
 
-async function fetchGiveawayReserveInfo(account) {
-    if (!giveawayReserve) {
-        console.error('Giveaway Reserve contract is not initialized');
+async function fetchRewardsReserveInfo(account) {
+    if (!rewardsReserve) {
+        console.error('Rewards Reserve contract is not initialized');
 	    return;
     }
 
 
-        const eligibleTokens = await giveawayReserve.methods.eligibleAmount(account).call();
+        const eligibleTokens = await rewardsReserve.methods.eligibleAmount(account).call();
         return eligibleTokens;
 	
 }	
 
 function updateProgressBar(totalTimelocked, totalEligibleAmount) {
-    const progressBarElement = document.getElementById('giveawayProgressBar');
+    const progressBarElement = document.getElementById('rewardsProgressBar');
     const currentProgressElement = progressBarElement.querySelector('.current-progress');
 
     // Calculate the width of the progress bar based on the total timelocked and eligible amount
@@ -102,24 +100,24 @@ function updateProgressBar(totalTimelocked, totalEligibleAmount) {
 async function fetchContract2Info(account) {
     console.log("Fetching Contract 2 info for account:", account);
     try {
-        const { timelockedTokens, timelockedGiveawayTokens, unclaimedGiveawayTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds } = await getContract2TimelockedTokens(account);
-        const eligibleTokens = await fetchGiveawayReserveInfo(account);
+        const { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds } = await getContract2TimelockedTokens(account);
+        const eligibleTokens = await fetchRewardsReserveInfo(account);
 
         const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(2);
-        const formattedGiveawayTokens = (Number(timelockedGiveawayTokens) / 100000000).toFixed(2);
-        const formattedUnclaimedGiveawayTokens = (Number(unclaimedGiveawayTokens) / 100000000).toFixed(2);
+        const formattedIncomingAccountBalance = (Number(incomingAccountBalance) / 100000000).toFixed(2);
+        const formattedUntakenIncomingTokens = (Number(untakenIncomingTokens) / 100000000).toFixed(2);
         const formattedTimeLeft = formatTimeLeft(Number(timeLeftInSeconds));
-        const formattedGiveawayUnlockTime = formatTimeLeft(Number(giveawayUnlockTimeInSeconds));
+        const formattedIncomingAccountLockTime = formatTimeLeft(Number(incomingAccountLockTimeInSeconds));
         const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
 
-        updateContract2Details(formattedTokens, formattedGiveawayTokens, formattedUnclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, '16 September 2026', 100, formattedEligibleTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds);
+        updateContract2Details(formattedTokens, formattedIncomingAccountBalance, formattedUntakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, '16 September 2026', 100, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds);
     } catch (error) {
         console.error("Error in fetching Contract 2 info:", error);
     }
 }
 
 
-function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiveawayTokens, formattedTimeLeft, formattedGiveawayUnlockTime, unlockTime, withdrawRate, formattedEligibleTokens, timeLeftInSeconds, giveawayUnlockTimeInSeconds) {
+function updateContract2Details(tokensLocked, incomingAccountBalance, untakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, unlockTime, withdrawRate, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds) {
 	
 	const mainContractInfoElement = document.getElementById('mainContractInfo');
     mainContractInfoElement.innerHTML = `
@@ -127,8 +125,8 @@ function updateContract2Details(tokensLocked, tokensGiveawayLocked, unclaimedGiv
         `;
 
 
-	const giveawayAccountElement = document.getElementById('giveawayAccount');
-    giveawayAccountElement.innerHTML = `
+	const rewardsAccountElement = document.getElementById('rewardsAccount');
+    rewardsAccountElement.innerHTML = `
 	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>	
 	<p><b>Unclaimed Timelock Rewards:</b> <span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
 	`;
@@ -151,61 +149,40 @@ if (timeLeftInSeconds === 0) {
         <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
     `;
 }
-/*
-if (giveawayUnlockTimeInSeconds > 0) {
-    // Update Incoming Tokens Account Info
-    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
-    incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
-        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedGiveawayUnlockTime}</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
-    `;
-}
-if (giveawayUnlockTimeInSeconds === 0) {
-    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
-    incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
-        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
-	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
-    `;
-}
-*/
 
-console.log(giveawayUnlockTimeInSeconds);
-if (giveawayUnlockTimeInSeconds > 0) {
+console.log(incomingAccountLockTimeInSeconds);
+if (incomingAccountLockTimeInSeconds > 0) {
     // Update Incoming Tokens Account Info
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
-        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedGiveawayUnlockTime}</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
+        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedIncomingAccountLockTime}</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
     `;
 
    }
 
-else if (parseFloat(tokensGiveawayLocked) == 0)  {
+else if (parseFloat(incomingAccountBalance) == 0)  {
 
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
         <p><b>Lock Time:</b> <span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
     `;
 
 
     }
 
-else if (giveawayUnlockTimeInSeconds == 0) {
+else if (incomingAccountLockTimeInSeconds == 0) {
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensGiveawayLocked} BSOV</span></p>
+        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
         <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime" style="color:green;">Unlocked!</span></p>
-	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${unclaimedGiveawayTokens} BSOV</span></p>
+	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
     `;
 }
 
