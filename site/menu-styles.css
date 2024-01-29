@@ -55,7 +55,7 @@ font-weight:normal;
     transform: scale(1.05);
 }
 
-.giveaway-menu {
+.rewards-menu {
     background-color: #F8B128;
     border: 3px solid #004F8B; /* Light blue border */
     color: black;
@@ -71,7 +71,7 @@ font-weight:normal;
 
 }
 
-.giveaway-menu:hover {
+.rewards-menu:hover {
     background-color: #FDC860; /* Slightly lighter gray on hover */
     border-color: #2A79A5; /* Slightly brighter blue on hover */
     transform: scale(1.05);

@@ -1,4 +1,4 @@
-// giveaway-progress.js
+// rewards-progress.js
 
 
 // Check if MetaMask is installed
@@ -11,11 +11,11 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 
-let giveawayReserve; // Define giveawayReserve in a broader scope
+let rewardsReserve; // Define rewardsReserve in a broader scope
 
-// Function to initialize the giveawayReserve contract
-function initGiveawayReserveContract(abi, contractAddress) {
-    giveawayReserve = new web3.eth.Contract(abi, contractAddress);
+// Function to initialize the rewardsReserve contract
+function initRewardsReserveContract(abi, contractAddress) {
+    rewardsReserve = new web3.eth.Contract(abi, contractAddress);
 }
 
 // Function to load the contract ABI
@@ -34,7 +34,7 @@ function loadABI(file, callback) {
 
 // Function to update the progress bar
 function updateProgressBar(totalTimelocked, totalEligibleAmount) {
-    const progressBarElement = document.getElementById('giveawayProgressBar');
+    const progressBarElement = document.getElementById('rewardsProgressBar');
     const currentProgressElement = progressBarElement.querySelector('.current-progress');
 
     // Convert the values to Numbers for arithmetic operations
@@ -68,13 +68,13 @@ rewardsLeftElement.textContent = rewardsLeft.toLocaleString(undefined, { minimum
 }
 
 async function updateCurrentTierDisplay() {
-    if (!giveawayReserve) {
-        console.error('Giveaway Reserve contract is not initialized');
+    if (!rewardsReserve) {
+        console.error('Rewards Reserve contract is not initialized');
         return;
     }
 
     try {
-        const currentTier = await giveawayReserve.methods.currentTier().call();
+        const currentTier = await rewardsReserve.methods.currentTier().call();
         // Ensure currentTier is interpreted as a number
         const currentTierNumber = Number(currentTier);
 
@@ -87,7 +87,7 @@ async function updateCurrentTierDisplay() {
         calculateAndDisplayROI(currentTierNumber);
 
     } catch (error) {
-        console.error("Error fetching the current tier from the Giveaway Reserve contract:", error);
+        console.error("Error fetching the current tier from the Rewards Reserve contract:", error);
         const currentTierDisplayElement = document.getElementById('currentTier');
         currentTierDisplayElement.textContent = "Error";
     }
@@ -140,24 +140,24 @@ function calculateAndDisplayROI(tier) {
 
 // Function to fetch and update the progress bar information
 async function fetchAndUpdateProgressBar() {
-    if (!giveawayReserve) {
-        console.error('Giveaway Reserve contract is not initialized');
+    if (!rewardsReserve) {
+        console.error('Rewards Reserve contract is not initialized');
         return;
     }
 
     try {
-        const totalTimelocked = await giveawayReserve.methods.totalTimelocked().call();
-        const totalEligibleAmount = await giveawayReserve.methods.totalEligibleAmount().call();
+        const totalTimelocked = await rewardsReserve.methods.totalTimelocked().call();
+        const totalEligibleAmount = await rewardsReserve.methods.totalEligibleAmount().call();
         
         updateProgressBar(totalTimelocked, totalEligibleAmount);
     } catch (error) {
-        console.error("Error fetching data from the Giveaway Reserve contract:", error);
+        console.error("Error fetching data from the Rewards Reserve contract:", error);
     }
 }
 
-// Load the Giveaway Reserve ABI and initialize the contract
-loadABI('/dapp/giveawayReserve.abi', function(abi) {
-    initGiveawayReserveContract(abi, giveawayReserveContractAddress); // Replace with your actual contract address
+// Load the Rewards Reserve ABI and initialize the contract
+loadABI('/dapp/rewardsReserve.abi', function(abi) {
+    initRewardsReserveContract(abi, rewardsReserveContractAddress); // Replace with your actual contract address
     fetchAndUpdateProgressBar(); // Fetch and update progress bar after initializing the contract
     updateCurrentTierDisplay();
 });

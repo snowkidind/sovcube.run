@@ -24,21 +24,21 @@
 
 
 // Include the configuration file
- global $conn, $giveawayReserveContractAddress;
-    //   $giveawayReserveContractAddress = '';
+ global $conn, $rewardsReserveContractAddress;
+    //   $rewardsReserveContractAddress = '';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Assuming giveawayReserveContractAddress is sent via POST
-    $giveawayReserveContractAddress = $_POST['giveawayReserveContractAddress'] ?? '';
+    // Assuming rewardsReserveContractAddress is sent via POST
+    $rewardsReserveContractAddress = $_POST['rewardsReserveContractAddress'] ?? '';
 } 
-// You can now use $giveawayReserveContractAddress in this script
+// You can now use $rewardsReserveContractAddress in this script
 
 
 /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Retrieve the address from the POST request
-    $giveawayReserveContractAddress = $_POST['giveawayReserveContractAddress'] ?? '';
-echo "POST Address immediately after setting: " . $giveawayReserveContractAddress . "<br>";
+    $rewardsReserveContractAddress = $_POST['rewardsReserveContractAddress'] ?? '';
+echo "POST Address immediately after setting: " . $rewardsReserveContractAddress . "<br>";
 }*/
 
 
@@ -59,7 +59,7 @@ $totalTimelocked1 = getTotalTimelockedValue($tableName1);
 $totalTimelocked2 = getTotalTimelockedValue($tableName2);
 // Fetch the total timelocked values for other table names as needed
 
-// echo "POST Address before calling function: " . $giveawayReserveContractAddress . "<br>";
+// echo "POST Address before calling function: " . $rewardsReserveContractAddress . "<br>";
 $leaderboard1 = timelockLeaderboard($tableName1);
 $leaderboard2 = timelockLeaderboard($tableName2);
 
@@ -176,16 +176,16 @@ function formatNumber($value) {
 
         <div class="contract-section">
             <h2>Timelock Rewards</h2>
-            <div class="info-container" id="giveawayReserveCurrentTier">
+            <div class="info-container" id="rewardsReserveCurrentTier">
                 Current Tier: Loading...
             </div>
-            <div class="info-container" id="giveawayReserveTotalClaimed">
+            <div class="info-container" id="rewardsReserveTotalClaimed">
                 Total Claimed: Loading...
             </div>
-            <div class="info-container" id="giveawayReserveTotalEligibleAmount">
+            <div class="info-container" id="rewardsReserveTotalEligibleAmount">
                 Total Eligible Amount: Loading...
             </div>
-            <div class="info-container" id="giveawayReserveTotalTimelocked">
+            <div class="info-container" id="rewardsReserveTotalTimelocked">
                 Total Timelocked: Loading...
             </div>
 	</div>

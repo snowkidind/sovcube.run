@@ -12,7 +12,7 @@ if (typeof window.ethereum !== 'undefined') {
 let contract1;
 let contract2;
 let bsovTokenContract;
-let giveawayReserve;
+let rewardsReserve;
 
 // Function to initialize the bsovTokenContract contract
 function initBsovTokenContract(abi, contractAddress) {
@@ -29,14 +29,14 @@ function initContract2(abi, contractAddress) {
     contract2 = new web3.eth.Contract(abi, contractAddress);
 }
 
-// Function to initialize the giveawayReserve contract
-function initGiveawayReserveContract(abi, contractAddress) {
-    giveawayReserve = new web3.eth.Contract(abi, contractAddress);
+// Function to initialize the rewardsReserve contract
+function initRewardsReserveContract(abi, contractAddress) {
+    rewardsReserve = new web3.eth.Contract(abi, contractAddress);
 }
 
-// Function to initialize the giveawayReserve contract
-function initGiveawayReserveContract(abi, contractAddress) {
-    giveawayReserve = new web3.eth.Contract(abi, contractAddress);
+// Function to initialize the rewardsReserve contract
+function initRewardsReserveContract(abi, contractAddress) {
+    rewardsReserve = new web3.eth.Contract(abi, contractAddress);
 }
 
 // Function to load the contract ABI and return a Promise
@@ -62,12 +62,12 @@ async function initializeContracts() {
         const contract1ABI = await loadABI('/dapp/contract1.abi');
         const contract2ABI = await loadABI('/dapp/contract2.abi');
         const tokenContractABI = await loadABI('/dapp/bsov.abi');
-        const giveawayReserveABI = await loadABI('/dapp/giveawayReserve.abi');
+        const rewardsReserveABI = await loadABI('/dapp/rewardsReserve.abi');
 
  	initContract1(contract1ABI, contract1Address); // Initialize contract1
         initContract2(contract2ABI, contract2Address); // Initialize contract2
         initBsovTokenContract(tokenContractABI, tokenContractAddress); // Initialize bsovTokenContract
-        initGiveawayReserveContract(giveawayReserveABI, giveawayReserveContractAddress);
+        initRewardsReserveContract(rewardsReserveABI, rewardsReserveContractAddress);
         
 	    // Now that contracts are initialized, you can update their data
         updateData();
@@ -84,10 +84,10 @@ function updateContractData(contract, methodName, containerId, methodArgs) {
 const containerLabels = {
   contract1TimeLeft: "Time Remaining of Lock Time",
   contract2TimeLeft: "Time Remaining of Lock Time",
-  giveawayReserveCurrentTier: "Current Reward Tier",
-  giveawayReserveTotalClaimed: "Total Rewards Claimed",
-  giveawayReserveTotalEligibleAmount: "Total Rewards Sent",
-  giveawayReserveTotalTimelocked: "Total BSOV Timelocked for Rewards",
+  rewardsReserveCurrentTier: "Current Reward Tier",
+  rewardsReserveTotalClaimed: "Total Rewards Claimed",
+  rewardsReserveTotalEligibleAmount: "Total Rewards Sent",
+  rewardsReserveTotalTimelocked: "Total BSOV Timelocked for Rewards",
   tokensMinted: "Total BSOV Tokens Minted",
   burnAmount: "Total BSOV Burned"
 };
@@ -158,11 +158,11 @@ function updateData() {
   //  updateContractData(contract2, 'getTotalTimelocked', 'contract2TotalTimelocked');
   //  updateContractData(contract2, 'getUsersInfo', 'contract2UsersInfo');
 
-    // Update data for giveawayReserve
-    updateContractData(giveawayReserve, 'currentTier', 'giveawayReserveCurrentTier');
-    updateContractData(giveawayReserve, 'totalClaimed', 'giveawayReserveTotalClaimed');
-    updateContractData(giveawayReserve, 'totalEligibleAmount', 'giveawayReserveTotalEligibleAmount');
-    updateContractData(giveawayReserve, 'totalTimelocked', 'giveawayReserveTotalTimelocked');
+    // Update data for rewardsReserve
+    updateContractData(rewardsReserve, 'currentTier', 'rewardsReserveCurrentTier');
+    updateContractData(rewardsReserve, 'totalClaimed', 'rewardsReserveTotalClaimed');
+    updateContractData(rewardsReserve, 'totalEligibleAmount', 'rewardsReserveTotalEligibleAmount');
+    updateContractData(rewardsReserve, 'totalTimelocked', 'rewardsReserveTotalTimelocked');
 }
 
 // Call the initializeContracts function to start the process

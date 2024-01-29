@@ -73,7 +73,7 @@ color:yellow;
     min-width: 300px;
 }
 
-#regularAccountContainer, #incomingAccountContainer {
+#regularAccountContainer, #rewardsAccountContainer {
     flex-basis: 50%; /* Each takes half of the space in the second line container */
 
 }
@@ -92,8 +92,8 @@ text-align:center;
 #regularAccountContainer:hover {
 }
 
-#giveawayAccountContainer {
-    width: 50%; /* Full width for the giveaway account container */
+#rewardsAccountContainer {
+    width: 50%; /* Full width for the rewards account container */
     text-align: center;
 border: 1px solid orange; /* Thick blue border */
     box-shadow: 0px 0px 8px rgba(255, 198, 0, 0.6); /* Subtle shadow for depth */
@@ -102,7 +102,7 @@ border: 1px solid orange; /* Thick blue border */
     transition: all 0.3s ease; /* Smooth transition for hover effects */
 
 }
-#giveawayAccountContainer:hover {
+#rewardsAccountContainer:hover {
  border-color: darkorange; /* Darker blue on hover */
     box-shadow: 0px 0px 12px rgba(179, 113, 0, 0.8); /* Intensified shadow on hover */
 }
@@ -260,7 +260,7 @@ display: block;
 .button:hover {
     background-color: #0073CF;
 }
-#claimGiveawayButton, #claimGiveawayReserveButton {
+#acceptIncomingButton, #claimRewardsReserveButton {
   position:relative; 
     background-color: #F8B128;
     color: black;
@@ -280,19 +280,19 @@ display: block;
     margin-bottom:5px;
 }
 
-#claimGiveawayButton {
+#acceptIncomingButton {
 background-color: #004F8B;
 color:white;
 }
 
-#claimGiveawayButton:hover, {
+#acceptIncomingButton:hover, {
     background-color: #FDC860; /* Slightly lighter gray on hover */
     border-color: #2A79A5; /* Slightly brighter blue on hover */
    /* transform: scale(1.05); */
     color:black;
 }
 
-#claimGiveawayReserveButton:hover {
+#claimRewardsReserveButton:hover {
     background-color: #FDC860; /* Slightly lighter gray on hover */
     border-color: #2A79A5; /* Slightly brighter blue on hover */
    /* transform: scale(1.05); */
@@ -326,7 +326,7 @@ color:white;
     margin-top: 15px;
 }
 
-.giveaway {
+.rewards {
     display: none; /* Hidden by default, can be shown based on contract selection */
     margin-top: 20px;
 }
@@ -391,7 +391,7 @@ font-size:9pt;
 }
 
 /* Hide the buttons initially */
-#timelock1Button, #withdraw1Button, #giveaway2Button, #timelock2Button, #withdraw2Button, #amount1, #amount2, #ethAddresses, #giveawayAmounts, #contract1Explanation, #contract2Explanation {
+#timelock1Button, #withdraw1Button, #sendLocked2Button, #timelock2Button, #withdraw2Button, #amount1, #amount2, #ethAddresses, #sendLockedAmounts, #contract1Explanation, #contract2Explanation {
     display: none;
     margin:auto;
     margin-top:10px;

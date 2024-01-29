@@ -170,7 +170,7 @@ console.log('updateUIOnConnection Function started');
     const withdraw2 = document.getElementById('withdraw2');
     const timelock1 = document.getElementById('timelock1');
     const timelock2 = document.getElementById('timelock2');
-    const giveaway = document.getElementById('giveaway');
+    const rewards = document.getElementById('rewards');
                 document.getElementById('container').style.display = 'block';
 
 
@@ -224,11 +224,11 @@ let totalTimelockedBigInt;
 // Function to fetch total timelocked value
 async function fetchTotalTimelocked() {
   try {
-    if (!window.giveawayReserve) {
-      console.error('GiveawayReserve is not initialized for fetching totalTimelocked');
+    if (!window.rewardsReserve) {
+      console.error('rewardsReserve is not initialized for fetching totalTimelocked');
       return;
     }
-    totalTimelockedBigInt = await window.giveawayReserve.methods.totalTimelocked().call();
+    totalTimelockedBigInt = await window.rewardsReserve.methods.totalTimelocked().call();
     // Continue with the rest of your code that depends on totalTimelockedBigInt
   } catch (error) {
     console.error("Error fetching totalTimelocked:", error);
