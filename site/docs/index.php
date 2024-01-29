@@ -247,7 +247,7 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Current Amount Timelocked</th>
-                <td><?php echo $row1['netAmount']; ?></td>
+                <td><?php echo $row1['netAmount']; ?> BSOV</td>
             </tr>
             <tr>
                 <th>Lock Time Expiry Date</th>
@@ -279,7 +279,7 @@ featuring explanations of contract functions, security measures, and how to inte
             </tr>
             <tr>
                 <th>Current Amount Timelocked</th>
-                <td><?php echo $row2['netAmount']; ?></td>
+                <td><?php echo $row2['netAmount']; ?> BSOV</td>
             </tr>
             <tr>
                 <th>Lock Time Expiry Date</th>

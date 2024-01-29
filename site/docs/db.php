@@ -1,9 +1,9 @@
 <?php
 // Query for timelock_contract_1
-$query1 = "SELECT netAmount FROM timelock_contract_1 WHERE rowName = 'TOTAL'";
+$query1 = "SELECT netAmount FROM timelock_contract_1 WHERE address = 'TOTAL'";
 
 // Query for timelock_contract_2
-$query2 = "SELECT netAmount FROM timelock_contract_2 WHERE rowName = 'TOTAL'";
+$query2 = "SELECT netAmount FROM timelock_contract_2 WHERE address = 'TOTAL'";
 
 // Execute the queries
 $result1 = $conn->query($query1);
