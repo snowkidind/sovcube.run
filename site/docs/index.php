@@ -27,7 +27,7 @@
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/config.php'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . 'db.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/docs/db.php'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/top.php'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/menu.php'; ?>
 <!--<?php include $_SERVER['DOCUMENT_ROOT'] . '/connect.php'; ?>-->
