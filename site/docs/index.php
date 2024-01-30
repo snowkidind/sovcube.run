@@ -40,8 +40,10 @@
 <div class="toc-container">
     <ul class="toc">
         <li><a href="#introduction">Introduction</a></li>
-        <li><a href="#getting-started">Getting Started with Metamask, SovCube & BSOV Token</a></li>
-        <li><a href="#time-locking">Time-Locking Tokens</a></li>
+	<li><a href="#getting-started">Getting Started with Metamask, SovCube & BSOV Token</a></li>
+       
+   <li><a href="#features">dApp Features</a>
+<ul>        <li><a href="#time-locking">Time-Locking Tokens</a></li>
 	<li><a href="#withdrawal">Withdrawal Process</a></li>
 	<li><a href="#unclaimed">Unclaimed Timelock Rewards</a></li>
 	<li><a href="#claimrewards">Claim Timelock Rewards</a></li>
@@ -49,7 +51,9 @@
 	<li><a href="#regularaccount">Regular Account</a></li>
 	<li><a href="#incomingaccount">Incoming Tokens Account</a></li>
 	<li><a href="#sendlocked">Send Locked Tokens</a></li>
-        <li><a href="#smart-contract">Smart Contract Details</a>
+  </ul>
+</li>
+	<li><a href="#smart-contract">Smart Contract Details</a>
 <ul>
                 <li><a href="#contract-1">Contract 1</a></li>
 		<li><a href="#contract-2">Contract 2</a></li>
@@ -59,9 +63,138 @@
         <li><a href="#faqs">FAQs</a></li>
 	<li><a href="#bsov">BSOV Token</a></li> 
        <li><a href="#support">Support and Community</a></li>
-        <li><a href="#legal">Legal - Terms</a></li>
+<li><a href="#github">Open Source Development - Github</a></li>       
+ <li><a href="#legal">Legal - Terms</a></li>
     </ul>
 </div>
+
+
+<!--
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tocItems = document.querySelectorAll('.toc li');
+
+        function isElementVisible(element) {
+            var rect = element.getBoundingClientRect();
+            return rect.top < window.innerHeight * 0.25 && rect.bottom >= 0;
+        }
+
+        tocItems.forEach(function (item) {
+            var sublist = item.querySelector('ul');
+            if (sublist) {
+                item.classList.add('has-dropdown');
+                var link = item.querySelector('a');
+
+                item.addEventListener('click', function (event) {
+                    if (event.target === link) {
+                        // If the clicked element is the link, toggle the dropdown
+                        event.preventDefault(); // Prevent the default link behavior
+                        sublist.style.display = (sublist.style.display === 'block') ? 'none' : 'block';
+                    } else {
+                        // If it's not the link, toggle 'active' class
+                        item.classList.toggle('active');
+                    }
+                });
+            }
+        });
+
+        function highlightActiveLink() {
+            var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+
+            tocItems.forEach(function (item) {
+                var targetId = item.querySelector('a').getAttribute('href').substring(1);
+                var targetElement = document.getElementById(targetId);
+
+                if (targetElement && (isElementVisible(targetElement) || Array.from(targetElement.getElementsByTagName('*')).some(isElementVisible))) {
+                    tocItems.forEach(function (otherItem) {
+                        otherItem.classList.remove('active');
+                    });
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Initial call to highlight the active link on page load
+        highlightActiveLink();
+
+        // Attach the highlightActiveLink function to the scroll event
+        window.addEventListener('scroll', highlightActiveLink);
+    });
+</script>
+-->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tocItems = document.querySelectorAll('.toc li');
+
+        function isElementVisible(element) {
+            var rect = element.getBoundingClientRect();
+            return rect.top < window.innerHeight * 0.25 && rect.bottom >= 0;
+        }
+
+        function expandDropdownOnChildVisible(parentItem) {
+            var sublist = parentItem.querySelector('ul');
+            var childElements = sublist.getElementsByTagName('li');
+
+            for (var i = 0; i < childElements.length; i++) {
+                if (isElementVisible(childElements[i])) {
+                    sublist.style.display = 'block';
+                    parentItem.classList.add('active'); // Add 'active' class to the parent
+                    break;
+                }
+            }
+        }
+
+        tocItems.forEach(function (item) {
+            var sublist = item.querySelector('ul');
+            if (sublist) {
+                item.classList.add('has-dropdown');
+                var link = item.querySelector('a');
+
+                item.addEventListener('click', function (event) {
+                    if (event.target === link) {
+                        event.preventDefault();
+                        if (sublist.style.display === 'block') {
+                            item.classList.remove('active'); // Remove 'active' when collapsing
+                            sublist.style.display = 'none';
+                        } else {
+                            sublist.style.display = 'block';
+                            expandDropdownOnChildVisible(item);
+                            item.classList.add('active');
+                        }
+                    } else {
+                        item.classList.toggle('active');
+                    }
+                });
+            }
+        });
+
+        function highlightActiveLink() {
+            var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+
+            tocItems.forEach(function (item) {
+                var targetId = item.querySelector('a').getAttribute('href').substring(1);
+                var targetElement = document.getElementById(targetId);
+
+                if (targetElement && isElementVisible(targetElement)) {
+                    tocItems.forEach(function (otherItem) {
+                        otherItem.classList.remove('active');
+                    });
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Initial call to highlight the active link on page load
+        highlightActiveLink();
+
+        // Attach the highlightActiveLink function to the scroll event
+        window.addEventListener('scroll', highlightActiveLink);
+    });
+</script>
+
+
+
 <!--<p style="color:red;">This page is currently under construction. Some of the content has been automatically generated, and is just acting as a placeholder.</p>-->
     <!-- Introduction -->
     <section id="introduction">
@@ -132,19 +265,22 @@ you now have everything you need to interact with SovCube.</p>
  where you will approve connecting your Metamask wallet to the SovCube website.</p>
     </section>
 
+
+    <section id="">
+        <h2>dApp Features</h2>
+<p>Read about all the features of the SovCube dApp.</p>
+
 <!-- Time-Locking Tokens -->
 <section id="time-locking">
     <h2>Timelocking Tokens</h2>
     <p>
 	The "Timelock Tokens" function allows users to lock a specified amount of tokens for a period set by the contract.
 If the user timelocks their tokens, the tokens will be locked until the Lock Time has expired. The Lock Time is determined by when the contract was deployed, and the lock time parameter in the contract.
-<p><strong>Contract 1</strong> was deployed the 2nd of August, 2019, and had only a 180 days lock time, which happened the 29th of January, 2020.
-Contract 1 has a weekly withdrawal rate of 1000 tokens per week, but even so, very few tokens have been withdrawn as of writing this (17th of January, 2024).
-</p>
-<p><strong>Contract 2</strong> was deployed the 15th of February, 2024, and has a 1000 days lock time.
-Contract 2 has a weekly withdrawal rate of 100 tokens per week, but also had an improvement with 3 added functions called Timelock Rewards, Send Locked Tokens and Incoming Tokens Account. 
-</p>
+</p><p>
+This means that since e.g. Contract 2 has a 1000 day Lock Time and was deployed 15th of February, the timelocked tokens for all users are unlocked 1000 days from the 15th of February.
     </p>
+<p>To receive Timelock Rewards, you will need to timelock tokens into <strong>Contract 2</strong>.</p> 
+<p>There are no incentives to timelock your tokens into Contract 1.</p>
 </section>
 
 <!-- Withdrawal Process -->
@@ -181,8 +317,8 @@ After you click this button, the balance of "Unclaimed Timelock Rewards" will be
     <h2>Accept Incoming Tokens</h2>
     <p>
 	"Accept Incoming Tokens" is a button that refers to the process of receiving tokens after claiming the Timelock Rewards or if you have been sent timelocked tokens from  other users who used the "Send Locked Tokens" function.
-After clicking "Accept Incoming Tokens" button, the balance in "Incoming Tokens" will be transferred to the "Timelocked Tokens" balance in the "Incoming Tokens Account".
-After the tokens have been transferred, the Lock Time of the "Incoming Tokens Account" will reset to the initial 1000 days, regardless of how much time you have left of your Lock Time in the Incoming Tokens Account. 
+</p><p>After clicking "Accept Incoming Tokens" button, the balance in "Incoming Tokens" will be transferred to the "Timelocked Tokens" balance in the "Incoming Tokens Account".
+</p><p>After the tokens have been transferred, the Lock Time of the "Incoming Tokens Account" will reset to the initial 1000 days, regardless of how much time you have left of your Lock Time in the Incoming Tokens Account. 
     </p>
 </section>
 
@@ -196,7 +332,8 @@ After the tokens have been transferred, the Lock Time of the "Incoming Tokens Ac
 <section id="incomingaccount">
     <h2>Incoming Tokens Account</h2>
     <p>
-	The "Incoming Tokens Account" is where all claimed Timelock Rewards and timelocked tokens that were sent by other users end up. If users send you tokens through the "Send Locked Tokens" function, they end up here, and after you click Accept Incoming Tokens button, they end up here. Note that when accepting incoming tokens, the Lock Time of the Timelocked Tokens in the "Incoming Tokens Account" is reset to 1000 days, regardless of how much time you have left on it. 
+	The "Incoming Tokens Account" is where all claimed Timelock Rewards and timelocked tokens that were sent by other users end up. If users send you tokens through the "Send Locked Tokens" function, they end up here, and after you click Accept Incoming Tokens button, they end up here.
+</p><p>Note that when accepting incoming tokens, the Lock Time of the Timelocked Tokens in the "Incoming Tokens Account" is reset to 1000 days, regardless of how much time you have left on it. 
    </p>
 </section>
 
@@ -217,10 +354,10 @@ To send timelocked tokens to several different addresses with several different 
 
     </p>
 </section>
-
+</section>
 
     <!-- Smart Contract Details -->
-    <section id="smart-contract">
+    <section id="">
         <h2>Smart Contract Details</h2>
         <p>
             Dive into the technical aspects of SovCube with an overview of its smart contracts. 
@@ -231,7 +368,11 @@ featuring explanations of contract functions, security measures, and how to inte
 
 <section id="contract-1" class="table-section">
     <h2>Contract 1 Details</h2>
-    <table class="contract-table">
+<p><strong>Contract 1</strong> was deployed the 2nd of August, 2019, and had only a 180 days lock time, which expired the 29th of January, 2020.
+Contract 1 has a weekly withdrawal rate of 1000 tokens per week, but even so, very few tokens have been withdrawn as of writing this (17th of January, 2024).
+You can still timelock tokens in Contract 1, but there is no incentive to do so.
+</p>
+ <table class="contract-table">
         <tbody>
             <tr>
                 <th>Function</th>
@@ -263,6 +404,11 @@ featuring explanations of contract functions, security measures, and how to inte
 
 <section id="contract-2" class="table-section">
     <h2>Contract 2 Details</h2>
+
+<p><strong>Contract 2</strong> was deployed the 15th of February, 2024, and has a 1000 days lock time.
+Contract 2 has a weekly withdrawal rate of 100 tokens per week, but also had an improvement with 3 added functions called Timelock Rewards, Send Locked Tokens and Incoming Tokens Account.
+</p>
+
     <table class="contract-table">
         <tbody>
             <tr>
@@ -295,11 +441,12 @@ featuring explanations of contract functions, security measures, and how to inte
 
 <section id="rewardreserve" class="table-section">
     <h2>Rewards Reserve Contract Details</h2>
+<p>The Rewards Reserve Contract is a contract that interacts with Contract 2 and acts as a reserve for the Timelock Rewards. 300,000 BSOV Tokens have been deposited by the creator of SovCube, and these tokens are designated for the users of SovCube. This contract fetches the amount of tokens that have been timelocked in Contract 2, and calculates how many Timelock Rewards should be sent to the users.</p>
     <table class="contract-table">
         <tbody>
             <tr>
                 <th>Function</th>
-                <td>Distribute BSOV Tokens to the users who timelock tokens, according to the current tier.</td>
+                <td>Distribute BSOV Tokens to the users who timelock tokens in Contract 2, calculating the correct amount corresponding to the current tier.</td>
             </tr>
             <tr>
                 <th>Contract Address</th>
@@ -427,11 +574,16 @@ Join the <a href="https://t.me/SovCube">SovCube Telegram</a> for help, support a
 
     <p>By using the SovCube website and dApp, you agree to release SovCube and its affiliates from any liability or claims arising out of your use of the platform. This disclaimer is subject to change without notice. It is your responsibility to review and understand the terms regularly. If you do not agree with these terms, please refrain from using the SovCube website and dApp.</p>    
 </section>
+
+
+<section id="github">
+<h2>Open Source Development - Github</h2>
+
+<p>The SovCube website and dApp is completely open source, and is available for any developers to deploy and use, even if the SovCube.com website goes down.</p>
+<p>Visit the <a href="https://github.com/realrouse/sovcube.com/" target="_blank">SovCube Github</a> Repository to read the code and deploy it yourself!</p>
+</section>
+
 </div>
-
-
-
-
 
 
 <!--<script src="/dapp/app.js"></script>-->

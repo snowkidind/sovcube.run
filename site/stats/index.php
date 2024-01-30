@@ -197,7 +197,7 @@ function formatNumber($value) {
 </div>
 
 <!--<script src="/dapp/app.js"></script> -->
-
+<p style="text-align:center;">Balances on this page are updated every minute or two.</p>
 </div>
 
 <script>
