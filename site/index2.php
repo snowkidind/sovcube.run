@@ -36,21 +36,35 @@
 
 <div class="blurred-background"></div>
     <div class="text-container">
+
 <center><h1 class="brand-name">SovCube</h1></center>
-    <center><h2>Freedom to Save Money</h2></center>
-    <p><strong>Freedom to Save Money is Financial Freedom.</strong>
-Keep your <a href="https://bsovtoken.com" target="_blank">BSOV Tokens</a> safe and help them grow with SovCube. In a cryptocurrency market that's risky and always changing, thinking long-term is really important.
-SovCube doesn't just keep your tokens safe; it also helps them become more valuable as time goes on.
-Use SovCube's web3 dApp to make your BSOV tokens stronger and more stable for the future.
-</p>
-<br><br>
-  <center><h3>Earn Rewards While Securing Your BSOV Tokens with SovCube's Time-Lock Feature</h3></center>
-    <p>
-SovCube offers a smart way to time-lock your BSOV tokens using the web3 interface, demonstrating your commitment to BSOV Token's long-term value.
-The unique Slow-Release feature gradually reintroduces BSOV tokens to the cryptocurrency market after the time-lock period,
-preventing market shocks and maintaining supply stability.
-This responsible approach fosters trust and sustains long-term value, making SovCube an ideal choice for forward-thinking token holders.
-</p>
+<center><h2>Grow Long-Term Value with an<br>Anti-Inflationary Savings Account</h2></center>
+<p style="text-align:center;">Secure your <a href="https://bsovtoken.com" target="_blank">BSOV Tokens</a> with SovCube's web3 dApp<br>and smart-contract collection.</p>
+<br>
+<div class="stats-container">
+<center><h3>Timelock Tokens</h3></center>
+<div style="text-align:center;">
+<p>Lock in your BSOV Tokens using SovCube's web3 interface, showcasing your commitment to BSOV Token's long-term value.</p>
+<img src="/images/Sovcube-padlock-icon10.png" style="margin:0px 0px 0px 0px; z-index:11;" width="200px" ></img>
+</div>
+</div>
+
+<div class="stats-container">
+<center><h3 style="color:#F8B128;">Timelock Rewards</h3></center>
+<p>Earn rewards after timelocking, and potentially double your investment with SovCube's Timelock Rewards.</p>
+<br>
+<div style="text-align:center;">
+<img src="/images/Sovcube-padlock-icon11.png" style="margin:0px 0px 20px 0px; z-index:11;" width="200px" ></img>
+</div>
+</div>
+<div class="stats-container">
+<center><h3>Send or Pay using Timelocked Tokens</h3></center>
+<p>You may offer people a payment which is locked for 1000 days. Or in other words: You can offer them a Long-Term Savings Account by sending, gifting or paying anyone with timelocked BSOV Tokens.</p>
+<br>
+</div>
+
+
+</div>
 </div>
 
 <div class="button-container">
