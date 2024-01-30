@@ -44,12 +44,13 @@
        
    <li><a href="#features">dApp Features</a>
 <ul>        <li><a href="#time-locking">Time-Locking Tokens</a></li>
+	<li><a href="#locktime">Lock Time</a></li>
+	<li><a href="#regularaccount">Regular Account</a></li>
+	<li><a href="#incomingaccount">Incoming Tokens Account</a></li>
 	<li><a href="#withdrawal">Withdrawal Process</a></li>
 	<li><a href="#unclaimed">Unclaimed Timelock Rewards</a></li>
 	<li><a href="#claimrewards">Claim Timelock Rewards</a></li>
 	<li><a href="#acceptincoming">Accept Incoming Tokens</a></li>
-	<li><a href="#regularaccount">Regular Account</a></li>
-	<li><a href="#incomingaccount">Incoming Tokens Account</a></li>
 	<li><a href="#sendlocked">Send Locked Tokens</a></li>
   </ul>
 </li>
@@ -283,12 +284,39 @@ This means that since e.g. Contract 2 has a 1000 day Lock Time and was deployed 
 <p>There are no incentives to timelock your tokens into Contract 1.</p>
 </section>
 
+<section id="locktime">
+<h2>Lock Time</h2>
+<p>
+Lock Time is a global variable that applies to all users, and is set on the day of the deployment of the contract.
+It means that all the users have to wait until the Lock Time expires before they can start withdrawing their tokens, following the weekly withdrawal rate.
+</p>
+</section>
+
+<section id="regularaccount">
+    <h2>Regular Account</h2>
+    <p>
+        The "Regular Account" is where the user-initiated timelocked balance ends up, so whenever you use the "Timelock" function, the tokens end up here. They are locked until the contracts' Lock Time has expired, and can only be withdrawn according to the weekly withdrawal rate set by the contract.
+    </p>
+</section>
+
+<section id="incomingaccount">
+    <h2>Incoming Tokens Account</h2>
+    <p>
+        The "Incoming Tokens Account" is where all claimed Timelock Rewards and timelocked tokens that were sent by other users end up. If users send you tokens through the "Send Locked Tokens" function, they end up here, and after you click Accept Incoming Tokens button, they end up here.
+</p><p>Note that when accepting incoming tokens, the Lock Time of the Timelocked Tokens in the "Incoming Tokens Account" is reset to 1000 days, regardless of how much time you have left on it.
+   </p>
+</section>
+
+
 <!-- Withdrawal Process -->
 <section id="withdrawal">
     <h2>Withdrawal Process</h2>
     <p>
 	The "Withdrawal Process" enables users to retrieve their locked tokens after the Lock Time has expired.
  This function provides a seamless way to unlock and access the previously timelocked tokens, making them available for further use or transfer.</p>
+<h3>Withdrawal Rate:</h3>
+When the Lock Time has expired, the users can begin withdrawing their tokens, but they do have to follow the weekly Withdrawal Rate.
+For example, if you timelock 10,000 tokens in Contract 2, which has a 100 tokens/week withdrawal rate; it will take 100 weeks to withdraw all those tokens, providing that you withdraw once every week.
 <p>
 <strong>Contract 1</strong> has a weekly withdrawal rate of 1000 tokens.
     </p>
@@ -322,20 +350,6 @@ After you click this button, the balance of "Unclaimed Timelock Rewards" will be
     </p>
 </section>
 
-<section id="regularaccount">
-    <h2>Regular Account</h2>
-    <p>
-	The "Regular Account" is where the user-initiated timelocked balance ends up, so whenever you use the "Timelock" function, the tokens end up here. They are locked until the contracts' Lock Time has expired, and can only be withdrawn according to the weekly withdrawal rate set by the contract.
-    </p>
-</section>
-
-<section id="incomingaccount">
-    <h2>Incoming Tokens Account</h2>
-    <p>
-	The "Incoming Tokens Account" is where all claimed Timelock Rewards and timelocked tokens that were sent by other users end up. If users send you tokens through the "Send Locked Tokens" function, they end up here, and after you click Accept Incoming Tokens button, they end up here.
-</p><p>Note that when accepting incoming tokens, the Lock Time of the Timelocked Tokens in the "Incoming Tokens Account" is reset to 1000 days, regardless of how much time you have left on it. 
-   </p>
-</section>
 
 <section id="sendlocked">
     <h2>Send Locked Tokens</h2>
@@ -530,6 +544,13 @@ Join the <a href="https://t.me/SovCube">SovCube Telegram</a> for help, support a
         </p>
     </section>
 
+<section id="github">
+<h2>Open Source Development - Github</h2>
+
+<p>The SovCube website and dApp is completely open source, and is available for any developers to deploy and use, even if the SovCube.com website goes down.</p>
+<p>Visit the <a href="https://github.com/realrouse/sovcube.com/" target="_blank">SovCube Github</a> Repository to read the code and deploy it yourself!</p>
+</section>
+
     <!-- Legal and Compliance -->
     <section id="legal">
         <h2>Legal - Terms</h2>
@@ -576,12 +597,6 @@ Join the <a href="https://t.me/SovCube">SovCube Telegram</a> for help, support a
 </section>
 
 
-<section id="github">
-<h2>Open Source Development - Github</h2>
-
-<p>The SovCube website and dApp is completely open source, and is available for any developers to deploy and use, even if the SovCube.com website goes down.</p>
-<p>Visit the <a href="https://github.com/realrouse/sovcube.com/" target="_blank">SovCube Github</a> Repository to read the code and deploy it yourself!</p>
-</section>
 
 </div>
 
