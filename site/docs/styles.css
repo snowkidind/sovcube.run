@@ -1,3 +1,35 @@
+.toc ul {
+    display: none;
+}
+
+.toc li.active > ul {
+    display: inline-block;
+}
+
+.toc li {
+ /*   display: inline-block;*/
+  /* position: relative; */
+}
+
+.toc li.has-dropdown::before {
+    content: '\25BC'; /* Unicode character for down arrow */
+    color: white;
+    display: inline-block;
+    margin-right: 5px;
+    position: absolute; /* Position the arrow relative to the list item */
+left:5px;
+margin-top:5px;
+}
+
+.toc li.has-dropdown.active ul {
+    display: block;
+}
+
+.toc li.active.has-dropdown::before {
+    content: '\25B2'; /* Unicode character for up arrow */
+}
+
+
 .body-container {
 width: 1200px;
 margin-top:100px;
@@ -159,7 +191,7 @@ color:white;
 
 .toc-container {
     position: fixed;
-    top: 240px;
+    top: 100px;
     left: 50px;
     background: #112240; /* Slightly Lighter Blue */
     border-radius: 10px;
@@ -174,18 +206,22 @@ color:white;
 .toc {
     list-style: none;
     padding: 0;
+    font-size:11pt;
 }
 
 .toc li a {
     color: #58A6FF; /* Light Blue for Links */
     display: block;
     padding: 5px;
+    text-decoration:underline #254A75;
 }
 
 .toc li a:hover {
     color: #CAE9FF; /* Lighter Blue on Hover */
 }
-
+    .toc li.active {
+        background-color: #254A75; /* Set your desired highlight color */
+    }
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
