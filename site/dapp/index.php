@@ -37,7 +37,10 @@
             </select>
         </div>
 
-<p id="contract-explanation">To begin using the SovCube dApp you have to select a contract to interact with. The contracts have different parameters, and you should read the documentation before you timelock your tokens.</p>
+<p id="contract-explanation">To begin using the SovCube dApp you have to select a contract to interact with. The contracts have different parameters, and you should read the documentation before you timelock your tokens.
+<br><br><span style="color:#F8B128">To receive Timelock Rewards, you will need to use <strong>Contract 2</strong></span
+</p>
+
 
 <div id="fieldContainer">
 
