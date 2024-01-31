@@ -65,6 +65,9 @@ document.getElementById('clearError').addEventListener('click', function() {
         <span id="contract1DynamicInfo"></span>
     </div>
 </div>
+
+<div class="styled-divider"></div>
+
 <div id="contractInfo2Container">
     <div id="contract2InfoSection">
     <h3 class="contract2infoheader" style="display:none;">Contract 2 Balances:</h3>

@@ -100,8 +100,8 @@ if (timeLeftInSeconds === 0) {
         <div class="contract-info-style">
 <div id="regularAccount1">
             <h3>Regular Account</h3>
-            <p><b>Your Timelocked Tokens:</b> <span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-            <p><b>Lock Time:</b> <span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
+            <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+            <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
         </div>
     </div>
 </div>

@@ -128,7 +128,7 @@ function updateContract2Details(tokensLocked, incomingAccountBalance, untakenInc
 	const rewardsAccountElement = document.getElementById('rewardsAccount');
     rewardsAccountElement.innerHTML = `
 	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>	
-	<p><b>Unclaimed Timelock Rewards:</b> <span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
+	<p><b>Unclaimed Timelock Rewards:</b><br><span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
 	`;
 
 
@@ -156,9 +156,9 @@ if (incomingAccountLockTimeInSeconds > 0) {
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
-        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedIncomingAccountLockTime}</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
+        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedIncomingAccountLockTime}</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b><br><span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
     `;
 
    }
@@ -168,9 +168,9 @@ else if (parseFloat(incomingAccountBalance) == 0)  {
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
-        <p><b>Lock Time:</b> <span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
+        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
+        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b><br><span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
     `;
 
 
@@ -180,9 +180,9 @@ else if (incomingAccountLockTimeInSeconds == 0) {
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
         <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
+        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
         <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime" style="color:green;">Unlocked!</span></p>
-	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
+	<p style="margin-top:10px;"><b>Incoming Tokens:</b><br><span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
     `;
 }
 
