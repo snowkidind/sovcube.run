@@ -95,7 +95,7 @@ function formatNumber($value) {
                 Time Left: Loading...
             </div>
             <div class="info-container" id="contract1TotalTimelocked">
-                <p><b>Total Timelocked:</b><br><?php echo formatNumber($totalTimelocked1) . " BSOV"; ?></p>
+                <p><b>Current Total Timelocked:</b><br><?php echo formatNumber($totalTimelocked1) . " BSOV"; ?></p>
             </div>
             <div class="info-container" id="contract1UsersInfo">
                 <div class="leaderboard-container" id="contract1Leaderboard">
@@ -130,7 +130,7 @@ function formatNumber($value) {
                 Time Left: Loading...
             </div>
             <div class="info-container" id="contract2TotalTimelocked">
-                <p><b>Total Timelocked:</b><br><?php echo formatNumber($totalTimelocked2) . " BSOV"; ?></p>
+                <p><b>Current Total Timelocked:</b><br><?php echo formatNumber($totalTimelocked2) . " BSOV"; ?></p>
             </div>
             <div class="info-container" id="contract2UsersInfo">
                 <div class="leaderboard-container" id="contract2Leaderboard">

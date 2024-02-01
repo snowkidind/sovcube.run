@@ -6,8 +6,7 @@ Timelock BSOV Tokens and receive Timelock Rewards.
 
 - Add more info to My Account page.
 - - Specifically:
-- - - Add "Time Left until next withdrawal"
-- - - List timelocking transactions.
+- - - List personal timelocking transactions.
 
 - Add more info to Stats page
 - - Specifically:

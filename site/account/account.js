@@ -16,16 +16,16 @@ let selectedAccount;
 
 // Check if MetaMask is installed
 if (typeof window.ethereum !== 'undefined') {
-    console.log('MetaMask is installed!');
+    // console.log('MetaMask is installed!');
     web3 = new Web3(window.ethereum);
 } else {
-    console.log('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+    // console.log('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
     alert('MetaMask is not installed. Please consider installing it to view this page correctly: https://metamask.io/download.html');
 }
 
 
 function toggleConnectButtonText() {
-console.log('Function toggleConnectButtonText started');
+// console.log('Function toggleConnectButtonText started');
     const connectButton = document.getElementById('connectWallet');
     if (selectedAccount) {
         connectButton.innerText = 'Disconnect Wallet';
@@ -36,7 +36,7 @@ console.log('Function toggleConnectButtonText started');
 
 // Function to handle wallet connection
 async function connectWallet() {
-console.log('connectWallet Function started');
+// console.log('connectWallet Function started');
     if (selectedAccount) {
         // Disconnect the wallet
         selectedAccount = null;
@@ -60,7 +60,7 @@ console.log('connectWallet Function started');
 
 
 function updateUIForDisconnectedWallet() {
-console.log('updateUIForDisconnectedWallet Function started');
+// console.log('updateUIForDisconnectedWallet Function started');
     const walletStatus = document.getElementById('walletStatus');
     walletStatus.innerText = 'Disconnected';
     walletStatus.style.color = 'red';
@@ -98,7 +98,7 @@ console.log('updateUIForDisconnectedWallet Function started');
 
 // Function to update UI after connecting the wallet
 function updateUIForConnectedWallet(account) {
-    console.log('updateUIForConnectedWallet Function started');
+   // console.log('updateUIForConnectedWallet Function started');
     const walletStatus = document.getElementById('walletStatus');
     const bsovTokenContract = new web3.eth.Contract(bsovTokenABI, tokenContractAddress);
     
@@ -125,7 +125,7 @@ const formattedBalanceString = new Intl.NumberFormat('en-US').format(formattedBa
 
 
 async function checkWalletConnection() {
-console.log('checkWalletConnection Function started');
+// console.log('checkWalletConnection Function started');
     if (window.ethereum) {
         try {
             // Request currently connected accounts
@@ -140,7 +140,7 @@ console.log('checkWalletConnection Function started');
                 updateUIForConnectedWallet(selectedAccount);
             } else {
                 // No accounts connected or the stored account does not match
-                console.log('No connected account found or mismatch with stored account');
+                // console.log('No connected account found or mismatch with stored account');
                 updateUIForDisconnectedWallet();
             }
         } catch (error) {
@@ -158,8 +158,8 @@ window.addEventListener('load', checkWalletConnection);
 
 // Function to update the UI after wallet connection
 function updateUIOnConnection(account) {
-console.log('updateUIOnConnection Function started');
-    console.log(`Connected to account: ${account}`);
+// console.log('updateUIOnConnection Function started');
+   // console.log(`Connected to account: ${account}`);
     const contractSelect = document.getElementById('contractSelect');
     const contract1InfoHeader = document.querySelector('.contract1infoheader');
     const contract2InfoHeader = document.querySelector('.contract2infoheader');
@@ -218,7 +218,7 @@ startInterval();
 	
 
 
-
+/*
 let totalTimelockedBigInt;
 
 // Function to fetch total timelocked value
@@ -239,13 +239,13 @@ async function fetchTotalTimelocked() {
 window.addEventListener('load', () => {
     fetchTotalTimelocked();
 });
-
+*/
 
 
 
 function resetContractUI() {
 
-console.log('resetContractUI Function started');
+// console.log('resetContractUI Function started');
     // Hide all buttons and input fields
 	document.getElementById('errorMessage').innerText = '';
 	document.getElementById(`clearError`).style.display = 'none';
