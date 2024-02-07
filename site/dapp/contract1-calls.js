@@ -61,10 +61,10 @@ function formatTimeLeft2(seconds) {
 
 
 function fetchContract1Info(account) {
-    console.log("Fetching Contract 1 info for account:", account);
+   // console.log("Fetching Contract 1 info for account:", account);
     getContract1TimelockedTokens(account).then(({ timelockedTokens, timeLeftInSeconds }) => {
-        console.log("Contract 1 Timelocked Tokens:", timelockedTokens);
-        console.log("Contract 1 Lock Time-Seconds:", timeLeftInSeconds);
+      //  console.log("Contract 1 Timelocked Tokens:", timelockedTokens);
+     //   console.log("Contract 1 Lock Time-Seconds:", timeLeftInSeconds);
 	const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(2);
 	const formattedTimeLeft = formatTimeLeft2(Number(timeLeftInSeconds));
         updateContract1Details(formattedTokens, '29 January 2020', 1000, formattedTimeLeft, timeLeftInSeconds);
@@ -84,8 +84,8 @@ if (timeLeftInSeconds > 0) {
         <div class="contract-info-style">
 <div id="regularAccount1">
             <h3>Regular Account</h3>
-            <p><b>Your Timelocked Tokens:</b> <span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-            <p><b>Lock Time:</b> <span id="regularUnlockTime">${formattedTimeLeft}</span></p>
+            <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+            <p><b>Lock Time:</b><br><span id="regularUnlockTime">${formattedTimeLeft}</span></p>
         </div>
     </div>
 </div>
@@ -100,8 +100,8 @@ if (timeLeftInSeconds === 0) {
         <div class="contract-info-style">
 <div id="regularAccount1">
             <h3>Regular Account</h3>
-            <p><b>Your Timelocked Tokens:</b> <span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-            <p><b>Lock Time:</b> <span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
+            <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+            <p><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
         </div>
     </div>
 </div>

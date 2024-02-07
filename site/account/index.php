@@ -43,9 +43,6 @@ $(document).ready(function(){
 
 
 
-        </div>
-    </div>
-</div>
 <div id="errorMessage" style="color: red;"></div><span id="clearError" style="cursor: pointer; padding: 0 5px; display:none;">X</span>
 
 
@@ -57,44 +54,137 @@ document.getElementById('clearError').addEventListener('click', function() {
 
 </script>
 
-
 <div id="contractInfoContainer">
-    
     <div id="contract1InfoSection">
         <h3 class="contract1infoheader" style="display:none;">Contract 1 Balances:</h3>
         <span id="contract1DynamicInfo"></span>
     </div>
+
+    <!-- HTML template for Contract 1 Info -->
+    <script id="contract1Template" type="text/template">
+        <p style="text-align:center;"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
+        <div class="contract-info-container">
+            <div class="contract-info-style">
+                <div id="regularAccount1">
+                    <h3>Regular Account</h3>
+                    <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+                    <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime">${timeLeftOutput}</span></p>
+		    <p style="margin-top:10px;"><b>Time to next withdrawal:</b><br><span id="nextWithdrawal1Regular">${nextWithdrawal1RegularOutput}</span></p>
+		    </div>
+		    </div>
+        </div>
+        <!--<p style="font-size:7pt; text-align:center;">Balances update every 5 seconds</p>-->
+    </script>
+
+
+<div class="contract-container">
+<div class="contract-section">
+                    <h4>Your Latest Transactions</h4>
+    <table class="latestTxTable" border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody1"></tbody>
+    </table>
 </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="styled-divider"></div>
+
+
 <div id="contractInfo2Container">
     <div id="contract2InfoSection">
-    <h3 class="contract2infoheader" style="display:none;">Contract 2 Balances:</h3>
-	      <div id="mainContractInfo">
+	<h3 class="contract2infoheader" style="display:none;">Contract 2 Balances:</h3>
+<div id="mainContractInfo">
 	      </div>
+        <span id="contract2DynamicInfo"></span>
+    </div>
+
+    <!-- HTML template for Contract 2 Info -->
+    <script id="contract2Template" type="text/template">
+        <p style="text-align:center;"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
 	<div class="contract-info-container">
-	      
-		<div class="second-line-container">
-	     <div class="contract-info-style" id="regularAccountContainer">
-	      <div id="regularAccount">
-	      </div>
-		</div>
-
-	      <div class="contract-info-style" id="incomingAccountContainer">
-               <div id="incomingTokensAccount">   
-	      </div>	
-		</div>
+	<div class="second-line-container">
+            <div class="contract-info-style" id="regularAccountContainer">
+                <div id="regularAccount">
+                    <h3>Regular Account</h3>
+                    <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
+                    <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime">${timeLeftOutput}</span></p>
+		    <p style="margin-top:10px;"><b>Time to next withdrawal:</b><br><span id="nextWithdrawal2Regular">${nextWithdrawal2RegularOutput}</span></p>
+		    </div>
+</div>
+		                  <div class="contract-info-style" id="incomingAccountContainer">
+				  <div id="incomingTokensAccount">
+				          <h3>Incoming Tokens Account</h3>
+        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
+	<p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime">${incomingAccountLockTimeOutput}</span></p>
+	<p style="margin-top:10px;"><b>Time to next withdrawal:</b><br><span id="nextWithdrawal2Incoming">${nextWithdrawal2IncomingOutput}</span></p>
+        <p style="margin-top:10px;"><b>Incoming Tokens:</b><br><span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
 	</div>
+                </div>
 
-	      <div class="contract-info-style" id="rewardsAccountContainer">
-               <div id="rewardsAccount">
-	      </div>	
 		</div>
-	</div>
-         
-     </div>
 
- <p style="font-size:7pt; text-align:center; letter-spacing:1.5px;">Balances update every 10 seconds</p>
+		              <div class="contract-info-style" id="rewardsAccountContainer">
+			      <div id="rewardsAccount">
+			      	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>
+	<p><b>Unclaimed Timelock Rewards:</b><br><span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
+              </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!--<p style="font-size:7pt; text-align:center;">Balances update every 5 seconds</p>-->
+    </script>
+
+
+<div class="contract-container">
+<div class="contract-section">
+                           <h4>Your Latest Transactions</h4>
+                <table class="latestTxTable" border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody2"></tbody>
+    </table>
+</div>
+
+
+<div class="contract-section">
+               <h4>Your Latest Transactions</h4>
+                <table class="latestTxTable" border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody2Incoming"></tbody>
+    </table>
+</div>
+</div>
 
 </div>
+ <p style="font-size:7pt; text-align:center; letter-spacing:1.5px;">Balances update every 10 seconds</p>
+
 
 <div class="terms-container">
     <p class="terms">Everything on this site is provided "as-is" and SovCube.com has no responsibilities. Everything you do and see on this website is 100% your responsibility. This is because SovCube is purely a voluntary community initiative.</p>
@@ -125,7 +215,7 @@ document.getElementById('toggleTerms').addEventListener('click', function(event)
 <script src="/account/account.js"></script>
 <script src="/account/contract1-calls.js"> </script>
 <script src="/account/contract2-calls.js"> </script>
-
+<script src="/account/txes.js"> </script>
 
  
    

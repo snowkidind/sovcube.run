@@ -27,6 +27,19 @@ if (web3) {
     });
 }
 
+function calculateNextWithdrawalTime2(lastWithdrawalTimestamp) {
+    // Get the current timestamp in seconds
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    // Calculate the time elapsed since the last withdrawal
+    const elapsedTime = currentTimestamp - lastWithdrawalTimestamp;
+
+    // Calculate the remaining time until the next 7-day interval
+    const remainingTime = (7 * 24 * 60 * 60) - (elapsedTime % (7 * 24 * 60 * 60));
+
+    return remainingTime;
+}
+
 
 function formatTimeLeft(seconds) {
     const days = Math.floor(seconds / (24 * 60 * 60));
@@ -48,6 +61,8 @@ async function getContract2TimelockedTokens(account) {
     const untakenIncomingTokens = await contract2.methods.getUntakenIncomingBalance(account).call();
     const timelockedTokens = await contract2.methods.getBalance(account).call();
     const incomingAccountBalance = await contract2.methods.getIncomingAccountBalance(account).call();
+const nextWithdrawal2IncomingInSeconds = await contract2.methods.getLastIncomingAccountWithdrawal(account).call();
+const nextWithdrawal2RegularInSeconds = await contract2.methods.getLastWithdrawal(account).call();
 
 let timeLeftInSeconds, incomingAccountLockTimeInSeconds;
 
@@ -67,7 +82,7 @@ try {
 
 
 
-    return { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds };
+    return { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds, nextWithdrawal2IncomingInSeconds, nextWithdrawal2RegularInSeconds };
 }
 
 
@@ -98,95 +113,123 @@ function updateProgressBar(totalTimelocked, totalEligibleAmount) {
 }
 
 async function fetchContract2Info(account) {
-    console.log("Fetching Contract 2 info for account:", account);
+    // console.log("Fetching Contract 2 info for account:", account);
     try {
-        const { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds } = await getContract2TimelockedTokens(account);
+        const { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds, nextWithdrawal2IncomingInSeconds, nextWithdrawal2RegularInSeconds } = await getContract2TimelockedTokens(account);
         const eligibleTokens = await fetchRewardsReserveInfo(account);
 
         const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(2);
         const formattedIncomingAccountBalance = (Number(incomingAccountBalance) / 100000000).toFixed(2);
         const formattedUntakenIncomingTokens = (Number(untakenIncomingTokens) / 100000000).toFixed(2);
+
+const nextWithdrawal2RegularCalculated = calculateNextWithdrawalTime(Number(nextWithdrawal2RegularInSeconds));
+const nextWithdrawal2IncomingCalculated = calculateNextWithdrawalTime(Number(nextWithdrawal2IncomingInSeconds));
+const formattedNextWithdrawal2Incoming = formatTimeLeft(Number(nextWithdrawal2IncomingCalculated));
+const formattedNextWithdrawal2Regular = formatTimeLeft(Number(nextWithdrawal2RegularCalculated));
+
+// console.log('nextWithdrawal2IncomingCalculated: ', nextWithdrawal2IncomingCalculated);
+// console.log('formattedNextWithdrawal2Incoming: ', formattedNextWithdrawal2Incoming);
+
         const formattedTimeLeft = formatTimeLeft(Number(timeLeftInSeconds));
         const formattedIncomingAccountLockTime = formatTimeLeft(Number(incomingAccountLockTimeInSeconds));
         const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
 
-        updateContract2Details(formattedTokens, formattedIncomingAccountBalance, formattedUntakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, '16 September 2026', 100, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds);
+        updateContract2Details(formattedTokens, formattedIncomingAccountBalance, formattedUntakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, '16 September 2026', 100, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds, formattedNextWithdrawal2Regular, nextWithdrawal2RegularInSeconds, nextWithdrawal2IncomingInSeconds, formattedNextWithdrawal2Incoming);
     } catch (error) {
         console.error("Error in fetching Contract 2 info:", error);
     }
 }
 
 
-function updateContract2Details(tokensLocked, incomingAccountBalance, untakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, unlockTime, withdrawRate, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds) {
-	
-	const mainContractInfoElement = document.getElementById('mainContractInfo');
-    mainContractInfoElement.innerHTML = `
-<p id="contractDescription"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
-        `;
+function updateContract2Details(tokensLocked, incomingAccountBalance, untakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, unlockTime, withdrawRate, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds, formattedNextWithdrawal2Regular, nextWithdrawal2RegularInSeconds, nextWithdrawal2IncomingInSeconds, formattedNextWithdrawal2Incoming) {
+    const infoElement = document.getElementById('contract2DynamicInfo');
+    const template = document.getElementById('contract2Template').innerHTML;
 
-
-	const rewardsAccountElement = document.getElementById('rewardsAccount');
-    rewardsAccountElement.innerHTML = `
-	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>	
-	<p><b>Unclaimed Timelock Rewards:</b> <span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
-	`;
-
-
-if (timeLeftInSeconds > 0) {
-	const regularAccountElement = document.getElementById('regularAccount');
-    regularAccountElement.innerHTML = `
-        <h3>Regular Account</h3>
-        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime">${formattedTimeLeft}</span></p>
-    `;
-
-}
-if (timeLeftInSeconds === 0) {
-	const regularAccountElement = document.getElementById('regularAccount');
-    regularAccountElement.innerHTML = `
-        <h3>Regular Account</h3>
-        <p><b>Your Timelocked Tokens:</b><br><span id="yourTokensTextRegular">${tokensLocked} BSOV</span></p>
-        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime" style="color:green;">Unlocked!</span></p>
-    `;
-}
-
-console.log(incomingAccountLockTimeInSeconds);
-if (incomingAccountLockTimeInSeconds > 0) {
-    // Update Incoming Tokens Account Info
-    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
-    incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
-        <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedIncomingAccountLockTime}</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
-    `;
-
-   }
-
-else if (parseFloat(incomingAccountBalance) == 0)  {
-
-    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
-    incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
-        <p><b>Lock Time:</b> <span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span></p>
-        <p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
-    `;
-
-
+    // Determine the TimeLeft output based on the condition
+    let timeLeftOutput = '';
+            if (timeLeftInSeconds == 0) {
+                    // console.log('timeLeftInSeconds is 0');
+        timeLeftOutput = `<span id="regularUnlockTime" style="color:green;">Unlocked!</span>`;
     }
 
-else if (incomingAccountLockTimeInSeconds == 0) {
-    const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
-    incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
-        <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${incomingAccountBalance} BSOV</span></p>
-        <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime" style="color:green;">Unlocked!</span></p>
-	<p style="margin-top:10px;"><b>Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
-    `;
+        else if (timeLeftInSeconds > 0) {
+            // console.log ('timeLeftInSeconds is over 0');
+        timeLeftOutput = `<span id="regularUnlockTime">${formattedTimeLeft}</span>`;
+    }
+
+
+    let incomingAccountLockTimeOutput = '';
+
+	        if (parseFloat(incomingAccountBalance) == 0) {
+        incomingAccountLockTimeOutput = `<span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span>`;
+
+        }
+
+	else if (incomingAccountLockTimeInSeconds == 0) {	
+                     // console.log('incomingAccountLockTimeInSeconds is 0');
+        incomingAccountLockTimeOutput = `<span id="regularUnlockTime" style="color:green;">Unlocked!</span>`;
+    }
+
+	
+
+        else if (incomingAccountLockTimeInSeconds > 0) {
+             // console.log ('incomingAccountLockTimeInSeconds is over 0');
+        incomingAccountLockTimeOutput = `<span id="regularUnlockTime">${formattedIncomingAccountLockTime}</span>`;
+    }
+
+    
+
+
+    let nextWithdrawal2RegularOutput = '';
+
+	if ((nextWithdrawal2RegularInSeconds == 0) && (incomingAccountLockTimeInSeconds > 0)) {
+nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular" style="font-size:8pt;">Cannot withdraw before Lock Time has expired.</span>`;
+
+	}
+	else if (nextWithdrawal2RegularInSeconds == 0) {
+            // console.log('nextWithdrawal2RegularInSeconds is 0');
+        nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular" style="color:green;">Ready to Withdraw!</span>`;
+    }
+        else if (nextWithdrawal2RegularInSeconds > 0) {
+           // console.log('nextWithdrawal2RegularInSeconds is over 0');
+        nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular">${formattedNextWithdrawal2Regular}</span>`;
+    }
+
+    let nextWithdrawal2IncomingOutput = '';
+
+                if (parseFloat(incomingAccountBalance) == 0) {
+        nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming" style="font-size:8pt;">You do not have timelocked tokens in this account.</span>`;
+
+        }
+        else if ((nextWithdrawal2IncomingInSeconds == 0) && (incomingAccountLockTimeInSeconds > 0)) {
+           // console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is 0');
+        nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming" style="font-size:8pt;">Cannot withdraw before Lock Time has expired.</span>`;
+    }
+	else if (nextWithdrawal2IncomingInSeconds == 0) {
+           // console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is 0');
+        nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming" style="color:green;">Ready to Withdraw!</span>`;
+    }
+        else if (nextWithdrawal2IncomingInSeconds > 0) {
+            // console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is over 0');
+        nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming">${formattedNextWithdrawal2Incoming}</span>`;
+    }
+
+
+    // Replace variables in the template with actual values
+    const updatedHtml = template.replace(/\${withdrawRate}/g, withdrawRate)
+                               .replace(/\${tokensLocked}/g, tokensLocked)
+				.replace('${incomingAccountBalance}', incomingAccountBalance)
+                               .replace(/\${formattedTimeLeft}/g, formattedTimeLeft)
+                               .replace('${timeLeftOutput}', timeLeftOutput)
+				.replace('${incomingAccountLockTimeOutput}', incomingAccountLockTimeOutput)
+                                .replace('${nextWithdrawal2RegularOutput}', nextWithdrawal2RegularOutput)
+				.replace('${nextWithdrawal2IncomingOutput}', nextWithdrawal2IncomingOutput)
+				.replace('${formattedEligibleTokens}', formattedEligibleTokens)
+				.replace('${untakenIncomingTokens}', untakenIncomingTokens);
+	// Update the HTML content of the target element
+    infoElement.innerHTML = updatedHtml;
 }
 
-}
 
 
 
@@ -200,6 +243,7 @@ function startFetching() {
     fetchInterval = setInterval(function() {
                 fetchContract1Info(selectedAccount);
                 fetchContract2Info(selectedAccount);
+	       
     }, 10000);
 };
 

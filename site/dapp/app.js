@@ -27,7 +27,7 @@ document.getElementById('contract-explanation').style.display = 'none';
 
 
 function toggleConnectButtonText() {
-console.log('Function toggleConnectButtonText started');
+// console.log('Function toggleConnectButtonText started');
     const connectButton = document.getElementById('connectWallet');
     if (selectedAccount) {
         connectButton.innerText = 'Disconnect Wallet';
@@ -38,7 +38,7 @@ console.log('Function toggleConnectButtonText started');
 
 // Function to handle wallet connection
 async function connectWallet() {
-console.log('connectWallet Function started');
+// console.log('connectWallet Function started');
     if (selectedAccount) {
         // Disconnect the wallet
         selectedAccount = null;
@@ -62,7 +62,7 @@ console.log('connectWallet Function started');
 
 
 function updateUIForDisconnectedWallet() {
-console.log('updateUIForDisconnectedWallet Function started');
+// console.log('updateUIForDisconnectedWallet Function started');
     const walletStatus = document.getElementById('walletStatus');
     walletStatus.innerText = 'Disconnected';
     walletStatus.style.color = 'red';
@@ -105,7 +105,7 @@ console.log('updateUIForDisconnectedWallet Function started');
 
 // Function to update UI after connecting the wallet
 function updateUIForConnectedWallet(account) {
-    console.log('updateUIForConnectedWallet Function started');
+    // console.log('updateUIForConnectedWallet Function started');
     const walletStatus = document.getElementById('walletStatus');
     const bsovTokenContract = new web3.eth.Contract(bsovTokenABI, tokenContractAddress);
     
@@ -132,7 +132,7 @@ const formattedBalanceString = new Intl.NumberFormat('en-US').format(formattedBa
 
 
 async function checkWalletConnection() {
-console.log('checkWalletConnection Function started');
+// console.log('checkWalletConnection Function started');
     if (window.ethereum) {
         try {
             // Request currently connected accounts
@@ -165,8 +165,8 @@ window.addEventListener('load', checkWalletConnection);
 
 // Function to update the UI after wallet connection
 function updateUIOnConnection(account) {
-console.log('updateUIOnConnection Function started');
-    console.log(`Connected to account: ${account}`);
+// console.log('updateUIOnConnection Function started');
+   // console.log(`Connected to account: ${account}`);
     const contractSelect = document.getElementById('contractSelect');
     const contract1InfoHeader = document.querySelector('.contract1infoheader');
     const contract2InfoHeader = document.querySelector('.contract2infoheader');
@@ -609,7 +609,7 @@ async function withdrawTokensContract2(amount) {
 // Function for marking timelocked tokens for send
 async function markTimelockedTokensForSend(addresses, amounts) {
     if (!window.contract2) {
-        console.error('Contract 2 is not initialized for earmarking tokens');
+        console.error('Contract 2 is not initialized for sending locked tokens');
         return;
     }
 
@@ -627,9 +627,9 @@ async function markTimelockedTokensForSend(addresses, amounts) {
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
-        console.log("Earmark transaction receipt: ", receipt);
+        console.log("Send Locked token transaction receipt: ", receipt);
     } catch (error) {
-        console.error("Error in earmarking transaction: ", error);
+        console.error("Error in send locked Token transaction: ", error);
         document.getElementById('errorMessage').innerText = `${error.message}`;
 	    document.getElementById('clearError').style.display = 'block';
 }
@@ -639,7 +639,7 @@ async function markTimelockedTokensForSend(addresses, amounts) {
 
 function resetContractUI() {
 
-console.log('resetContractUI Function started');
+// console.log('resetContractUI Function started');
     // Hide all buttons and input fields
     document.getElementById('amount1').style.display = 'none';
     document.getElementById('amount2').style.display = 'none';

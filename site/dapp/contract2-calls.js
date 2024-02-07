@@ -95,7 +95,7 @@ function updateProgressBar(totalTimelocked, totalEligibleAmount) {
 }
 
 async function fetchContract2Info(account) {
-    console.log("Fetching Contract 2 info for account:", account);
+   // console.log("Fetching Contract 2 info for account:", account);
     try {
         const { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds } = await getContract2TimelockedTokens(account);
         const eligibleTokens = await fetchRewardsReserveInfo(account);
@@ -148,7 +148,7 @@ if (timeLeftInSeconds === 0) {
 }
 
 
-console.log(incomingAccountLockTimeInSeconds);
+// console.log(incomingAccountLockTimeInSeconds);
 if (incomingAccountLockTimeInSeconds > 0) {
     // Update Incoming Tokens Account Info
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
