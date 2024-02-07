@@ -4,14 +4,7 @@ Timelock BSOV Tokens and receive Timelock Rewards.
 
 ### Known issues and to-do:
 
-- Add more info to My Account page.
-- - Specifically:
-- - - List personal timelocking transactions.
 
-- Add more info to Stats page
-- - Specifically:
-- - - Add web3 calls to Docs & Help page
-- - - List last timelocking transactions
 - CODE COSMETIC - Code Cleanup of app.js
 - CODE COSMETIC - Code Cleanup of contract2-calls.js
 - CODE COSMETIC - Code Cleanup of contract1-calls.js

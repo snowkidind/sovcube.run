@@ -1,5 +1,90 @@
 /*styles.css*/
 
+
+
+
+.contract-container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+}
+
+.contract-section {
+    width: calc(70% - 20px); /* Adjust width as needed */
+    margin-right: 20px; /* Adjust margin between sections */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Ensure the containers are side-by-side */
+.contract-section:first-child {
+    margin-right: 20px; /* Adjust margin between sections */
+}
+
+/* Clear margin for the last container */
+.contract-section:last-child {
+    margin-right: 0;
+}
+
+
+
+
+
+
+/* Table Styles */
+.contract-section h4 {
+text-align:center;
+}
+
+.contract-section table, .leaderboard-container table {
+    width: 50%;
+    max-width: 500%;
+    border-collapse: collapse;
+    margin:auto;
+    font-size: 0.9em;
+    max-width: 300px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+
+}
+
+.contract-section th, .leaderboard-container th,
+.contract-section td, .leaderboard-container td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.contract-section th, .leaderboard-container th {
+    background-color: #0D203B;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+.contract-section tr, .leaderboard-container tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.contract-section tr:hover, .leaderboard-container tr:hover {
+    background-color: #0E2240;
+}
+
+
+.latestTxTable tr td{
+padding:2px;
+text-align:center;
+}
+.latestTxTable tr td:nth-child(4) {
+    text-align:right;
+}
+.latestTxTable tr td:nth-child(1) {
+    text-align:left;
+}
+
+
+.latestTxTable tr td {
+    white-space: nowrap;
+}
+
+
+
 .styled-divider {
     width: 100%;
     max-width: 800px; /* Set your preferred max-width */

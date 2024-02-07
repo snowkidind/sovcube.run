@@ -1,4 +1,19 @@
 /* General Styles */
+.latestTxTable tr td{
+padding:2px;
+text-align:center;
+}
+.latestTxTable tr td:nth-child(4) {
+    text-align:right;
+}
+.latestTxTable tr td:nth-child(1) {
+    text-align:left;
+}
+
+
+.latestTxTable tr td {
+    white-space: nowrap;
+}
 
 #external-link1, #external-link2, #external-link3, #external-link4, #contract-heading {
 display: inline-block;

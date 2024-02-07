@@ -49,6 +49,7 @@ async function connectWallet() {
             selectedAccount = accounts[0];
             localStorage.setItem('selectedAccount', selectedAccount); // Store account in local storage
             updateUIForConnectedWallet(selectedAccount);
+		initiateWeb3();
 	  // updateUIForConnectedWallet(selectedAccount);
         } catch (error) {
             console.error('User denied account access', error);
@@ -249,12 +250,6 @@ function resetContractUI() {
     // Hide all buttons and input fields
 	document.getElementById('errorMessage').innerText = '';
 	document.getElementById(`clearError`).style.display = 'none';
-	document.getElementById(`account-checkbox`).style.display = 'none';
-        document.getElementById(`account-checkbox-label`).style.display = 'none';
-            document.getElementById('timelockedtokens1').style.display = 'none';
-            document.getElementById('withdrawaltime1').style.display = 'none';
-            document.getElementById('withdrawaltime2').style.display = 'none';
-document.getElementById('timelockRewardCalculation').style.display = 'none';
 
 // When a new contract is selected
 const contractSelect = document.getElementById('contractSelect');

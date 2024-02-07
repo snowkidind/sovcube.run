@@ -71,11 +71,34 @@ document.getElementById('clearError').addEventListener('click', function() {
                     <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="regularUnlockTime">${timeLeftOutput}</span></p>
 		    <p style="margin-top:10px;"><b>Time to next withdrawal:</b><br><span id="nextWithdrawal1Regular">${nextWithdrawal1RegularOutput}</span></p>
 		    </div>
-            </div>
+		    </div>
         </div>
         <!--<p style="font-size:7pt; text-align:center;">Balances update every 5 seconds</p>-->
     </script>
+
+
+<div class="contract-container">
+<div class="contract-section">
+                    <h4>Your Latest Transactions</h4>
+    <table class="latestTxTable" border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody1"></tbody>
+    </table>
 </div>
+</div>
+
+
+
+</div>
+
+
+
 
 
 <div class="styled-divider"></div>
@@ -109,7 +132,7 @@ document.getElementById('clearError').addEventListener('click', function() {
 	<p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime">${incomingAccountLockTimeOutput}</span></p>
 	<p style="margin-top:10px;"><b>Time to next withdrawal:</b><br><span id="nextWithdrawal2Incoming">${nextWithdrawal2IncomingOutput}</span></p>
         <p style="margin-top:10px;"><b>Incoming Tokens:</b><br><span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
-              </div>
+	</div>
                 </div>
 
 		</div>
@@ -126,9 +149,40 @@ document.getElementById('clearError').addEventListener('click', function() {
         </div>
         <!--<p style="font-size:7pt; text-align:center;">Balances update every 5 seconds</p>-->
     </script>
+
+
+<div class="contract-container">
+<div class="contract-section">
+                           <h4>Your Latest Transactions</h4>
+                <table class="latestTxTable" border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody2"></tbody>
+    </table>
 </div>
 
 
+<div class="contract-section">
+               <h4>Your Latest Transactions</h4>
+                <table class="latestTxTable" border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody2Incoming"></tbody>
+    </table>
+</div>
+</div>
+
+</div>
  <p style="font-size:7pt; text-align:center; letter-spacing:1.5px;">Balances update every 10 seconds</p>
 
 
@@ -161,7 +215,7 @@ document.getElementById('toggleTerms').addEventListener('click', function(event)
 <script src="/account/account.js"></script>
 <script src="/account/contract1-calls.js"> </script>
 <script src="/account/contract2-calls.js"> </script>
-
+<script src="/account/txes.js"> </script>
 
  
    

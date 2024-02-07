@@ -117,6 +117,19 @@ function formatNumber($value) {
             </tr>
         <?php endforeach; ?>
     </table>
+
+    <h4>Latest Transactions</h4>
+    <table class="latestTxTable" border="1">
+        <thead>
+	    <tr>
+		<th>Timestamp</th>
+                <th>Address</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody1"></tbody>
+    </table>
 </div>
 
             </div>
@@ -152,6 +165,20 @@ function formatNumber($value) {
             </tr>
         <?php endforeach; ?>
     </table>
+   <h4>Latest Transactions</h4>
+    <table class="latestTxTable" border="1">
+        <thead>
+	    <tr>
+		<th>Timestamp</th>
+                <th>Address</th>
+                <th>Method</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTableBody2"></tbody>
+    </table>
+</div>
+
 </div>
 
             </div>
@@ -218,5 +245,6 @@ function formatNumber($value) {
 
 <!-- <script src="/dapp/config.js"></script>-->
 <script src="stats.js"></script>
+<script src="txes.js"></script>
 </body>
 </html>

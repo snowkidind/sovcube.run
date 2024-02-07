@@ -127,8 +127,8 @@ const nextWithdrawal2IncomingCalculated = calculateNextWithdrawalTime(Number(nex
 const formattedNextWithdrawal2Incoming = formatTimeLeft(Number(nextWithdrawal2IncomingCalculated));
 const formattedNextWithdrawal2Regular = formatTimeLeft(Number(nextWithdrawal2RegularCalculated));
 
-console.log('nextWithdrawal2IncomingCalculated: ', nextWithdrawal2IncomingCalculated);
-console.log('formattedNextWithdrawal2Incoming: ', formattedNextWithdrawal2Incoming);
+// console.log('nextWithdrawal2IncomingCalculated: ', nextWithdrawal2IncomingCalculated);
+// console.log('formattedNextWithdrawal2Incoming: ', formattedNextWithdrawal2Incoming);
 
         const formattedTimeLeft = formatTimeLeft(Number(timeLeftInSeconds));
         const formattedIncomingAccountLockTime = formatTimeLeft(Number(incomingAccountLockTimeInSeconds));
@@ -166,14 +166,14 @@ function updateContract2Details(tokensLocked, incomingAccountBalance, untakenInc
         }
 
 	else if (incomingAccountLockTimeInSeconds == 0) {	
-                     console.log('incomingAccountLockTimeInSeconds is 0');
+                     // console.log('incomingAccountLockTimeInSeconds is 0');
         incomingAccountLockTimeOutput = `<span id="regularUnlockTime" style="color:green;">Unlocked!</span>`;
     }
 
 	
 
         else if (incomingAccountLockTimeInSeconds > 0) {
-             console.log ('incomingAccountLockTimeInSeconds is over 0');
+             // console.log ('incomingAccountLockTimeInSeconds is over 0');
         incomingAccountLockTimeOutput = `<span id="regularUnlockTime">${formattedIncomingAccountLockTime}</span>`;
     }
 
@@ -187,11 +187,11 @@ nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular" style="font-si
 
 	}
 	else if (nextWithdrawal2RegularInSeconds == 0) {
-            console.log('nextWithdrawal2RegularInSeconds is 0');
+            // console.log('nextWithdrawal2RegularInSeconds is 0');
         nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular" style="color:green;">Ready to Withdraw!</span>`;
     }
         else if (nextWithdrawal2RegularInSeconds > 0) {
-           console.log('nextWithdrawal2RegularInSeconds is over 0');
+           // console.log('nextWithdrawal2RegularInSeconds is over 0');
         nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular">${formattedNextWithdrawal2Regular}</span>`;
     }
 
@@ -202,15 +202,15 @@ nextWithdrawal2RegularOutput = `<span id="nextWithdrawal2Regular" style="font-si
 
         }
         else if ((nextWithdrawal2IncomingInSeconds == 0) && (incomingAccountLockTimeInSeconds > 0)) {
-           console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is 0');
+           // console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is 0');
         nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming" style="font-size:8pt;">Cannot withdraw before Lock Time has expired.</span>`;
     }
 	else if (nextWithdrawal2IncomingInSeconds == 0) {
-           console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is 0');
+           // console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is 0');
         nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming" style="color:green;">Ready to Withdraw!</span>`;
     }
         else if (nextWithdrawal2IncomingInSeconds > 0) {
-            console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is over 0');
+            // console.log('nextWithdrawal2IncomingInSeconds for nextWithdrawalIncoming is over 0');
         nextWithdrawal2IncomingOutput = `<span id="nextWithdrawal2Incoming">${formattedNextWithdrawal2Incoming}</span>`;
     }
 
@@ -243,6 +243,7 @@ function startFetching() {
     fetchInterval = setInterval(function() {
                 fetchContract1Info(selectedAccount);
                 fetchContract2Info(selectedAccount);
+	       
     }, 10000);
 };
 
