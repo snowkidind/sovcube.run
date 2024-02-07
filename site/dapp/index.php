@@ -21,6 +21,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 
+<?php  include $_SERVER['DOCUMENT_ROOT'] . '/tag.php';  
+?>
 
 </head>
 <body>
@@ -32,13 +34,14 @@
         <div class="contract-selection" style="display: none;">
             <select id="contractSelect" class="contractSelect">
 		<option value="select">Select Contract &#x21B4</option>
-                <option value="contract1">Contract 1</option>
-                <option value="contract2">Contract 2 &#127873;</option>
+                <option value="contract1" style="color:gray;">Contract 1 (old)</option>
+                <option value="contract2">Contract 2 &#127873; (new!)</option>
             </select>
         </div>
 
 <p id="contract-explanation">To begin using the SovCube dApp you have to select a contract to interact with. The contracts have different parameters, and you should read the documentation before you timelock your tokens.
-<br><br><span style="color:#F8B128">To receive Timelock Rewards, you will need to use <strong>Contract 2</strong></span
+<br><br><span style="color:#F8B128">To get Timelock Rewards, you will need to timelock <a href="https://bsovtoken.com" target="_blank">BSOV Tokens</a> using <strong>Contract 2</strong>
+<br></span>
 </p>
 
 
@@ -121,7 +124,7 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
             
             <div class="radio-buttons">
                 <input type="radio" id="timelock2" name="contract2Action" value="timelock">
-                <label for="timelock2" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time and receive Timelock Rewards. Tokens cannot be accessed until the Lock Time has expired.">Timelock</label>
+                <label for="timelock2" style="outline-color:orange; box-shadow: 0 0 10px 1px orange;" data-toggle="tooltip" title="Lock your tokens for a pre-set period of time and receive Timelock Rewards. Tokens cannot be accessed until the Lock Time has expired.">Timelock</label>
                 <input type="radio" id="withdraw2" name="contract2Action" value="withdraw">
                 <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Lock Time has expired, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
                 <input type="radio" id="sendlocked" name="contract2Action" value="sendlocked">

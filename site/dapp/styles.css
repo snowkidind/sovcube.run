@@ -6,6 +6,9 @@ text-align:center;
 margin:2px;
 color:#5E798C;
 }
+#timelockRewardCalculation {
+color:orange;
+}
 
 #contractDescription {
 text-align:center;

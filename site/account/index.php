@@ -20,6 +20,8 @@
     <!-- Include web3.js or other necessary scripts -->
 
 <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+<?php  include $_SERVER['DOCUMENT_ROOT'] . '/tag.php';  
+?>
 
 
 </head>
