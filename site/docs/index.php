@@ -23,6 +23,8 @@
 
 <!--<script src="/dapp/connect.js"> </script>-->
 <script src="/dapp/config.js"></script>
+<?php  include $_SERVER['DOCUMENT_ROOT'] . '/tag.php';  
+?>
 
 </head>
 <body>
