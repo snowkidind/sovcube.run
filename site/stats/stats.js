@@ -12,7 +12,7 @@ if (typeof window.ethereum !== 'undefined') {
 let contract1;
 let contract2;
 let bsovTokenContract;
-let rewardsReserve;
+
 
 // Function to initialize the bsovTokenContract contract
 function initBsovTokenContract(abi, contractAddress) {
@@ -29,15 +29,8 @@ function initContract2(abi, contractAddress) {
     contract2 = new web3.eth.Contract(abi, contractAddress);
 }
 
-// Function to initialize the rewardsReserve contract
-function initRewardsReserveContract(abi, contractAddress) {
-    rewardsReserve = new web3.eth.Contract(abi, contractAddress);
-}
 
-// Function to initialize the rewardsReserve contract
-function initRewardsReserveContract(abi, contractAddress) {
-    rewardsReserve = new web3.eth.Contract(abi, contractAddress);
-}
+
 
 // Function to load the contract ABI and return a Promise
 function loadABI(file) {
@@ -62,13 +55,12 @@ async function initializeContracts() {
         const contract1ABI = await loadABI('/dapp/contract1.abi');
         const contract2ABI = await loadABI('/dapp/contract2.abi');
         const tokenContractABI = await loadABI('/dapp/bsov.abi');
-        const rewardsReserveABI = await loadABI('/dapp/rewardsReserve.abi');
+        
 
  	initContract1(contract1ABI, contract1Address); // Initialize contract1
         initContract2(contract2ABI, contract2Address); // Initialize contract2
         initBsovTokenContract(tokenContractABI, tokenContractAddress); // Initialize bsovTokenContract
-        initRewardsReserveContract(rewardsReserveABI, rewardsReserveContractAddress);
-        
+                
 	    // Now that contracts are initialized, you can update their data
         updateData();
     } catch (error) {
@@ -154,15 +146,15 @@ function updateData() {
   //  updateContractData(contract1, 'getUsersInfo', 'contract1UsersInfo');
 
     // Update data for contract2
-    updateContractData(contract2, 'getTimeLeft', 'contract2TimeLeft');
+    updateContractData(contract2, 'getTimeLeftRegularAccount', 'contract2TimeLeft');
   //  updateContractData(contract2, 'getTotalTimelocked', 'contract2TotalTimelocked');
   //  updateContractData(contract2, 'getUsersInfo', 'contract2UsersInfo');
 
     // Update data for rewardsReserve
-    updateContractData(rewardsReserve, 'currentTier', 'rewardsReserveCurrentTier');
-    updateContractData(rewardsReserve, 'totalClaimed', 'rewardsReserveTotalClaimed');
-    updateContractData(rewardsReserve, 'totalEligibleAmount', 'rewardsReserveTotalEligibleAmount');
-    updateContractData(rewardsReserve, 'totalTimelocked', 'rewardsReserveTotalTimelocked');
+    updateContractData(contract2, 'currentGlobalTier', 'rewardsReserveCurrentTier');
+    updateContractData(contract2, 'totalRewardsClaimed', 'rewardsReserveTotalClaimed');
+    updateContractData(contract2, 'totalRewardsEarned', 'rewardsReserveTotalEligibleAmount');
+    updateContractData(contract2, 'totalCurrentlyTimelocked', 'rewardsReserveTotalTimelocked');
 }
 
 // Call the initializeContracts function to start the process

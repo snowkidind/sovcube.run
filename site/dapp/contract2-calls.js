@@ -1,7 +1,6 @@
 // contract2-calls.js
 
 let contract2; // Define contract2 in a broader scope
-let rewardsReserve;
 
 function loadABI(file, callback) {
     const xhr = new XMLHttpRequest();
@@ -21,11 +20,13 @@ if (web3) {
         window.contract2 = new web3.eth.Contract(abi, contract2Address);
 	contract2 = new web3.eth.Contract(abi, contract2Address);
     });
-    loadABI('/dapp/rewardsReserve.abi', function(abi) {
+/*    loadABI('/dapp/rewardsReserve.abi', function(abi) {
         rewardsReserve = new web3.eth.Contract(abi, rewardsReserveContractAddress);
     window.rewardsReserve = new web3.eth.Contract(abi, rewardsReserveContractAddress);
     });
+*/
 }
+
 
 
 function formatTimeLeft(seconds) {
@@ -45,20 +46,20 @@ async function getContract2TimelockedTokens(account) {
         console.error('Contract2 is not initialized when fetching timelocked tokens');
         return;
     }
-    const untakenIncomingTokens = await contract2.methods.getUntakenIncomingBalance(account).call();
-    const timelockedTokens = await contract2.methods.getBalance(account).call();
-    const incomingAccountBalance = await contract2.methods.getIncomingAccountBalance(account).call();
+    const untakenIncomingTokens = await contract2.methods.getBalanceUntakenIncomingAccount(account).call();
+    const timelockedTokens = await contract2.methods.getBalanceRegularAccount(account).call();
+    const incomingAccountBalance = await contract2.methods.getBalanceIncomingAccount(account).call();
 
 let timeLeftInSeconds, incomingAccountLockTimeInSeconds;
           try {
-            timeLeftInSeconds = await contract2.methods.getTimeLeft().call();
+            timeLeftInSeconds = await contract2.methods.getTimeLeftRegularAccount().call();
         } catch (error) {
            // console.error("Time Left Error:", error.message);
 	
             timeLeftInSeconds = 0; // Set to 0 or a suitable default value
         }
 try {
-            incomingAccountLockTimeInSeconds = await contract2.methods.getIncomingAccountTimeLeft(account).call();
+            incomingAccountLockTimeInSeconds = await contract2.methods.getTimeLeftIncomingAccount(account).call();
 } catch (error) {
 
             incomingAccountLockTimeInSeconds = 0; // Set to 0 or a suitable default value
@@ -71,14 +72,14 @@ try {
 // Function to fetch information related to Rewards Reserve
 
 async function fetchRewardsReserveInfo(account) {
-    if (!rewardsReserve) {
+    if (!contract2) {
         console.error('Rewards Reserve contract is not initialized');
 	    return;
     }
 
 
-        const eligibleTokens = await rewardsReserve.methods.eligibleAmount(account).call();
-        return eligibleTokens;
+// DEPRECATED        const eligibleTokens = await contract2.methods.currentUserRewardsAmount(account).call();
+  //      return eligibleTokens;
 	
 }	
 
@@ -98,36 +99,36 @@ async function fetchContract2Info(account) {
    // console.log("Fetching Contract 2 info for account:", account);
     try {
         const { timelockedTokens, incomingAccountBalance, untakenIncomingTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds } = await getContract2TimelockedTokens(account);
-        const eligibleTokens = await fetchRewardsReserveInfo(account);
+   // DEPRECATED     const eligibleTokens = await fetchRewardsReserveInfo(account);
 
         const formattedTokens = (Number(timelockedTokens) / 100000000).toFixed(2);
         const formattedIncomingAccountBalance = (Number(incomingAccountBalance) / 100000000).toFixed(2);
         const formattedUntakenIncomingTokens = (Number(untakenIncomingTokens) / 100000000).toFixed(2);
         const formattedTimeLeft = formatTimeLeft(Number(timeLeftInSeconds));
         const formattedIncomingAccountLockTime = formatTimeLeft(Number(incomingAccountLockTimeInSeconds));
-        const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
+ //DEPRECATED       const formattedEligibleTokens = (Number(eligibleTokens) / 100000000).toFixed(2);
 
-        updateContract2Details(formattedTokens, formattedIncomingAccountBalance, formattedUntakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, '16 September 2026', 100, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds);
+        updateContract2Details(formattedTokens, formattedIncomingAccountBalance, formattedUntakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, '16 September 2026', 100, timeLeftInSeconds, incomingAccountLockTimeInSeconds);
     } catch (error) {
         console.error("Error in fetching Contract 2 info:", error);
     }
 }
 
 
-function updateContract2Details(tokensLocked, tokensIncomingAccount, untakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, unlockTime, withdrawRate, formattedEligibleTokens, timeLeftInSeconds, incomingAccountLockTimeInSeconds) {
+function updateContract2Details(tokensLocked, tokensIncomingAccount, untakenIncomingTokens, formattedTimeLeft, formattedIncomingAccountLockTime, unlockTime, withdrawRate, timeLeftInSeconds, incomingAccountLockTimeInSeconds) {
 	
 	const mainContractInfoElement = document.getElementById('mainContractInfo');
     mainContractInfoElement.innerHTML = `
 <p id="contractDescription"><b>Withdrawal Rate:</b> ${withdrawRate} tokens/week</p>
         `;
 
-
+/* DEPRECATED
 	const rewardsAccountElement = document.getElementById('rewardsAccount');
     rewardsAccountElement.innerHTML = `
 	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>	
 	<p><b>Unclaimed Timelock Rewards:</b> <span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
 	`;
-
+*/
 
 if (timeLeftInSeconds > 0) {
 	const regularAccountElement = document.getElementById('regularAccount');

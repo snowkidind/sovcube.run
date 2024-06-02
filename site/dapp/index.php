@@ -145,7 +145,7 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
             var weeks = timelocked / 100;
             var years = weeks / 52;
 
-	    const lockTimeLeftInSeconds = await contract2.methods.getTimeLeft().call();
+	    const lockTimeLeftInSeconds = await contract2.methods.getTimeLeftRegularAccount().call();
 const secondsInYear = BigInt(365 * 24 * 60 * 60); // Approximate seconds in a year
 // const lockYears = lockTimeLeftInSeconds / secondsInYear;
 const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Convert to number
@@ -172,7 +172,7 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
 
                 document.getElementById('timelockedtokens2').textContent = timelocked + " BSOV will be timelocked. " + burnt + " BSOV will be burnt.";
         try {
-            const lockTimeLeftInSeconds = await contract2.methods.getTimeLeft().call();
+            const lockTimeLeftInSeconds = await contract2.methods.getTimeLeftRegularAccount().call();
             const secondsInYear = BigInt(365 * 24 * 60 * 60); // Approximate seconds in a year
             const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Convert to number
 

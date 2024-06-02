@@ -87,7 +87,7 @@ In essence, you can provide them with a Long-Term Savings Account by sending, gi
 window.onload = function() {
     setTimeout(function() {
         document.querySelector('.body-container').classList.add('bg-loaded');
-    }, 2000); // Wait for 2000 milliseconds before executing the code inside the function
+    }, 1000); // Wait for 2000 milliseconds before executing the code inside the function
 };
 
 </script>

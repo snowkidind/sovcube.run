@@ -195,7 +195,7 @@ function formatNumber($value) {
 
         <div class="contract-section">
 	    <h2 id="contract-heading">Timelock Rewards</h2>
-<a id="external-link3" href='#' target="_blank"><img src="/images/external-link.png" width="15px" alt="External Link Icon"> Etherscan</a> <a id="moreinfo" href="/docs/index.php/#rewardreserve" target="_blank">More info</a>
+<a id="moreinfo" href="/docs/index.php/#rewardreserve" target="_blank">More info</a>
             <div class="info-container" id="rewardsReserveCurrentTier">
                 Current Tier: Loading...
             </div>
@@ -234,13 +234,12 @@ function formatNumber($value) {
     // Get the link element by its ID
     const externalLink1 = document.getElementById('external-link1');
     const externalLink2 = document.getElementById('external-link2');
-    const externalLink3 = document.getElementById('external-link3');
     const externalLink4 = document.getElementById('external-link4');
 
     // Set the href attribute of the link using the contract1Address
     externalLink1.href = `https://goerli.etherscan.io/address/${contract1Address}`;
     externalLink2.href = `https://goerli.etherscan.io/address/${contract2Address}`;
-    externalLink3.href = `https://goerli.etherscan.io/address/${rewardsReserveContractAddress}`;
+    
     externalLink4.href = `https://goerli.etherscan.io/address/${tokenContractAddress}`;
 </script>
 

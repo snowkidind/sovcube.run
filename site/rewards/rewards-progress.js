@@ -1,5 +1,6 @@
 // rewards-progress.js
 
+let contract2;
 
 // Check if MetaMask is installed
 if (typeof window.ethereum !== 'undefined') {
@@ -11,7 +12,12 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 
-let rewardsReserve; // Define rewardsReserve in a broader scope
+if (web3) {
+    loadABI('/dapp/contract2.abi', function(abi) {
+        window.contract2 = new web3.eth.Contract(abi, contract2Address);
+        contract2 = new web3.eth.Contract(abi, contract2Address);
+    });
+}
 
 // Function to initialize the rewardsReserve contract
 function initRewardsReserveContract(abi, contractAddress) {
@@ -68,13 +74,13 @@ rewardsLeftElement.textContent = rewardsLeft.toLocaleString(undefined, { minimum
 }
 
 async function updateCurrentTierDisplay() {
-    if (!rewardsReserve) {
+    if (!contract2) {
         console.error('Rewards Reserve contract is not initialized');
         return;
     }
 
     try {
-        const currentTier = await rewardsReserve.methods.currentTier().call();
+        const currentTier = await contract2.methods.currentGlobalTier().call();
         // Ensure currentTier is interpreted as a number
         const currentTierNumber = Number(currentTier);
 
@@ -140,14 +146,14 @@ function calculateAndDisplayROI(tier) {
 
 // Function to fetch and update the progress bar information
 async function fetchAndUpdateProgressBar() {
-    if (!rewardsReserve) {
+    if (!contract2) {
         console.error('Rewards Reserve contract is not initialized');
         return;
     }
 
     try {
-        const totalTimelocked = await rewardsReserve.methods.totalTimelocked().call();
-        const totalEligibleAmount = await rewardsReserve.methods.totalEligibleAmount().call();
+        const totalTimelocked = await contract2.methods.totalCurrentlyTimelocked().call();
+        const totalEligibleAmount = await contract2.methods.totalRewardsEarned().call();
         
         updateProgressBar(totalTimelocked, totalEligibleAmount);
     } catch (error) {
@@ -155,12 +161,7 @@ async function fetchAndUpdateProgressBar() {
     }
 }
 
-// Load the Rewards Reserve ABI and initialize the contract
-loadABI('/dapp/rewardsReserve.abi', function(abi) {
-    initRewardsReserveContract(abi, rewardsReserveContractAddress); // Replace with your actual contract address
-    fetchAndUpdateProgressBar(); // Fetch and update progress bar after initializing the contract
-    updateCurrentTierDisplay();
-});
+
 
 // Set an interval to regularly update the progress bar
 setInterval(fetchAndUpdateProgressBar, 5000); // Update every 5 seconds
