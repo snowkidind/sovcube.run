@@ -26,7 +26,7 @@
             <p>Welcome to SovCube Timelock Rewards! We're inviting the community to participate in a unique event that will last for years, where early users have the chance to double their <a href="https://bsovtoken.com" target="_blank">BSOV token</a> holdings. Here's how you can be a part of it:</p>
 <div class="stats-container">
 <div id="roiDisplay">
-    <h4>Receive <span id="roiPercentage">[Not Loaded...]</span>% ROI of your investment if you timelock tokens in the current tier</h4>
+    <h4>Receive <span id="roiPercentage">[Loading...]</span>% ROI of your investment if you timelock tokens in the current tier</h4>
 </div>
 </div>
 

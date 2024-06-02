@@ -41,7 +41,8 @@
 
 <div class="toc-container">
     <ul class="toc">
-        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#what-is-sovcube">What is SovCube?</a></li>
+	 <li><a href="#introduction">Introduction</a></li>
 	<li><a href="#getting-started">Getting Started with Metamask, SovCube & BSOV Token</a></li>
        
    <li><a href="#features">dApp Features</a>
@@ -199,11 +200,33 @@
 
 
 <!--<p style="color:red;">This page is currently under construction. Some of the content has been automatically generated, and is just acting as a placeholder.</p>-->
+
+<section id="what-is-sovcube">
+        <div class="what-is-sovcube">        
+<h2>What is SovCube?</h2>
+<p>SovCube offers long-term holders a way to increase their BSOV Token holdings securely over time, with the limitation of gradual withdrawals.</p>             
+<p>We also plan to introduce a future governance function, allowing top timelockers to use their locked tokens as voting power. These timelockers will be able to vote on proposals for allocating funds from a decentralized governance treasury and receive voting rewards.</p>
+<br>
+<section>
+<p style="color:#F8B128;">1. Timelock your BSOV Tokens, receive Timelock Rewards</p>
+<p style="color:#F8B128;">2. Wait</p>
+<p style="color:#F8B128;">3. Withdraw your tokens and rewards gradually over time</p>
+<p style="color:#F8B128;">4. Vote to spend from decentralized treasury [UPCOMING FEATURE]</p>
+</section>
+<br>
+<p>Read the documentation and make sure you fully understand what you're undertaking when using the SovCube dApp.</p>
+
+        </div>
+
+</section>
+
+
+
     <!-- Introduction -->
     <section id="introduction">
         <h2>Introduction</h2>
         <p>
-	    SovCube is a platform that provides access to a collection of timelocking contracts, offering a unique approach to token time-locking.
+	    The SovCube.com website is a platform that provides access to a collection of timelocking contracts, offering a unique approach to token time-locking.
 </p> 
 <p>
 This documentation aims to provide a comprehensive understanding of SovCube's functionalities, its integration with the BSOV ecosystem,

@@ -5,3 +5,4 @@ site/stats/trash
 site/account/trash
 site/config.php
 node_modules
+contracts/trash

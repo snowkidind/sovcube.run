@@ -411,14 +411,14 @@ return;
 // WORKING CODE
 async function updateTimelockRewardCalculation() {
     // Check if contract2 and the element exist
-    if (!window.rewardsReserve || !document.getElementById('amount2')) {
+    if (!window.contract2 || !document.getElementById('amount2')) {
         console.error('Required elements are not initialized.');
         return;
     }
 
 try {
-	const currentTier = await window.rewardsReserve.methods.currentTier().call();
-const totalTimelockedBigInt = await window.rewardsReserve.methods.totalTimelocked().call();
+	const currentTier = await window.contract2.methods.currentGlobalTier().call();
+const totalTimelockedBigInt = await window.contract2.methods.totalCumulativeTimelocked().call();
 const totalTimelocked = Number(totalTimelockedBigInt);
 const totalTimelockedFormatted = totalTimelocked / 100000000;
 
@@ -509,11 +509,11 @@ if (claimRewardsReserveButton) {
 
 // Function to claim Rewards Reserve tokens
 async function claimRewardsReserveTokens() {
-    if (!window.rewardsReserve) {
+    if (!window.contract2) {
         console.error('rewardsReserve is not initialized for claiming tokens');
         return;
     }
-    const transaction = window.rewardsReserve.methods.claimTimelockRewards();
+    const transaction = window.contract2.methods.claimTimelockRewards();
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
@@ -540,7 +540,7 @@ async function acceptIncomingTokens() {
         console.error('Contract 2 is not initialized for claiming tokens');
         return;
     }
-    const transaction = window.contract2.methods.acceptIncomingTokens();
+    const transaction = window.contract2.methods.acceptUntakenIncomingTokens();
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
@@ -587,7 +587,7 @@ async function withdrawTokensContract2(amount) {
         return;
     }
     const fromIncomingAccount = document.getElementById('account-checkbox').checked;
-    const transaction = window.contract2.methods.withdraw(amount, fromIncomingAccount);
+    const transaction = window.contract2.methods.withdrawFromRegularAccount(amount);
     //const transaction = window.contract2.methods.withdraw(amount);
 
     try {
@@ -623,7 +623,7 @@ async function markTimelockedTokensForSend(addresses, amounts) {
  return;
     }
 
-    const transaction = window.contract2.methods.markTimelockedTokensForSend(addresses, amounts);
+    const transaction = window.contract2.methods.sendLockedTokensToMany(addresses, amounts);
 
     try {
         const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
