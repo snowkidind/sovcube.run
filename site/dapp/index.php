@@ -198,11 +198,20 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
     document.getElementById('amount2').addEventListener('input', updateText);
 </script>
 
-
+<!--
 <div class="checkbox-container">		
 <input type="checkbox" id="account-checkbox">
 <label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Tokens Account?</b></label>
+</div> -->
+
+<div id="radio-container" class="radio-container">
+    <input type="radio" id="regular-account" name="account-type" value="regular" checked>
+    <label for="regular-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Regular Account'">Regular Account</label><br>
+
+    <input type="radio" id="incoming-account" name="account-type" value="incoming">
+    <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account'">Incoming Account</label>
 </div>
+
             <textarea id="ethAddresses" spellcheck="false" placeholder="Enter ETH addresses to send timelocked tokens to (one address per line)"></textarea>
 	    <textarea id="sendLockedAmounts" spellcheck="false"  placeholder="Enter BSOV amounts (one amount per line)"></textarea>
           <!-- Contract 2 - Timelock, Withdraw, and Send Locked Tokens Buttons -->
@@ -249,16 +258,17 @@ document.getElementById('clearError').addEventListener('click', function() {
 	      <div class="contract-info-style" id="incomingAccountContainer">
                <div id="incomingTokensAccount">   
 	      </div>	
-	              <button id="acceptIncomingButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Incoming Tokens</button>
+	              <button id="acceptIncomingButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Untaken Incoming Tokens</button>
 		</div>
 	</div>
 
-	      <div class="contract-info-style" id="rewardsAccountContainer">
+<!--	      <div class="contract-info-style" id="rewardsAccountContainer">
                <div id="rewardsAccount">
 	      </div>	
-              <button id="claimRewardsReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Timelock Rewards! By clicking this button the Unclaimed Timelock Rewards will be transferred to your 'Incoming Tokens' balance">Claim Timelock Rewards</button>
+              <button id="claimRewardsReserveButton" data-toggle="tooltip" title="If you timelock BSOV tokens, you'll be worthy of Timelock Rewards! By clicking this button the Unclaimed Timelock Rewards will be transferred to your 'Incoming Tokens' balance">Claim Timelock Rewards</button> 
 		</div>
 	</div>
+-->
          
      </div>
 

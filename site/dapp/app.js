@@ -205,8 +205,9 @@ document.getElementById(`fieldContainer`).style.display = 'none';
         contractInfoContainer.style.display = 'none';
 	contractSelect.style.display = 'block';
 	document.getElementById(`fieldContainer`).style.display = 'block';
-	document.getElementById(`account-checkbox`).style.display = 'none';
-        document.getElementById(`account-checkbox-label`).style.display = 'none';
+	document.getElementById(`radio-container`).style.display = 'none';
+//	document.getElementById(`account-checkbox`).style.display = 'none';
+  //      document.getElementById(`account-checkbox-label`).style.display = 'none';
 document.getElementById('contract-explanation').style.display = 'block';	
       //  document.getElementById('contract-selection').style.display = 'block';
         if (selectedContract === 'select') {
@@ -335,8 +336,9 @@ document.getElementById('timelockRewardCalculation').style.display = 'block';
             document.getElementById('withdrawaltime2').style.display = 'none';
 document.getElementById('timelockRewardCalculation').style.display = 'none';
             document.getElementById('withdraw2Button').style.display = 'block';
-		        document.getElementById(`account-checkbox`).style.display = 'block';
-        document.getElementById(`account-checkbox-label`).style.display = 'block';
+document.getElementById(`radio-container`).style.display = 'block';
+		        //document.getElementById(`account-checkbox`).style.display = 'block';
+        //document.getElementById(`account-checkbox-label`).style.display = 'block';
         } else if (radio.value === 'sendlocked') {
 		stopInterval();
             document.getElementById('ethAddresses').style.display = 'block';
@@ -578,7 +580,7 @@ async function withdrawTokensContract1(amount) {
     }
 }
 
-
+/*
 // Function to withdraw tokens from Contract 2
 async function withdrawTokensContract2(amount) {
     document.getElementById('errorMessage').innerText = '';
@@ -586,7 +588,9 @@ async function withdrawTokensContract2(amount) {
         console.error('Contract 2 is not initialized for withdrawal');
         return;
     }
-    const fromIncomingAccount = document.getElementById('account-checkbox').checked;
+//    const fromIncomingAccount = document.getElementById('account-checkbox').checked;
+const selectedAccountType = document.querySelector('input[name="account-type"]:checked').value;
+
     const transaction = window.contract2.methods.withdrawFromRegularAccount(amount);
     //const transaction = window.contract2.methods.withdraw(amount);
 
@@ -604,9 +608,45 @@ async function withdrawTokensContract2(amount) {
 }
     }
 }
+*/
+
+// Function to withdraw tokens from Contract 2
+async function withdrawTokensContract2(amount) {
+    document.getElementById('errorMessage').innerText = '';
+    if (!window.contract2) {
+        console.error('Contract 2 is not initialized for withdrawal');
+        return;
+    }
+
+    // Determine which account type is selected
+    const selectedAccountType = document.querySelector('input[name="account-type"]:checked').value;
+
+    let transaction;
+    if (selectedAccountType === 'incoming') {
+        transaction = window.contract2.methods.withdrawFromIncomingAccount(amount);
+    } else {
+        transaction = window.contract2.methods.withdrawFromRegularAccount(amount);
+    }
+
+    try {
+        const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
+        console.log("Transaction receipt: ", receipt);
+    } catch (error) {
+        if (error.message.includes("HighFees")) {
+            document.getElementById('errorMessage').innerText = 'Absurdly high ETH fees detected. Something is wrong with the parameters you have specified, or you are trying to withdraw before the Lock Time has expired, or you are trying to withdraw/timelock too many tokens.';
+            document.getElementById('clearError').style.display = 'block';
+        } else {
+            console.error("Error in transaction: ", error);
+            document.getElementById('errorMessage').innerText = `${error.message}`;
+            document.getElementById('clearError').style.display = 'block';
+        }
+    }
+}
 
 
-// Function for marking timelocked tokens for send
+
+/*
+// Function for sending locked tokens
 async function markTimelockedTokensForSend(addresses, amounts) {
     if (!window.contract2) {
         console.error('Contract 2 is not initialized for sending locked tokens');
@@ -634,6 +674,44 @@ async function markTimelockedTokensForSend(addresses, amounts) {
 	    document.getElementById('clearError').style.display = 'block';
 }
 }
+*/
+
+
+// Function for sending locked tokens
+async function markTimelockedTokensForSend(addresses, amounts) {
+    if (!window.contract2) {
+        console.error('Contract 2 is not initialized for sending locked tokens');
+        return;
+    }
+
+    // Validate Addresses and Amounts
+    const isValidAddresses = addresses.every(address => web3.utils.isAddress(address));
+    const isValidAmounts = amounts.every(amount => !isNaN(amount) && amount > 0);
+
+    if (!isValidAddresses || !isValidAmounts) {
+        document.getElementById('errorMessage').innerText = 'Please enter valid Ethereum addresses and amounts.';
+        document.getElementById('clearError').style.display = 'block';
+        return;
+    }
+
+    let transaction;
+    if (addresses.length === 1 && amounts.length === 1) {
+        // Call sendLockedTokensToSingle if there's only one address and one amount
+        transaction = window.contract2.methods.sendLockedTokensToSingle(addresses[0], amounts[0]);
+    } else {
+        // Call sendLockedTokensToMany if there are multiple addresses and amounts
+        transaction = window.contract2.methods.sendLockedTokensToMany(addresses, amounts);
+    }
+
+    try {
+        const receipt = await executeTransactionIfFeeIsAcceptable(transaction, [], selectedAccount);
+        console.log("Send Locked token transaction receipt: ", receipt);
+    } catch (error) {
+        console.error("Error in send locked Token transaction: ", error);
+        document.getElementById('errorMessage').innerText = `${error.message}`;
+        document.getElementById('clearError').style.display = 'block';
+    }
+}
 
 
 
@@ -653,8 +731,9 @@ function resetContractUI() {
 //document.getElementById('contract-explanation').style.display = 'none';
 	document.getElementById('errorMessage').innerText = '';
 	document.getElementById(`clearError`).style.display = 'none';
-	document.getElementById(`account-checkbox`).style.display = 'none';
-        document.getElementById(`account-checkbox-label`).style.display = 'none';
+document.getElementById(`radio-container`).style.display = 'none';
+//	document.getElementById(`account-checkbox`).style.display = 'none';
+ //       document.getElementById(`account-checkbox-label`).style.display = 'none';
             document.getElementById('timelockedtokens1').style.display = 'none';
             document.getElementById('withdrawaltime1').style.display = 'none';
             document.getElementById('timelockedtokens2').style.display = 'none';

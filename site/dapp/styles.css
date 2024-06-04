@@ -130,7 +130,7 @@ font-size:10pt;
 }
 
 
-.checkbox-container {
+.radio-container {
     display: flex;
     align-items: center; /* This vertically centers the text with the checkbox */
 }

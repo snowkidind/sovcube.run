@@ -47,19 +47,18 @@ https://SovCube.com
 
 // Customizable constants if you ever wish to deploy this contract with different parameters
         uint constant TOKEN_PRECISION = 100000000; // Number of decimals in BSOV Token (8)
-        uint constant lockExpirationForAllRegularAccounts = 1000 days; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
+        uint constant lockExpirationForAllRegularAccounts = 1 minutes; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
         uint constant periodWithdrawalAmount = 100 * TOKEN_PRECISION; // The user can withdraw this amount of tokens per withdrawal period.
         uint constant maxWithdrawalPeriods = 10; // The user can accumulate withdrawals for a maximum number of periods.
-        uint constant timeBetweenWithdrawals = 7 days; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
-        uint constant resetTimeLeftIncomingAccount = 1000 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
+        uint constant timeBetweenWithdrawals = 1 minutes; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
+        uint constant resetTimeLeftIncomingAccount = 1 minutes; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
         uint lockExpirationDateRegularAccount;
         
 // Stats that apply to totals and globals
         uint public currentGlobalTier; // The current global tier. The reward ratio for each tier is defined in getRewardRatioForTier.
         uint public totalCumulativeTimelocked; // Amount of tokens that have ever been timelocked, disregarding withdrawals.
         uint public totalCurrentlyTimelocked; // Amount of tokens that are currently timelocked
-        uint public totalRewardsEarned; // Total amount of rewards that have been earned across all users.
-        mapping(address => uint) public totalRewardsEarnedByUser; // Total amount of rewards earned by specific user.        
+        uint public totalRewardsEarned; // Total amount of rewards that have been earned across all users.        
 
 // Address of the owner/contract deployer - Supposed to become the burn address (0x0000...) after owner revokes ownership.
         address public owner;
@@ -134,9 +133,14 @@ https://SovCube.com
             require(_value > 100, "Value must be greater than 100 Mundos, (0.00000100 BSOV)");
 
             require(ERC20Interface(tokenContract).transferFrom(_sender, address(this), _value), "Timelocking transaction failed");
-
+            
+            // Adjust for 1% burn of BSOV Token
             uint256 _adjustedValue = (_value * 99) / 100;
+            
+            // Write updated balance to storage
             balanceRegularAccount[_sender] += _adjustedValue;
+            totalCurrentlyTimelocked += _adjustedValue;
+            
             emit TokenTimelock(_sender, _adjustedValue, block.timestamp);
             
                     // If sender is not this contract, meaning a normal user initiates timelock, then calculate and send Timelock Rewards
@@ -149,27 +153,34 @@ https://SovCube.com
         function calculateAndSendRewardsAfterTimelock(address user, uint256 amountTimelocked) internal {
             require(amountTimelocked <= 14500000000000, "Cannot timelock more than 145,000 tokens at once");
 
-            // Update timelocked totals
-            totalCumulativeTimelocked += amountTimelocked;
-            totalCurrentlyTimelocked += amountTimelocked;
+            // Read balances and totals once and create temporary variables in memory
+            uint256 totalRewards = totalRewardsEarned;
+            uint256 currentTier = currentGlobalTier;
+            uint256 totalCumulative = totalCumulativeTimelocked;
+
+            // Update balances and totals in memory
+            totalCumulative += amountTimelocked;
+            
+            // Update totals to storage
+            totalCumulativeTimelocked = totalCumulative;
 
                 // If total rewards earned has reached 300,000 tokens, no more rewards will be calculated or sent
-                if (totalRewardsEarned >= 30000000000000) {
+                if (totalRewards >= 30000000000000) {
                     return;
                 }
 
             uint256 newlyEarnedRewards = 0;
-            uint256 nextTierThreshold = currentGlobalTier * 15000000000000;
+            uint256 nextTierThreshold = currentTier * 15000000000000;
                     
                     // Check if total cumulative timelocked amount is below the threshold for the next tier or if the current tier is the highest (tier 10)
-                if (totalCumulativeTimelocked < nextTierThreshold || currentGlobalTier == 10) {
-                    uint256 rewardRatio = getRewardRatioForTier(currentGlobalTier);
+                if (totalCumulative < nextTierThreshold || currentTier == 10) {
+                    uint256 rewardRatio = getRewardRatioForTier(currentTier);
                     newlyEarnedRewards = amountTimelocked * rewardRatio / TOKEN_PRECISION;
                 } else {
                     
                     // Calculate rewards for the current tier and adjust for any amount that exceeds the current tier threshold
-                    uint256 amountInCurrentTier = nextTierThreshold - (totalCumulativeTimelocked - amountTimelocked);
-                    uint256 rewardRatioCurrent = getRewardRatioForTier(currentGlobalTier);
+                    uint256 amountInCurrentTier = nextTierThreshold - (totalCumulative - amountTimelocked);
+                    uint256 rewardRatioCurrent = getRewardRatioForTier(currentTier);
                     newlyEarnedRewards = amountInCurrentTier * rewardRatioCurrent / TOKEN_PRECISION;
                     
                     // Move to the next tier and calculate rewards for the remaining amount in the next tier
@@ -180,12 +191,11 @@ https://SovCube.com
 
                 }
                     // Ensure that total rewards earned does not exceed 300,000 tokens
-                if (totalRewardsEarned + newlyEarnedRewards > 30000000000000) {
-                newlyEarnedRewards = 30000000000000 - totalRewardsEarned;
+                if (totalRewards + newlyEarnedRewards > 30000000000000) {
+                newlyEarnedRewards = 30000000000000 - totalRewards;
                 }
 
-            // Update totals   
-            totalRewardsEarnedByUser[user] += newlyEarnedRewards;
+            // Update totals
             totalRewardsEarned += newlyEarnedRewards;
 
             // Send earned rewards to user's Incoming Account and deduct from Rewards Reserve
@@ -194,20 +204,22 @@ https://SovCube.com
 
                 emit SentLockedTokensToSingle(address(this), user, newlyEarnedRewards);
         }
-
-
-// Send locked tokens to a single address
-        function sendLockedTokensToSingle(address _receiver, uint _amount) public nonReentrant{
-            require(balanceRegularAccount[msg.sender] >= _amount, "Insufficient timelocked balance. You have to timelock tokens before sending timelocked tokens.");
-            balanceRegularAccount[msg.sender] -= _amount;
-
-            // Update the balanceUntakenIncomingAccount mapping for the receiver
-            balanceUntakenIncomingAccount[_receiver] += _amount;
-
-            // Emit an event for the locked token transfer
-            emit SentLockedTokensToSingle(msg.sender, _receiver, _amount);
-        }
         
+
+    // Send locked tokens to a single address
+    function sendLockedTokensToSingle(address _receiver, uint _amount) public nonReentrant {
+        uint senderBalance = balanceRegularAccount[msg.sender];
+        require(senderBalance >= _amount, "Insufficient timelocked balance. You have to timelock tokens before sending timelocked tokens.");
+
+        // Update the sender's balance
+        balanceRegularAccount[msg.sender] = senderBalance - _amount;
+
+        // Update the receiver's balance
+        balanceUntakenIncomingAccount[_receiver] += _amount;
+
+        // Emit an event for the locked token transfer
+        emit SentLockedTokensToSingle(msg.sender, _receiver, _amount);
+    }
 
 // Send locked tokens to several addresses
         function sendLockedTokensToMany(address[] memory _receivers, uint[] memory _amounts) public nonReentrant {
@@ -271,15 +283,18 @@ https://SovCube.com
 
 
 // Withdrawal functions - Enforce a set withdrawal rate
-        function withdrawFromRegularAccount(uint _amount) public nonReentrant{
+        function withdrawFromRegularAccount(uint _amount) public nonReentrant {
             require(_amount > 0, "Withdraw amount must be greater than zero");
             require(block.timestamp >= lockExpirationDateRegularAccount, "Tokens are locked!");
-            require(balanceRegularAccount[msg.sender] >= _amount, "Insufficient timelocked balance for withdrawal");
 
-            uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawalRegularAccount[msg.sender]);
+            uint senderBalance = balanceRegularAccount[msg.sender];
+            require(senderBalance >= _amount, "Insufficient timelocked balance for withdrawal");
+
+            uint lastWithdrawal = lastWithdrawalRegularAccount[msg.sender];
+            uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawal);
             require(_amount <= maxWithdrawable, "Exceeds max allowable withdrawal amount based on elapsed time");
 
-            balanceRegularAccount[msg.sender] -= _amount;
+            balanceRegularAccount[msg.sender] = senderBalance - _amount;
             totalCurrentlyTimelocked -= _amount;
             lastWithdrawalRegularAccount[msg.sender] = block.timestamp;
 
@@ -287,20 +302,25 @@ https://SovCube.com
             emit TokenWithdrawal(msg.sender, _amount, block.timestamp);
         }
 
-        function withdrawFromIncomingAccount(uint _amount) public nonReentrant{
+        function withdrawFromIncomingAccount(uint _amount) public nonReentrant {
             require(_amount > 0, "Withdraw amount must be greater than zero");
             require(block.timestamp >= lockExpirationForUserIncomingAccount[msg.sender], "Tokens are locked!");
-            require(balanceIncomingAccount[msg.sender] >= _amount, "Insufficient timelocked balance for withdrawal");
 
-            uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawalIncomingAccount[msg.sender]);
+            uint senderBalance = balanceIncomingAccount[msg.sender];
+            require(senderBalance >= _amount, "Insufficient timelocked balance for withdrawal");
+
+            uint lastWithdrawal = lastWithdrawalIncomingAccount[msg.sender];
+            uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawal);
             require(_amount <= maxWithdrawable, "Exceeds max allowable withdrawal amount based on elapsed time");
 
-            balanceIncomingAccount[msg.sender] -= _amount;
+            balanceIncomingAccount[msg.sender] = senderBalance - _amount;
+            totalCurrentlyTimelocked -= _amount; 
             lastWithdrawalIncomingAccount[msg.sender] = block.timestamp;
 
             require(ERC20Interface(tokenContract).transfer(msg.sender, _amount), "Withdrawal: Transfer failed");
             emit TokenWithdrawal(msg.sender, _amount, block.timestamp);
         }
+
 
 // Let the user accumulate a withdrawal amount for a set amount of periods, so that they do not need to waste gas on too many transactions.
         function calculateMaxWithdrawable(uint lastWithdrawalTime) internal view returns (uint) {
