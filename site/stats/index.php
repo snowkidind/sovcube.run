@@ -196,16 +196,13 @@ function formatNumber($value) {
         <div class="contract-section">
 	    <h2 id="contract-heading">Timelock Rewards</h2>
 <a id="moreinfo" href="/docs/index.php/#rewardreserve" target="_blank">More info</a>
-            <div class="info-container" id="rewardsReserveCurrentTier">
+            <div class="info-container" id="CurrentTier">
                 Current Tier: Loading...
             </div>
-            <div class="info-container" id="rewardsReserveTotalClaimed">
-                Total Claimed: Loading...
-            </div>
-            <div class="info-container" id="rewardsReserveTotalEligibleAmount">
+            <div class="info-container" id="TotalEligibleAmount">
                 Total Eligible Amount: Loading...
             </div>
-            <div class="info-container" id="rewardsReserveTotalTimelocked">
+            <div class="info-container" id="TotalTimelocked">
                 Total Timelocked: Loading...
             </div>
 	</div>
