@@ -139,13 +139,13 @@ document.getElementById('clearError').addEventListener('click', function() {
 
 		</div>
 
-		              <div class="contract-info-style" id="rewardsAccountContainer">
+		             <!-- <div class="contract-info-style" id="rewardsAccountContainer">
 			      <div id="rewardsAccount">
 			      	<h3 style="color:orange; border-bottom:1px solid orange;">Your Rewards</h3>
 	<p><b>Unclaimed Timelock Rewards:</b><br><span id="yourTokensText" style="color:yellow;">${formattedEligibleTokens} BSOV</span></p>
               </div>
                 </div>
-
+-->
 
             </div>
         </div>

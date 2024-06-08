@@ -155,7 +155,7 @@ function formatNumber($value) {
         <tr>
             <th>Address</th>
             <th>Total Timelocked</th>
-            <th>Total Withdrawn</th>
+            <th>Total Withdrawn or Sent</th>
             <th>Net Amount</th>
         </tr>
         <?php foreach ($leaderboard2 as $entry): ?>
@@ -202,6 +202,9 @@ function formatNumber($value) {
             <div class="info-container" id="TotalEligibleAmount">
                 Total Eligible Amount: Loading...
             </div>
+	   <div class="info-container" id="RewardsRemaining">
+    		Rewards Remaining: Loading...
+	   </div>
             <div class="info-container" id="TotalTimelocked">
                 Total Timelocked: Loading...
             </div>

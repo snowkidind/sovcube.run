@@ -71,6 +71,7 @@ function updateContractData(contract, methodName, containerId, methodArgs) {
         CurrentTier: "Current Reward Tier",
         TotalClaimed: "Total Rewards Claimed",
         TotalEligibleAmount: "Total Rewards Sent",
+        RewardsRemaining: "Rewards Remaining",
         TotalTimelocked: "Total BSOV Timelocked for Rewards",
         tokensMinted: "Total BSOV Tokens Minted",
         burnAmount: "Total BSOV Burned"
@@ -97,7 +98,7 @@ function updateContractData(contract, methodName, containerId, methodArgs) {
             let formattedResult = Number(result);
 
             // Format specific contract data
-            if (methodName === 'tokensMinted' || methodName === 'totalClaimed' || methodName === 'totalRewardsEarned' || methodName === 'totalCumulativeTimelocked' || methodName === 'balanceOf') {
+            if (methodName === 'tokensMinted' || methodName === 'totalClaimed' || methodName === 'totalRewardsEarned' || methodName === 'totalCumulativeTimelocked' || methodName === 'balanceOf' || methodName === 'getBalanceRegularAccount') {
                 formattedResult = (formattedResult / 100000000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + " BSOV";
             } else if (methodName === 'getTimeLeft' || methodName === 'getTimeLeftRegularAccount' || methodName === 'getTimeLeftIncomingAccount') {
                 formattedResult = formatTime(formattedResult); // Format time as countdown
@@ -140,6 +141,7 @@ function updateData() {
     // Update data for rewardsReserve
     updateContractData(contract2, 'currentGlobalTier', 'CurrentTier');
     updateContractData(contract2, 'totalRewardsEarned', 'TotalEligibleAmount');
+    updateContractData(contract2, 'getBalanceRegularAccount', 'RewardsRemaining', [contract2Address]);
     updateContractData(contract2, 'totalCumulativeTimelocked', 'TotalTimelocked');
 }
 

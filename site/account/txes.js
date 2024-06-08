@@ -1,20 +1,12 @@
 async function initiateWeb3() {
     if (window.ethereum) {
-      // window.web3 = new Web3(window.ethereum);
         try {
-           //  await window.ethereum.request({ method: 'eth_requestAccounts' });
-	await checkWalletConnection();
-		
-
-//		console.log('Connected to: '+ selectedAccount);
-		if (selectedAccount) {
-//			console.log('2Connected to: '+ selectedAccount);
-            fetchTransactions(contract1Address, 'transactionTableBody1', '/dapp/contract1.abi');
-	    fetchTransactions(contract2Address, 'transactionTableBody2', '/dapp/contract2.abi');
-            fetchTransactions(contract2Address, 'transactionTableBody2Incoming', '/dapp/contract2.abi');
-		}
-
-
+            await checkWalletConnection();
+            if (selectedAccount) {
+                fetchTransactions(contract1Address, 'transactionTableBody1', '/dapp/contract1.abi');
+                fetchTransactions(contract2Address, 'transactionTableBody2', '/dapp/contract2.abi');
+                fetchTransactions(contract2Address, 'transactionTableBody2Incoming', '/dapp/contract2.abi');
+            }
         } catch (error) {
             console.error('User denied account access');
         }
@@ -22,13 +14,6 @@ async function initiateWeb3() {
         console.error('Web3 not detected');
     }
 }
-
-
-
-
-
-
-
 
 async function loadContractAbi(abiPath) {
     try {
@@ -41,9 +26,6 @@ async function loadContractAbi(abiPath) {
     }
 }
 
-
-
-
 async function fetchTransactions(contractAddress, tableId, abiPath) {
     const contractAbi = await loadContractAbi(abiPath);
     const contract = new web3.eth.Contract(contractAbi, contractAddress);
@@ -51,84 +33,67 @@ async function fetchTransactions(contractAddress, tableId, abiPath) {
     let allEvents = [];
 
     if (tableId === 'transactionTableBody2Incoming') {
-        const tokensClaimedEvents = await contract.getPastEvents('TokensClaimed', { fromBlock: 0, toBlock: 'latest' });
-        const sendTimelockedMarkedEvents = await contract.getPastEvents('sendTimelockedMarked', { fromBlock: 0, toBlock: 'latest' });
-        allEvents = [...tokensClaimedEvents, ...sendTimelockedMarkedEvents].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber));
-		  //  console.log('AllEvents from transactionTableBody2Incoming: ', allEvents);
+        try {
+            const tokensClaimedEvents = await contract.getPastEvents('TokensClaimed', { fromBlock: 0, toBlock: 'latest' });
+            const sendTimelockedMarkedEvents = await contract.getPastEvents('sendTimelockedMarked', { fromBlock: 0, toBlock: 'latest' });
+            allEvents = [...tokensClaimedEvents, ...sendTimelockedMarkedEvents].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber));
+        } catch (error) {
+            console.error('Error fetching TokensClaimed or sendTimelockedMarked events:', error);
+        }
     } else {
-        const tokensUnfrozenEvents = await contract.getPastEvents('TokensUnfrozen', { fromBlock: 0, toBlock: 'latest' });
-        const tokensFrozenEvents = await contract.getPastEvents('TokensFrozen', { fromBlock: 0, toBlock: 'latest' });
-        allEvents = [...tokensUnfrozenEvents, ...tokensFrozenEvents].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber));
-// console.log('AllEvents from everything else: ', allEvents);
+        try {
+            const events1 = await contract.getPastEvents('TokensUnfrozen', { fromBlock: 0, toBlock: 'latest' });
+            const events2 = await contract.getPastEvents('TokensFrozen', { fromBlock: 0, toBlock: 'latest' });
+            allEvents = [...events1, ...events2].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber));
+        } catch (error) {
+            console.error('Error fetching TokensUnfrozen or TokensFrozen events:', error);
+        }
+
+        try {
+            const events3 = await contract.getPastEvents('TokenWithdrawal', { fromBlock: 0, toBlock: 'latest' });
+            const events4 = await contract.getPastEvents('TokenTimelock', { fromBlock: 0, toBlock: 'latest' });
+            allEvents = [...allEvents, ...events3, ...events4].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber));
+        } catch (error) {
+            console.error('Error fetching TokenWithdrawal or TokenTimelock events:', error);
+        }
     }
 
     const tableBody = document.getElementById(tableId);
     tableBody.innerHTML = '';
 
-
-for (const event of allEvents) {
-    const sender = event.returnValues.addr || event.returnValues._sender || event.returnValues.from || event.returnValues.to;
-    let senderFrom = event.returnValues.to || event.returnValues.from;
-//	console.log('senderFrom: ', senderFrom);
-
-    // Check if the sender matches the selected account OR
-    // for events of type 'sendTimelockedMarked', check if senderFrom matches the selected account
-    if (sender.toLowerCase() === selectedAccount.toLowerCase() || 
-        (event.event == 'sendTimelockedMarked' && senderFrom.toLowerCase() === selectedAccount.toLowerCase())) {
-//		console.log('Found sendTimelockedMarked');
-
-	/*
     for (const event of allEvents) {
         const sender = event.returnValues.addr || event.returnValues._sender || event.returnValues.from || event.returnValues.to;
-        const senderFrom = event.returnValues.from || event.returnValues.to;
-        if ((sender.toLowerCase() === selectedAccount.toLowerCase()) || (event.event === 'sendTimelockedMarked' && senderFrom.toLowerCase() === selectedAccount.toLowerCase())) {
- */
-		const row = tableBody.insertRow();
+        let senderFrom = event.returnValues.to || event.returnValues.from;
+
+        if (sender && selectedAccount && sender.toLowerCase() === selectedAccount.toLowerCase() ||
+            (event.event === 'sendTimelockedMarked' && senderFrom && senderFrom.toLowerCase() === selectedAccount.toLowerCase())) {
+
+            const row = tableBody.insertRow();
             const timestampCell = row.insertCell(0);
             const methodCell = row.insertCell(1);
             const amountCell = row.insertCell(2);
 
             const eventType = event.event;
-// console.log('Event type:', eventType);
-// console.log('Event:', event);
 
-    
-		if (eventType === 'TokensUnfrozen') {
+            if (eventType === 'TokensUnfrozen' || eventType === 'TokenWithdrawal') {
                 methodCell.textContent = 'Withdraw';
-            } else if (eventType === 'TokensFrozen') {
+            } else if (eventType === 'TokensFrozen' || eventType === 'TokenTimelock') {
                 methodCell.textContent = 'Timelock';
             } else if (eventType === 'TokensClaimed') {
                 methodCell.textContent = 'Accept Incoming Tokens';
-
-
-
-	    } else if (eventType === 'sendTimelockedMarked') {
-		   // console.log('found "sendTimelockedMarked"');
-    const isSender = event.returnValues.from.toLowerCase() == selectedAccount.toLowerCase();
-    const isRecipient = event.returnValues.to.toLowerCase() == selectedAccount.toLowerCase();
-		   // console.log('isRecipient: ', isRecipient);
-		   // console.log('isSender: ', isSender);
-//		        console.log('Selected Account:', selectedAccount);
- //   console.log('From:', event.returnValues.from);
-//    console.log('To:', event.returnValues.to);
-
-//console.log('sender: ',sender);
-//console.log('senderFrom: ',senderFrom);	    
-	      if (isRecipient && isSender) {
-        methodCell.textContent = 'Sent to Self';
-     } else if (isRecipient) {
-	   //  console.log('This account is a Recipient of a transaction!')
-        methodCell.textContent = 'Incoming Tokens';
-     } else if (isSender) {
-        methodCell.textContent = 'Sent Locked Tokens';
-    } else {
-        methodCell.textContent = 'Unknown';
-    }
-
-
-
-	    } else {
-                // If the event type is unknown, set a default value or handle it accordingly
+            } else if (eventType === 'sendTimelockedMarked') {
+                const isSender = event.returnValues.from.toLowerCase() === selectedAccount.toLowerCase();
+                const isRecipient = event.returnValues.to.toLowerCase() === selectedAccount.toLowerCase();
+                if (isRecipient && isSender) {
+                    methodCell.textContent = 'Sent to Self';
+                } else if (isRecipient) {
+                    methodCell.textContent = 'Incoming Tokens';
+                } else if (isSender) {
+                    methodCell.textContent = 'Sent Locked Tokens';
+                } else {
+                    methodCell.textContent = 'Unknown';
+                }
+            } else {
                 methodCell.textContent = 'ERROR';
             }
 
@@ -148,9 +113,5 @@ for (const event of allEvents) {
         }
     }
 }
-
-
-
-
 
 initiateWeb3();
