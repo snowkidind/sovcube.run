@@ -76,7 +76,6 @@ https://SovCube.com
 // Events
         event SentLockedTokensToSingle(address indexed from, address indexed to, uint256 amount);
         event SentLockedTokensToMany(address indexed from, address[] receivers, uint[] amounts);
-        event EarnedReward(address indexed from, address indexed to, uint256 amount);
         event AcceptedUntakenIncomingTokens(address indexed to, uint256 amount);
         event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
         event TokenTimelock(address indexed addr, uint256 amt, uint256 time);
@@ -203,8 +202,8 @@ https://SovCube.com
             // Send earned rewards to user's Incoming Account and deduct from Rewards Reserve
             balanceRegularAccount[address(this)] -= newlyEarnedRewards;
             balanceUntakenIncomingAccount[user] += newlyEarnedRewards;
-            
-                emit EarnedReward(address(this), user, newlyEarnedRewards);
+
+                emit SentLockedTokensToSingle(address(this), user, newlyEarnedRewards);
         }
         
 

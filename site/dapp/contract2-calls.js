@@ -151,10 +151,10 @@ if (timeLeftInSeconds === 0) {
 
 // console.log(incomingAccountLockTimeInSeconds);
 if (incomingAccountLockTimeInSeconds > 0) {
-    // Update Incoming Tokens Account Info
+    // Update Incoming Account Info
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
+        <h3>Incoming Account</h3>
         <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensIncomingAccount} BSOV</span></p>
         <p><b>Lock Time:</b> <span id="incomingUnlockTime">${formattedIncomingAccountLockTime}</span></p>
         <p style="margin-top:10px;"><b>Untaken Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
@@ -166,7 +166,7 @@ else if (parseFloat(tokensIncomingAccount) == 0)  {
 
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
+        <h3>Incoming Account</h3>
         <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensIncomingAccount} BSOV</span></p>
         <p><b>Lock Time:</b> <span id="incomingUnlockTime" style="font-size:8pt;">Accept Incoming Tokens to reset the Lock Time.</span></p>
         <p style="margin-top:10px;"><b>Untaken Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>
@@ -178,7 +178,7 @@ else if (parseFloat(tokensIncomingAccount) == 0)  {
 else if (incomingAccountLockTimeInSeconds == 0) {
     const incomingTokensAccountElement = document.getElementById('incomingTokensAccount');
     incomingTokensAccountElement.innerHTML = `
-        <h3>Incoming Tokens Account</h3>
+        <h3>Incoming Account</h3>
         <p><b>Your Timelocked Tokens:</b> <span id="yourTokensText">${tokensIncomingAccount} BSOV</span></p>
         <p style="margin-top:10px;"><b>Lock Time:</b><br><span id="incomingUnlockTime" style="color:green;">Unlocked!</span></p>
 	<p style="margin-top:10px;"><b>Untaken Incoming Tokens:</b> <span id="unclaimedTokens">${untakenIncomingTokens} BSOV</span></p>

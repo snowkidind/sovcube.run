@@ -128,7 +128,7 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
                 <input type="radio" id="withdraw2" name="contract2Action" value="withdraw">
                 <label for="withdraw2" data-toggle="tooltip" title="Retrieve your timelocked tokens after the Lock Time has expired, adhering to the weekly Withdrawal Rate limits.">Withdraw</label>
                 <input type="radio" id="sendlocked" name="contract2Action" value="sendlocked">
-                <label for="sendlocked" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Tokens Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Lock Time resets to 1000 days.">Send Locked Tokens</label>
+                <label for="sendlocked" data-toggle="tooltip" title="Transfer your timelocked tokens to someone else's 'Incoming Account'. When these tokens are claimed using the 'Accept Incoming Tokens' button, their Lock Time resets to 1000 days.">Send Locked Tokens</label>
             </div>
             <input type="number" id="amount2" placeholder="Amount of BSOV">
 
@@ -201,7 +201,7 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
 <!--
 <div class="checkbox-container">		
 <input type="checkbox" id="account-checkbox">
-<label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Tokens Account?</b></label>
+<label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Account?</b></label>
 </div> -->
 
 <div id="radio-container" class="radio-container">
@@ -209,7 +209,7 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
     <label for="regular-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Regular Account'">Regular Account</label><br>
 
     <input type="radio" id="incoming-account" name="account-type" value="incoming">
-    <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Tokens Account'">Incoming Account</label>
+    <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Account'">Incoming Account</label>
 </div>
 
             <textarea id="ethAddresses" spellcheck="false" placeholder="Enter ETH addresses to send timelocked tokens to (one address per line)"></textarea>
@@ -258,7 +258,7 @@ document.getElementById('clearError').addEventListener('click', function() {
 	      <div class="contract-info-style" id="incomingAccountContainer">
                <div id="incomingTokensAccount">   
 	      </div>	
-	              <button id="acceptIncomingButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Tokens Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Untaken Incoming Tokens</button>
+	              <button id="acceptIncomingButton" data-toggle="tooltip" title="Accepting Incoming Tokens will reset the lock period of any existing timelocked balance in your 'Incoming Account' to a full 1000 days. This will not affect the lock period of your Regular Account.">Accept Untaken Incoming Tokens</button>
 		</div>
 	</div>
 
