@@ -79,7 +79,8 @@ https://SovCube.com
         event AcceptedUntakenIncomingTokens(address indexed to, uint256 amount);
         event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
         event TokenTimelock(address indexed addr, uint256 amt, uint256 time);
-        event TokenWithdrawal(address indexed addr, uint256 amt, uint256 time);
+        event TokenWithdrawalRegularAccount(address indexed addr, uint256 amt, uint256 time);
+        event TokenWithdrawalIncomingAccount(address indexed addr, uint256 amt, uint256 time);
 
 // When deploying this contract, you will need to input the BSOV Token contract address.
         constructor(address _tokenContractAddress) {
@@ -299,7 +300,7 @@ https://SovCube.com
             lastWithdrawalRegularAccount[msg.sender] = block.timestamp;
 
             require(ERC20Interface(tokenContract).transfer(msg.sender, _amount), "Withdrawal: Transfer failed");
-            emit TokenWithdrawal(msg.sender, _amount, block.timestamp);
+            emit TokenWithdrawalRegularAccount(msg.sender, _amount, block.timestamp);
         }
 
         function withdrawFromIncomingAccount(uint _amount) public nonReentrant {
@@ -318,7 +319,7 @@ https://SovCube.com
             lastWithdrawalIncomingAccount[msg.sender] = block.timestamp;
 
             require(ERC20Interface(tokenContract).transfer(msg.sender, _amount), "Withdrawal: Transfer failed");
-            emit TokenWithdrawal(msg.sender, _amount, block.timestamp);
+            emit TokenWithdrawalIncomingAccount(msg.sender, _amount, block.timestamp);
         }
 
 
