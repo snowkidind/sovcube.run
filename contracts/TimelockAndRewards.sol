@@ -47,11 +47,11 @@ https://SovCube.com
 
 // Customizable constants if you ever wish to deploy this contract with different parameters
         uint constant TOKEN_PRECISION = 100000000; // Number of decimals in BSOV Token (8)
-        uint constant lockExpirationForAllRegularAccounts = 1 minutes; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
+        uint constant lockExpirationForAllRegularAccounts = 1000 days; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
         uint constant periodWithdrawalAmount = 100 * TOKEN_PRECISION; // The user can withdraw this amount of tokens per withdrawal period.
         uint constant maxWithdrawalPeriods = 10; // The user can accumulate withdrawals for a maximum number of periods.
-        uint constant timeBetweenWithdrawals = 1 minutes; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
-        uint constant resetTimeLeftIncomingAccount = 1 minutes; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
+        uint constant timeBetweenWithdrawals = 7 days; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
+        uint constant resetTimeLeftIncomingAccount = 1000 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
         uint lockExpirationDateRegularAccount;
         
 // Stats that apply to totals and globals
