@@ -64,11 +64,11 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
 
     // Customizable constants if you ever wish to deploy this contract with different parameters
     uint constant TOKEN_PRECISION = 100000000; // Number of decimals in BSOV Token (8)
-    uint constant lockExpirationForAllRegularAccounts = 1 minutes; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
+    uint constant lockExpirationForAllRegularAccounts = 1000 days; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
     uint constant periodWithdrawalAmount = 100 * TOKEN_PRECISION; // The user can withdraw this amount of tokens per withdrawal period.
     uint constant maxWithdrawalPeriods = 10; // The user can accumulate withdrawals for a maximum number of periods.
-    uint constant timeBetweenWithdrawals = 1 minutes; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
-    uint constant resetTimeLeftIncomingAccount = 1 minutes; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
+    uint constant timeBetweenWithdrawals = 7 days; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
+    uint constant resetTimeLeftIncomingAccount = 1000 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
     uint lockExpirationDateRegularAccount;
 
     // Stats that apply to totals and globals
@@ -76,7 +76,6 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
     uint public totalCumulativeTimelocked; // Amount of tokens that have ever been timelocked, disregarding withdrawals.
     uint public totalCurrentlyTimelocked; // Amount of tokens that are currently timelocked
     uint public totalRewardsEarned; // Total amount of rewards that have been earned across all users.
-    mapping(address => uint) public totalRewardsEarnedByUser; // Total amount of rewards earned by specific user.
 
     // Address of the owner/contract deployer - Supposed to become the burn address (0x0000...) after owner revokes ownership.
     address public owner;
@@ -102,13 +101,27 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
         address[] receivers,
         uint[] amounts
     );
+    event EarnedReward(
+        address indexed from,
+        address indexed to,
+        uint256 amount
+    );
     event AcceptedUntakenIncomingTokens(address indexed to, uint256 amount);
     event OwnershipTransferred(
         address indexed previousOwner,
         address indexed newOwner
     );
     event TokenTimelock(address indexed addr, uint256 amt, uint256 time);
-    event TokenWithdrawal(address indexed addr, uint256 amt, uint256 time);
+    event TokenWithdrawalRegularAccount(
+        address indexed addr,
+        uint256 amt,
+        uint256 time
+    );
+    event TokenWithdrawalIncomingAccount(
+        address indexed addr,
+        uint256 amt,
+        uint256 time
+    );
 
     // When deploying this contract, you will need to input the BSOV Token contract address.
     constructor(address _tokenContractAddress) {
@@ -187,8 +200,13 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
             "Timelocking transaction failed"
         );
 
+        // Adjust for 1% burn of BSOV Token
         uint256 _adjustedValue = (_value * 99) / 100;
+
+        // Write updated balance to storage
         balanceRegularAccount[_sender] += _adjustedValue;
+        totalCurrentlyTimelocked += _adjustedValue;
+
         emit TokenTimelock(_sender, _adjustedValue, block.timestamp);
 
         // If sender is not this contract, meaning a normal user initiates timelock, then calculate and send Timelock Rewards
@@ -207,34 +225,36 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
             "Cannot timelock more than 145,000 tokens at once"
         );
 
-        // Update timelocked totals
-        totalCumulativeTimelocked += amountTimelocked;
-        totalCurrentlyTimelocked += amountTimelocked;
+        // Read balances and totals once and create temporary variables in memory
+        uint256 totalRewards = totalRewardsEarned;
+        uint256 currentTier = currentGlobalTier;
+        uint256 totalCumulative = totalCumulativeTimelocked;
+
+        // Update balances and totals in memory
+        totalCumulative += amountTimelocked;
+
+        // Update totals to storage
+        totalCumulativeTimelocked = totalCumulative;
 
         // If total rewards earned has reached 300,000 tokens, no more rewards will be calculated or sent
-        if (totalRewardsEarned >= 30000000000000) {
+        if (totalRewards >= 30000000000000) {
             return;
         }
 
         uint256 newlyEarnedRewards = 0;
-        uint256 nextTierThreshold = currentGlobalTier * 15000000000000;
+        uint256 nextTierThreshold = currentTier * 15000000000000;
 
         // Check if total cumulative timelocked amount is below the threshold for the next tier or if the current tier is the highest (tier 10)
-        if (
-            totalCumulativeTimelocked < nextTierThreshold ||
-            currentGlobalTier == 10
-        ) {
-            uint256 rewardRatio = getRewardRatioForTier(currentGlobalTier);
+        if (totalCumulative < nextTierThreshold || currentTier == 10) {
+            uint256 rewardRatio = getRewardRatioForTier(currentTier);
             newlyEarnedRewards =
                 (amountTimelocked * rewardRatio) /
                 TOKEN_PRECISION;
         } else {
             // Calculate rewards for the current tier and adjust for any amount that exceeds the current tier threshold
             uint256 amountInCurrentTier = nextTierThreshold -
-                (totalCumulativeTimelocked - amountTimelocked);
-            uint256 rewardRatioCurrent = getRewardRatioForTier(
-                currentGlobalTier
-            );
+                (totalCumulative - amountTimelocked);
+            uint256 rewardRatioCurrent = getRewardRatioForTier(currentTier);
             newlyEarnedRewards =
                 (amountInCurrentTier * rewardRatioCurrent) /
                 TOKEN_PRECISION;
@@ -248,19 +268,18 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
                 TOKEN_PRECISION;
         }
         // Ensure that total rewards earned does not exceed 300,000 tokens
-        if (totalRewardsEarned + newlyEarnedRewards > 30000000000000) {
-            newlyEarnedRewards = 30000000000000 - totalRewardsEarned;
+        if (totalRewards + newlyEarnedRewards > 30000000000000) {
+            newlyEarnedRewards = 30000000000000 - totalRewards;
         }
 
         // Update totals
-        totalRewardsEarnedByUser[user] += newlyEarnedRewards;
         totalRewardsEarned += newlyEarnedRewards;
 
         // Send earned rewards to user's Incoming Account and deduct from Rewards Reserve
         balanceRegularAccount[address(this)] -= newlyEarnedRewards;
         balanceUntakenIncomingAccount[user] += newlyEarnedRewards;
 
-        emit SentLockedTokensToSingle(address(this), user, newlyEarnedRewards);
+        emit EarnedReward(address(this), user, newlyEarnedRewards);
     }
 
     // Send locked tokens to a single address
@@ -268,13 +287,16 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
         address _receiver,
         uint _amount
     ) public nonReentrant {
+        uint senderBalance = balanceRegularAccount[msg.sender];
         require(
-            balanceRegularAccount[msg.sender] >= _amount,
+            senderBalance >= _amount,
             "Insufficient timelocked balance. You have to timelock tokens before sending timelocked tokens."
         );
-        balanceRegularAccount[msg.sender] -= _amount;
 
-        // Update the balanceUntakenIncomingAccount mapping for the receiver
+        // Update the sender's balance
+        balanceRegularAccount[msg.sender] = senderBalance - _amount;
+
+        // Update the receiver's balance
         balanceUntakenIncomingAccount[_receiver] += _amount;
 
         // Emit an event for the locked token transfer
@@ -363,20 +385,21 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
             block.timestamp >= lockExpirationDateRegularAccount,
             "Tokens are locked!"
         );
+
+        uint senderBalance = balanceRegularAccount[msg.sender];
         require(
-            balanceRegularAccount[msg.sender] >= _amount,
+            senderBalance >= _amount,
             "Insufficient timelocked balance for withdrawal"
         );
 
-        uint maxWithdrawable = calculateMaxWithdrawable(
-            lastWithdrawalRegularAccount[msg.sender]
-        );
+        uint lastWithdrawal = lastWithdrawalRegularAccount[msg.sender];
+        uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawal);
         require(
             _amount <= maxWithdrawable,
             "Exceeds max allowable withdrawal amount based on elapsed time"
         );
 
-        balanceRegularAccount[msg.sender] -= _amount;
+        balanceRegularAccount[msg.sender] = senderBalance - _amount;
         totalCurrentlyTimelocked -= _amount;
         lastWithdrawalRegularAccount[msg.sender] = block.timestamp;
 
@@ -384,7 +407,11 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
             ERC20Interface(tokenContract).transfer(msg.sender, _amount),
             "Withdrawal: Transfer failed"
         );
-        emit TokenWithdrawal(msg.sender, _amount, block.timestamp);
+        emit TokenWithdrawalRegularAccount(
+            msg.sender,
+            _amount,
+            block.timestamp
+        );
     }
 
     function withdrawFromIncomingAccount(uint _amount) public nonReentrant {
@@ -393,27 +420,33 @@ contract TimelockAndRewardsContract is ReentrancyGuard {
             block.timestamp >= lockExpirationForUserIncomingAccount[msg.sender],
             "Tokens are locked!"
         );
+
+        uint senderBalance = balanceIncomingAccount[msg.sender];
         require(
-            balanceIncomingAccount[msg.sender] >= _amount,
+            senderBalance >= _amount,
             "Insufficient timelocked balance for withdrawal"
         );
 
-        uint maxWithdrawable = calculateMaxWithdrawable(
-            lastWithdrawalIncomingAccount[msg.sender]
-        );
+        uint lastWithdrawal = lastWithdrawalIncomingAccount[msg.sender];
+        uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawal);
         require(
             _amount <= maxWithdrawable,
             "Exceeds max allowable withdrawal amount based on elapsed time"
         );
 
-        balanceIncomingAccount[msg.sender] -= _amount;
+        balanceIncomingAccount[msg.sender] = senderBalance - _amount;
+        totalCurrentlyTimelocked -= _amount;
         lastWithdrawalIncomingAccount[msg.sender] = block.timestamp;
 
         require(
             ERC20Interface(tokenContract).transfer(msg.sender, _amount),
             "Withdrawal: Transfer failed"
         );
-        emit TokenWithdrawal(msg.sender, _amount, block.timestamp);
+        emit TokenWithdrawalIncomingAccount(
+            msg.sender,
+            _amount,
+            block.timestamp
+        );
     }
 
     // Let the user accumulate a withdrawal amount for a set amount of periods, so that they do not need to waste gas on too many transactions.
