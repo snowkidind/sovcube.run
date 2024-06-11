@@ -26,7 +26,7 @@ const timelockReserveRewardsAbi = require('../utils/timelockReserveRewards.json'
 
 let bsovContract
 let bsovDecimals
-let TimelockAndRewardsContract
+let timelockAndRewardsContract
 let timelockRewardsReserveContract
 
 const run = async () => {
@@ -85,55 +85,33 @@ const run = async () => {
 
   const parameters1 = [bsovAddress]
   const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContract")
-  TimelockAndRewardsContract = await Contract1.deploy(...parameters1)
-  const timelockAndRewardsContractAddress = TimelockAndRewardsContract.target
+  timelockAndRewardsContract = await Contract1.deploy(...parameters1)
+  const timelockAndRewardsContractAddress = timelockAndRewardsContract.target
   await fs.writeFileSync(__dirname + '/' + network + '/TimelockAndRewardsContract.json', JSON.stringify({ contract: timelockAndRewardsContractAddress }, null, 4))
   console.log("TimelockContract2 deployed to: " + timelockAndRewardsContractAddress + ' on ' + network)
 
-  return
 
-  const parameters = [timelockAndRewardsContractAddress, bsovAddress]
-  const Contract = await hre.ethers.getContractFactory("TimelockRewardsReserve")
-  timelockRewardsReserveContract = await Contract.deploy(...parameters)
-  const timelockRewardsReserveContractAddress = timelockRewardsReserveContract.target
-  await fs.writeFileSync(__dirname + '/' + network + '/TimelockRewardsReserve.json', JSON.stringify({ contract: timelockRewardsReserveContractAddress }, null, 4))
-  console.log("TimelockRewardsReserve deployed to: " + timelockRewardsReserveContractAddress + ' on ' + network)
-  console.log()
-
-  // Initialize the first contract with the second address
-  await timelockContract2.setTimelockRewardReserveAddress(timelockRewardsReserveContractAddress)
-
-  // owner seeds contract with 300k rewards tokens
-  // the issue here is that since theres a tax the owner must send a percent more than expected to seed. 
-  // then call contract calculating a lower number:
-  // Recommend: this design has flaws and is not tight, consider redoing this:
-  // 1 dont tax owner funds for seeding
-  // 2 instead of using the same approve and call method maybe have a separate call for this
-  const seedFund = 300000 * 10 ** 8 // just below max in a tx
-  const seedFundPerc = 30303030303031
-
-  // first the owner sends a percent to the contract for rewards
-  await bsovContract.connect(owner).transfer(timelockRewardsReserveContractAddress, seedFundPerc)
-  // then the owner timelocks the seed funds. 
-  await timelockRewardsReserveContract.connect(owner).ownerTimelockTokens(seedFund, '0x')
+  // the owner sends a percent to the contract for rewards, then seeds contract
+  const seedFund = 30609121600000 // as per documentation
+  await bsovContract.connect(owner).transfer(timelockAndRewardsContractAddress, seedFund)
+  await timelockAndRewardsContract.connect(owner).ownerSeedContract()
 
   console.log(await chainDate() + ' Init and Seed')
   await allTheGlobalThings()
-
 
   console.log('............. Section 1: User Deposits .............\n')
   // A couple users locks his stuff in the contract
   const sendToLockA = 101000 * 10 ** 8 // just below max in a tx
   // console.log('\nStep 1, user 1')
-  const step1 = await bsovContract.connect(user1).approveAndCall(timelockContract2Address, sendToLockA, '0x')
+  const step1 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockA, '0x')
 
   const sendToLockB = 60000 * 10 ** 8 // blast thresh by a little
   // console.log('\nStep 1, user 2')
-  const step2 = await bsovContract.connect(user2).approveAndCall(timelockContract2Address, sendToLockB, '0x')
+  const step2 = await bsovContract.connect(user2).approveAndCall(timelockAndRewardsContractAddress, sendToLockB, '0x')
 
   const sendToLockC = 1000 * 10 ** 8
   // console.log('\nStep 1, user 1')
-  const step3 = await bsovContract.connect(user1).approveAndCall(timelockContract2Address, sendToLockC, '0x')
+  const step3 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockC, '0x')
 
   if (0) {
     console.log('User deposit totals')
@@ -145,22 +123,14 @@ const run = async () => {
 
   console.log(await chainDateFmt() + ' User 1 details:')
   await allThe_userThings(user1.address)
-  // console.log(await chainDateFmt() + ' User 2 details:')
-  // await allThe_userThings(user2.address, timelockContract2, timelockRewardsReserveContract)
-
 
   console.log('............. Section 2: Claim Eligible / Accept Incoming .............\n')
 
-  const ready = await timelockRewardsReserveContract.connect(user1).claimTimelockRewards()
+  // Im taking the general purpose of this is to "accept the terms"
+  // but Im not sure if a withdrawal of funds is possible before this.
+  const ready = await timelockAndRewardsContract.connect(user1).acceptUntakenIncomingTokens()
 
-  // still not sure I understand what the point of this is.
   console.log(await chainDateFmt() + ' User 2 details: > claim eligible amount, balance moves from eligibleAmount to untakenIncomingBalance')
-  await allThe_userThings(user1.address)
-
-  // It appears that you want to call this as soon as you are finished making deposits because otherwise 
-  // it is a thousand day wait after you make this call
-  const accept = await timelockContract2.connect(user1).acceptIncomingTokens()
-  console.log(await chainDateFmt() + ' User 2: After accept incoming tokens, balance moves from untakenIncoming to Incoming')
   await allThe_userThings(user1.address)
 
   console.log('............. Section 3: Fast Forward  .............\n')
@@ -177,12 +147,11 @@ const run = async () => {
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
 
-
   console.log('............. Section 4: Withdrawals .............\n')
 
   // can only withdrawal 100 tokens per day after 1000 days has elapsed
   const withdrawal1 = 100 * 10 ** 8
-  await timelockContract2.connect(user1).withdraw(withdrawal1, true)
+  await timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(withdrawal1)
 
   console.log(await chainDateFmt() + ' After Withdrawal 1: Balances')
   await allTheGlobalThings()
@@ -191,13 +160,11 @@ const run = async () => {
 
   // can only withdrawal 100 tokens per day after 1000 days has elapsed
   const withdrawal2 = 100 * 10 ** 8
-  await timelockContract2.connect(user1).withdraw(withdrawal2, false)
+  await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(withdrawal2)
 
   console.log(await chainDateFmt() + ' After Withdrawal 2: Balances')
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
-
-
 
   console.log('............. Section 5: Weekly Withdrawals continued (takes a bit to simulate).............\n')
 
@@ -205,8 +172,8 @@ const run = async () => {
   let elapsedHours = 0
   for (let i = 0; i < 1003; i++) {
     await helpers.mine(170, { interval: 3600 }) // A week and two hours later
-    const a = timelockContract2.connect(user1).withdraw(100 * 10 ** 8, true)
-    const b = timelockContract2.connect(user1).withdraw(100 * 10 ** 8, false)
+    const a = timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(100 * 10 ** 8)
+    const b = timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
     await Promise.all([a, b])
     elapsedHours += 170
   }
@@ -244,59 +211,64 @@ const allTheGlobalThings = async () => {
 
   const date = await chainDate()
 
-  console.log('Globals:')
+  console.log(timeFmtDb(date) + ' Globals:')
 
-  const bsovBalance = await bsovContract.balanceOf(timelockRewardsReserveContract)
+  const bsovBalance = await bsovContract.balanceOf(timelockAndRewardsContract)
   console.log('  BSOV balance (rewards)'.padEnd(30), d(bsovBalance.toString(), bsovDecimals))
 
-  // "Regular Account"
-  const getTimeLeft = await timelockContract2.getTimeLeft()
-  const GTLDisp = getTimeLeft > 0 ? timeFmtDb(date + parseInt(getTimeLeft) * 1000) : 0
-  console.log('  getTimeLeft'.padEnd(30), GTLDisp)
-  console.log('')
-
+  try {
+    // "Regular Account"
+    const getTimeLeft = await timelockAndRewardsContract.getTimeLeftRegularAccount()
+    const GTLDisp = getTimeLeft > 0 ? timeFmtDb(date + parseInt(getTimeLeft) * 1000) : 0
+    console.log('  getTimeLeft'.padEnd(30), GTLDisp)
+    console.log('')
+  } catch (error) {
+    // this call throws if seed tokens are vested
+    console.log('Tokens are unlocked and ready for withdrawal')
+  }
 }
 
 const allThe_userThings = async (user) => {
 
-  console.log('User Parameters:')
-
   const date = await chainDate()
+  console.log(timeFmtDb(date) + ' User Parameters:')
+
   const bsovBalance = await bsovContract.balanceOf(user)
   console.log('  BSOV balance'.padEnd(30), d(bsovBalance.toString(), bsovDecimals))
 
-  const ea1 = await timelockRewardsReserveContract.eligibleAmount(user)
-  const eligibleAmount = d(ea1.toString(), bsovDecimals)
-  console.log('  eligibleAmount'.padEnd(30), eligibleAmount)
+  // these are in the order of the contract
+  const unlockedForWithdrawalRegularAccount = await timelockAndRewardsContract.getUnlockedForWithdrawalRegularAccount(user)
+  console.log('  unlockedRegularAccount'.padEnd(30), d(unlockedForWithdrawalRegularAccount.toString(), bsovDecimals))
 
-  const pi = await timelockContract2.pendingIncoming(user)
-  piDisplay = d(pi.toString(), bsovDecimals)
-  console.log('  pendingIncoming'.padEnd(30), piDisplay)
+  const unlockedForWithdrawalIncomingAccount = await timelockAndRewardsContract.getUnlockedForWithdrawalIncomingAccount(user)
+  console.log('  unlockedIncomingAccount'.padEnd(30), d(unlockedForWithdrawalIncomingAccount.toString(), bsovDecimals))
 
-  const userBalance = await timelockContract2.getBalance(user)
+  const userBalance = await timelockAndRewardsContract.getBalanceRegularAccount(user)
   userBalanceDisp = d(userBalance.toString(), bsovDecimals)
   console.log('  userbalance'.padEnd(30), userBalanceDisp)
 
-  const gliaw = await timelockContract2.getLastIncomingAccountWithdrawal(user)
+  const getUntakenIncomingBalance = await timelockAndRewardsContract.getBalanceUntakenIncomingAccount(user)
+  console.log('  getUntakenIncomingBalance'.padEnd(30), d(getUntakenIncomingBalance.toString(), bsovDecimals))
 
-  // cant prograp a future date into getTimeAgo harumph
+  const bi = await timelockAndRewardsContract.getBalanceIncomingAccount(user)
+  biDisplay = d(bi.toString(), bsovDecimals)
+  console.log('  balanceIncoming'.padEnd(30), biDisplay)
+
+  const gliaw = await timelockAndRewardsContract.getLastWithdrawalIncomingAccount(user)
   const LIAWDisp = gliaw > 0 ? timeFmtDb(parseInt(gliaw) * 1000) : 'never'
   console.log('  getLastIncAccountWithdrawal'.padEnd(30), LIAWDisp)
 
-  const getLastWithdrawal = await timelockContract2.getLastWithdrawal(user)
+  const getLastWithdrawal = await timelockAndRewardsContract.getLastWithdrawalRegularAccount(user)
   const GLWDisp = getLastWithdrawal > 0 ? timeFmtDb(parseInt(getLastWithdrawal) * 1000) : 'never'
   console.log('  getLastWithdrawal'.padEnd(30), GLWDisp)
 
-  const getIncomingAccountTimeLeft = await timelockContract2.getIncomingAccountTimeLeft(user)
+  // getTimeLeftRegularAccount is global
+
+  const getIncomingAccountTimeLeft = await timelockAndRewardsContract.getTimeLeftIncomingAccount(user)
   const IATLDisp = timeFmtDb(date + parseInt(getIncomingAccountTimeLeft) * 1000)
   console.log('  getIncomingAccountTimeLeft'.padEnd(30), IATLDisp)
 
-  const getUntakenIncomingBalance = await timelockContract2.getUntakenIncomingBalance(user)
-  console.log('  getUntakenIncomingBalance'.padEnd(30), d(getUntakenIncomingBalance.toString(), bsovDecimals))
 
-  const getIncomingAccountBalance = await timelockContract2.getIncomingAccountBalance(user)
-  console.log('  getIncomingAccountBalance'.padEnd(30), d(getIncomingAccountBalance.toString(), bsovDecimals))
-  console.log()
 }
 
 const getFunds = async (whale, owner) => {
