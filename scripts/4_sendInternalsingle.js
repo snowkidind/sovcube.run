@@ -6,7 +6,7 @@ const provider = ethers.provider
 
 const helpers = require("@nomicfoundation/hardhat-network-helpers")
 
-const { decimals, readlineUtils, txUtils, dateUtils } = require('../utils/')
+const { decimals, readlineUtils, txUtils, dateUtils } = require('../utils')
 const { getFunctionsForContract, getFunctionDefinitionsFromAbi } = txUtils
 const { getAnswer } = readlineUtils
 const { getTimeAgo, dateNowBKK, timeFmtDb } = dateUtils
@@ -131,6 +131,34 @@ const run = async () => {
 
   console.log(await chainDateFmt() + ' User 2 details: > claim eligible amount, balance moves from eligibleAmount to untakenIncomingBalance')
   await allThe_userThings(user1.address)
+
+
+  console.log('............. Section 3: Send locked tokens to single .............\n')
+  // here I will send some of my locked tokens to another account. Lets consider the incidence where i 
+  // want to change my wallet address to a different one, so I send the entire balance
+
+  const balanceRegularAccount = await timelockAndRewardsContract.getBalanceRegularAccount(user1)
+
+  console.log('User 1 totals: Here we can see the userBalance is positive')
+  await allThe_userThings(user1.address)
+  await timelockAndRewardsContract.connect(user1).sendLockedTokensToSingle(user3.address, balanceRegularAccount)
+  console.log('User 1 totals, post: Now that the method is called userBalance is zeroed')
+  await allThe_userThings(user1.address)
+  console.log('User 3 totals: We cann also see that user 3 has received these tokens in untakenIncomingBalance')
+  await allThe_userThings(user3.address)
+
+  await timelockAndRewardsContract.connect(user3).acceptUntakenIncomingTokens()
+
+  console.log('User 3 -> acceptUntakenIncomingTokens. User 1 totals are unchanged after this action')
+  await allThe_userThings(user1.address)
+  console.log('User 3 totals postAccept: can observe that balancIncoming is now populated')
+  await allThe_userThings(user3.address)
+
+
+
+
+
+  return
 
   console.log('............. Section 3: Fast Forward  .............\n')
 
@@ -272,21 +300,6 @@ const getFunds = async (whale, owner) => {
   const receipt = await tx.wait()
 }
 
-const extraJunk = async () => {
-
-  const rewardsFunctions = await getFunctionDefinitionsFromAbi(timelockReserveRewardsAbi, ethers)
-  // console.log(rewardsFunctions)
-
-  const currentTier = await timelockRewardsReserveContract.currentTier()
-  // console.log('tier:', currentTier)
-
-  const tiers = await timelockRewardsReserveContract.tiers(2)
-  // console.log('tiers:', tiers)
-
-  const timelockFunctions = await getFunctionDefinitionsFromAbi(timelockContract2Abi, ethers)
-  // console.log(timelockFunctions)
-
-}
 
 
   ; (async () => {

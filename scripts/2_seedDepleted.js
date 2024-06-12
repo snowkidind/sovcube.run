@@ -82,19 +82,24 @@ const run = async () => {
     process.exit(1)
   }
 
-
   const parameters1 = [bsovAddress]
-  const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContract")
+  const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContractT2")
   timelockAndRewardsContract = await Contract1.deploy(...parameters1)
   const timelockAndRewardsContractAddress = timelockAndRewardsContract.target
   await fs.writeFileSync(__dirname + '/' + network + '/TimelockAndRewardsContract.json', JSON.stringify({ contract: timelockAndRewardsContractAddress }, null, 4))
   console.log("TimelockContract2 deployed to: " + timelockAndRewardsContractAddress + ' on ' + network)
 
 
-  // the owner sends a percent to the contract for rewards, then seeds contract
-  const seedFund = 30609121600000 // as per documentation
+  // So apparently there is some form of rule that states that the amount deposited may not exceed the amount seeded
+
+  // the owner sends funds to the contract for rewards, then seeds contract
+  const seedFund = 110000 * 10 ** 8 // modified to observe end of life operation
+
+  // testing questions - what if less is sent to the contract?
+  // why is this value hardcoded into the contract?
   await bsovContract.connect(owner).transfer(timelockAndRewardsContractAddress, seedFund)
   await timelockAndRewardsContract.connect(owner).ownerSeedContract()
+
   console.log(await chainDate() + ' Init and Seed')
   await allTheGlobalThings()
 
@@ -104,20 +109,13 @@ const run = async () => {
   // console.log('\nStep 1, user 1')
   const step1 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockA, '0x')
 
-  const sendToLockB = 60000 * 10 ** 8 // blast thresh by a little
-  // console.log('\nStep 1, user 2')
-  const step2 = await bsovContract.connect(user2).approveAndCall(timelockAndRewardsContractAddress, sendToLockB, '0x')
-
-  const sendToLockC = 1000 * 10 ** 8
-  // console.log('\nStep 1, user 1')
-  const step3 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockC, '0x')
-
-  if (0) {
-    console.log('User deposit totals')
-    const sent = sendToLockA + sendToLockB + sendToLockC
-    console.log('\ntotal sent:', sent)
-    const user1Deposits = sendToLockA + sendToLockC
-    console.log('user 1 deposits:' + user1Deposits)
+  try {
+    const sendToLockB = 60000 * 10 ** 8 // blast thresh by a little
+    // console.log('\nStep 1, user 2')
+    // in this case the second deposit fails because there are not enough rewards to manage his deposit
+    const step2 = await bsovContract.connect(user2).approveAndCall(timelockAndRewardsContractAddress, sendToLockB, '0x')
+  } catch (error) {
+    console.log('Contract failed second deposit transaction, as expected, Test 2')
   }
 
   console.log(await chainDateFmt() + ' User 1 details:')
@@ -171,9 +169,27 @@ const run = async () => {
   let elapsedHours = 0
   for (let i = 0; i < 1003; i++) {
     await helpers.mine(170, { interval: 3600 }) // A week and two hours later
-    const a = timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(100 * 10 ** 8)
-    const b = timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
-    await Promise.all([a, b])
+    try {
+      const a = timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(100 * 10 ** 8)
+      const b = timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
+      await Promise.all([a, b])
+    } catch (error) {
+      // when the user balances get lower than whats available, this triggers by execution error
+      await allThe_userThings(user1.address)
+      const unlockedForWithdrawalRegularAccount = await timelockAndRewardsContract.getBalanceRegularAccount(user1)
+      const balanceIncomingAccount = await timelockAndRewardsContract.getBalanceIncomingAccount(user1)
+      try {
+        const b = timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(unlockedForWithdrawalRegularAccount)
+        const a = timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(balanceIncomingAccount)
+        await Promise.all([a, b])
+      } catch (error) {
+        console.log(error)
+      }
+      console.log('final balances:')
+      await allThe_userThings(user1.address)
+      await allTheGlobalThings()
+      process.exit()
+    }
     elapsedHours += 170
   }
   const days = elapsedHours / 24
