@@ -8,6 +8,8 @@
 
   It would be nice to **combine transactions** withdrawFromIncomingAccount and withdrawFromRegularAccount in a single transaction or better just withdrawal what is available to withdrawal right now. Although it is important to show how much comes from either action, which can be observed with events.
 
+  It would be nice to get a block height at which the next withdrawal is possible
+
   It would be nice to have a **large deposit threshold** which allows for larger withdrawals to account for the time difference it takes to close out a larer position as opposed to a smaller position.
 
 # 1_deploy.js
