@@ -47,18 +47,29 @@ https://SovCube.com
 
 // Customizable constants if you ever wish to deploy this contract with different parameters
         uint constant TOKEN_PRECISION = 100000000; // Number of decimals in BSOV Token (8)
-        uint constant lockExpirationForAllRegularAccounts = 1000 days; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires.
-        uint constant periodWithdrawalAmount = 100 * TOKEN_PRECISION; // The user can withdraw this amount of tokens per withdrawal period.
+        uint constant lockExpirationForAllRegularAccounts = 1000 days; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires. 
         uint constant maxWithdrawalPeriods = 10; // The user can accumulate withdrawals for a maximum number of periods.
         uint constant timeBetweenWithdrawals = 7 days; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
         uint constant resetTimeLeftIncomingAccount = 1000 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
+        uint constant withdrawalHalvingEraDuration 1000 days; // Amount of days until the periodWithdrawalAmount halves - only happens after the inital lockExpiration.
+        uint constant maxWithdrawalHalvingEras = 10; // Max amount of withdrawal halving eras
+        uint constant newUserLockTime = 10 weeks; // Set the time that new timelockers need to wait before withdrawing their tokens. To penalize multiple wallets. 
         uint lockExpirationDateRegularAccount;
         
+// Set in the constructor - The user can withdraw this amount of tokens per withdrawal period.
+        uint public periodWithdrawalAmount; 
+
+// Withdrawal halving variables
+        uint public lastWithdrawalHalving;
+        uint public withdrawalHalvingEra;
+
 // Stats that apply to totals and globals
         uint public currentGlobalTier; // The current global tier. The reward ratio for each tier is defined in getRewardRatioForTier.
         uint public totalCumulativeTimelocked; // Amount of tokens that have ever been timelocked, disregarding withdrawals.
         uint public totalCurrentlyTimelocked; // Amount of tokens that are currently timelocked
-        uint public totalRewardsEarned; // Total amount of rewards that have been earned across all users.        
+        uint public totalRewardsEarned; // Total amount of rewards that have been earned across all users.
+        uint public deploymentTimestamp; // Timestamp created the day of contract deployment
+        
 
 // Address of the owner/contract deployer - Supposed to become the burn address (0x0000...) after owner revokes ownership.
         address public owner;
@@ -82,13 +93,21 @@ https://SovCube.com
         event TokenTimelock(address indexed addr, uint256 amt, uint256 time);
         event TokenWithdrawalRegularAccount(address indexed addr, uint256 amt, uint256 time);
         event TokenWithdrawalIncomingAccount(address indexed addr, uint256 amt, uint256 time);
+        event NewWithdrawalHalving(uint256 era, uint256 time);
 
 // When deploying this contract, you will need to input the BSOV Token contract address.
         constructor(address _tokenContractAddress) {
-            tokenContract = ERC20Interface(_tokenContractAddress);
-            owner = msg.sender;
-            lockExpirationDateRegularAccount = (block.timestamp + lockExpirationForAllRegularAccounts);
-            currentGlobalTier = 1;
+            tokenContract = ERC20Interface(_tokenContractAddress); // Input address of BSOV Token contract
+            owner = msg.sender; // Set owner
+            lockExpirationDateRegularAccount = (block.timestamp + lockExpirationForAllRegularAccounts); // Initialize initial lock period of all RegularAccounts
+            currentGlobalTier = 1; // Set the global tier to 1
+            deploymentTimestamp = block.timestamp; // Initialize the deployment timestamp
+            
+            // Set the first withdrawal amount, which will halve every 1000 days after lockExpirationDateRegularAccount has expired
+            periodWithdrawalAmount = 100 * TOKEN_PRECISION; // 100 BSOV Tokens
+            
+            lastWithdrawalHalving = lockExpirationDateRegularAccount; // Initialize the last halving timestamp
+            withdrawalHalvingEra = 1; // Initialize the halving era
         }
 
         modifier onlyOwner() {
@@ -144,8 +163,13 @@ https://SovCube.com
             totalCurrentlyTimelocked += _adjustedValue;
             
             emit TokenTimelock(_sender, _adjustedValue, block.timestamp);
+
+                // If sender has not withdrawn yet, meaning is a new user, then set a 10 week wait before the user can withdraw.
+                if (lastWithdrawalRegularAccount[_sender] == 0) {
+                        lastWithdrawalRegularAccount[_sender] = block.timestamp + newUserLockTime;
+                }
             
-                    // If sender is not this contract, meaning a normal user initiates timelock, then calculate and send Timelock Rewards
+                // If sender is not this contract, meaning a normal user initiates timelock, then calculate and send Timelock Rewards
                 if (_sender != address(this)) {
                     calculateAndSendRewardsAfterTimelock(_sender, _adjustedValue);
                 }
@@ -324,6 +348,44 @@ https://SovCube.com
         }
 
 
+// Withdraw maxWithdrawable from both RegularAccount and IncomingAccount in a single transaction.
+        function withdrawAll() public nonReentrant {
+
+            // Ensure that at least one of the accounts are unlocked before proceeding
+            require(block.timestamp >= lockExpirationDateRegularAccount || block.timestamp >= lockExpirationForUserIncomingAccount[msg.sender], "Tokens are locked!");
+
+            // Calculate max withdrawable amounts from both accounts using the calculateMaxWithdrawable function
+            uint maxWithdrawableFromRegular = block.timestamp >= lockExpirationDateRegularAccount ? calculateMaxWithdrawable(lastWithdrawalRegularAccount[msg.sender]) : 0;
+            uint maxWithdrawableFromIncoming = block.timestamp >= lockExpirationForUserIncomingAccount[msg.sender] ? calculateMaxWithdrawable(lastWithdrawalIncomingAccount[msg.sender]) : 0;
+
+            uint regularBalance = balanceRegularAccount[msg.sender];
+            uint incomingBalance = balanceIncomingAccount[msg.sender];
+
+            uint amountToWithdrawFromRegular = maxWithdrawableFromRegular > regularBalance ? regularBalance : maxWithdrawableFromRegular;
+            uint amountToWithdrawFromIncoming = maxWithdrawableFromIncoming > incomingBalance ? incomingBalance : maxWithdrawableFromIncoming;
+
+            // Ensure there is something to withdraw
+            require(amountToWithdrawFromRegular > 0 || amountToWithdrawFromIncoming > 0, "No withdrawable tokens available");
+
+            // If the accounts have anything to withdraw, then update balances and total currently timelocked tokens and then transfer 
+            if (amountToWithdrawFromRegular > 0) {
+                balanceRegularAccount[msg.sender] -= amountToWithdrawFromRegular;
+                lastWithdrawalRegularAccount[msg.sender] = block.timestamp;
+                totalCurrentlyTimelocked -= amountToWithdrawFromRegular;
+                require(ERC20Interface(tokenContract).transfer(msg.sender, amountToWithdrawFromRegular), "Withdrawal from regular account: Transfer failed");
+                emit TokenWithdrawalRegularAccount(msg.sender, amountToWithdrawFromRegular, block.timestamp);
+            }
+
+            if (amountToWithdrawFromIncoming > 0) {
+                balanceIncomingAccount[msg.sender] -= amountToWithdrawFromIncoming;
+                lastWithdrawalIncomingAccount[msg.sender] = block.timestamp;
+                totalCurrentlyTimelocked -= amountToWithdrawFromIncoming;
+                require(ERC20Interface(tokenContract).transfer(msg.sender, amountToWithdrawFromIncoming), "Withdrawal from incoming account: Transfer failed");
+                emit TokenWithdrawalIncomingAccount(msg.sender, amountToWithdrawFromIncoming, block.timestamp);
+            }
+        }
+
+
 // Let the user accumulate a withdrawal amount for a set amount of periods, so that they do not need to waste gas on too many transactions.
         function calculateMaxWithdrawable(uint lastWithdrawalTime) internal view returns (uint) {
             if (block.timestamp < lastWithdrawalTime + timeBetweenWithdrawals) {
@@ -336,14 +398,36 @@ https://SovCube.com
             return elapsedWithdrawalPeriods * periodWithdrawalAmount; // Calculate the max amount based on the number of withdrawal periods elapsed
         }
 
+// After the Global lockExpirationDateRegularAccount is over, then start 1000 day countdown to halve the weekly periodWithdrawalAmount
+        function newWithdrawalHalving() public {
+            require(block.timestamp >= lockExpirationDateRegularAccount, "Global lock expiration has not been reached");
+            require(withdrawalHalvingEra <= maxWithdrawalHalvingEras, "Max halving eras reached");
+            require(block.timestamp >= lastWithdrawalHalving + withdrawalHalvingEraDuration, "Halving era duration has not elapsed");
+
+            periodWithdrawalAmount /= 2; // Halve the withdrawal amount
+            lastWithdrawalHalving = block.timestamp; // Update the last halving timestamp
+            withdrawalHalvingEra += 1; // Increment the halving era
+            emit NewWithdrawalHalving (withdrawalHalvingEra, block.timestamp);
+        }
+
 
 // Get-functions to retrieve essential data about users.
         function getUnlockedForWithdrawalRegularAccount(address user) public view returns (uint) {
-            return calculateMaxWithdrawable(lastWithdrawalRegularAccount[user]);
+            uint balance = balanceRegularAccount[user];
+            if (balance == 0) {
+                return 0;
+            }
+            uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawalRegularAccount[user]);
+            return balance < maxWithdrawable ? balance : maxWithdrawable;
         }
 
         function getUnlockedForWithdrawalIncomingAccount(address user) public view returns (uint) {
-            return calculateMaxWithdrawable(lastWithdrawalIncomingAccount[user]);
+            uint balance = balanceIncomingAccount[user];
+            if (balance == 0) {
+                return 0;
+            }
+            uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawalIncomingAccount[user]);
+            return balance < maxWithdrawable ? balance : maxWithdrawable;
         }
 
         function getBalanceRegularAccount(address _addr) public view returns (uint256 _balance) {

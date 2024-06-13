@@ -205,7 +205,7 @@ document.getElementById(`fieldContainer`).style.display = 'none';
         contractInfoContainer.style.display = 'none';
 	contractSelect.style.display = 'block';
 	document.getElementById(`fieldContainer`).style.display = 'block';
-	document.getElementById(`radio-container`).style.display = 'none';
+	document.getElementById(`radio-container-account`).style.display = 'none';
 //	document.getElementById(`account-checkbox`).style.display = 'none';
   //      document.getElementById(`account-checkbox-label`).style.display = 'none';
 document.getElementById('contract-explanation').style.display = 'block';	
@@ -300,7 +300,9 @@ let intervalId; // Variable to store the interval ID
 
 // Function to start the interval
 function startInterval() {
-    intervalId = setInterval(updateTimelockRewardCalculation, 1000);
+    intervalId = setInterval(() => {
+        updateTimelockRewardCalculation();
+    }, 1000);
 }
 
 // Function to stop the interval
@@ -328,7 +330,9 @@ startInterval();
             document.getElementById('withdrawaltime2').style.display = 'block';
 document.getElementById('timelockRewardCalculation').style.display = 'block';
         } else if (radio.value === 'withdraw') {
-		stopInterval();
+		document.getElementById('withdrawableNowRegularAccount').style.display = 'block';
+		document.getElementById('withdrawableNowIncomingAccount').style.display = 'block';
+		updateWithdrawableAmounts();
             document.getElementById('amount2').style.display = 'block';
 	                document.getElementById('timelockedtokens2').style.display = 'none';
 		document.getElementById('advanceTierMessage').style.display = 'none';
@@ -336,7 +340,7 @@ document.getElementById('timelockRewardCalculation').style.display = 'block';
             document.getElementById('withdrawaltime2').style.display = 'none';
 document.getElementById('timelockRewardCalculation').style.display = 'none';
             document.getElementById('withdraw2Button').style.display = 'block';
-document.getElementById(`radio-container`).style.display = 'block';
+document.getElementById(`radio-container-account`).style.display = 'flex';
 		        //document.getElementById(`account-checkbox`).style.display = 'block';
         //document.getElementById(`account-checkbox-label`).style.display = 'block';
         } else if (radio.value === 'sendlocked') {
@@ -407,6 +411,66 @@ return;
     markTimelockedTokensForSend(addresses, amounts);
 });
 }
+
+
+/*
+async function updateWithdrawableAmounts() {
+    try {
+        const account = await web3.eth.getAccounts()[0]; // Assuming you get the account from web3
+
+        const withdrawableNowRegularAccount = await window.contract2.methods.getUnlockedForWithdrawalRegularAccount(account).call();
+        const withdrawableNowIncomingAccount = await window.contract2.methods.getUnlockedForWithdrawalIncomingAccount(account).call();
+
+        document.getElementById('withdrawableNowRegularAccount').innerText = `Max withdrawable now: ${withdrawableNowRegularAccount} BSOV`;
+        document.getElementById('withdrawableNowIncomingAccount').innerText = `Max withdrawable now: ${withdrawableNowIncomingAccount} BSOV`;
+    } catch (error) {
+        console.error('Error fetching withdrawable amounts:', error);
+    }
+}
+*/
+
+async function updateWithdrawableAmounts() {
+    try {
+        const accounts = await web3.eth.getAccounts();
+        const account = accounts[0]; // Ensure an account is available
+
+        if (!account) {
+            throw new Error('No account found');
+        }
+
+        console.log('Fetching withdrawable amounts for account:', account);
+
+        // Ensure contract2 is initialized
+        if (!window.contract2) {
+            throw new Error('Contract 2 is not initialized');
+        }
+
+        // Fetch withdrawable amounts
+        const withdrawableNowRegularAccount = await window.contract2.methods.getUnlockedForWithdrawalRegularAccount(account).call();
+        const withdrawableNowIncomingAccount = await window.contract2.methods.getUnlockedForWithdrawalIncomingAccount(account).call();
+
+        // Convert BigInt amounts to BSOV with 8 decimal places
+        const withdrawableNowRegularAccountFormatted = formatBSOVAmount(withdrawableNowRegularAccount);
+        const withdrawableNowIncomingAccountFormatted = formatBSOVAmount(withdrawableNowIncomingAccount);
+
+        console.log('Withdrawable amounts fetched successfully:', {
+            withdrawableNowRegularAccountFormatted,
+            withdrawableNowIncomingAccountFormatted
+        });
+
+        document.getElementById('withdrawableNowRegularAccount').innerText = `Max withdrawable now: ${withdrawableNowRegularAccountFormatted} BSOV`;
+        document.getElementById('withdrawableNowIncomingAccount').innerText = `Max withdrawable now: ${withdrawableNowIncomingAccountFormatted} BSOV`;
+    } catch (error) {
+        console.error('Error fetching withdrawable amounts:', error.message);
+        document.getElementById('errorMessage').innerText = `Error fetching withdrawable amounts: ${error.message}`;
+    }
+}
+
+function formatBSOVAmount(amount) {
+    const bsovAmount = Number(BigInt(amount) / BigInt(100000000)); // Convert to BSOV by dividing by 10^8
+    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(bsovAmount);
+}
+
 
 
 
@@ -731,7 +795,7 @@ function resetContractUI() {
 //document.getElementById('contract-explanation').style.display = 'none';
 	document.getElementById('errorMessage').innerText = '';
 	document.getElementById(`clearError`).style.display = 'none';
-document.getElementById(`radio-container`).style.display = 'none';
+document.getElementById(`radio-container-account`).style.display = 'none';
 //	document.getElementById(`account-checkbox`).style.display = 'none';
  //       document.getElementById(`account-checkbox-label`).style.display = 'none';
             document.getElementById('timelockedtokens1').style.display = 'none';
