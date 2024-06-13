@@ -203,14 +203,52 @@ const lockYears = Number(lockTimeLeftInSeconds) / Number(secondsInYear); // Conv
 <input type="checkbox" id="account-checkbox">
 <label for="account-checkbox" id="account-checkbox-label" data-toggle="tooltip" title="Checking this checkbox will attempt to withdraw timelocked tokens from the 'Incoming Account', if you do not check the checkbox it will attempt to withdraw from the 'Regular Account'">Withdraw from <b>Incoming Account?</b></label>
 </div> -->
-
+<!--
 <div id="radio-container" class="radio-container">
     <input type="radio" id="regular-account" name="account-type" value="regular" checked>
     <label for="regular-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Regular Account'">Regular Account</label><br>
 
     <input type="radio" id="incoming-account" name="account-type" value="incoming">
     <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Account'">Incoming Account</label>
+</div>-->
+
+<!--<div id="radio-container-account" class="radio-container-account">
+    <div class="radio-buttons-account">
+        <input type="radio" id="regular-account" name="account-type" value="regular" checked>
+        <label for="regular-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Regular Account'">Regular Account</label>
+    </div>
+    <div class="radio-buttons-account">
+        <input type="radio" id="incoming-account" name="account-type" value="incoming">
+        <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Account'">Incoming Account</label>
+    </div>
 </div>
+-->
+<!--
+<div id="radio-container-account" class="radio-container-account">
+    <div class="radio-buttons-account">
+        <input type="radio" id="regular-account" name="account-type" value="regular" checked>
+        <label for="regular-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Regular Account'">Regular Account</label>
+    </div>
+    <div class="radio-buttons-account">
+        <input type="radio" id="incoming-account" name="account-type" value="incoming">
+        <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Account'">Incoming Account</label>
+    </div>
+</div>
+-->
+<div id="radio-container-account" class="radio-container-account">
+    <div class="radio-buttons-account">
+        <input type="radio" id="regular-account" name="account-type" value="regular" checked>
+        <label for="regular-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Regular Account'">Regular Account</label>
+    </div>
+    <div class="radio-buttons-account">
+        <input type="radio" id="incoming-account" name="account-type" value="incoming">
+        <label for="incoming-account" data-toggle="tooltip" title="" data-original-title="Selecting this option will attempt to withdraw timelocked tokens from the 'Incoming Account'">Incoming Account</label>
+    </div>
+    <div id="withdrawableNowRegularAccount" class="withdrawable-now">Max withdrawable now: Loading</div>
+    <div id="withdrawableNowIncomingAccount" class="withdrawable-now">Max withdrawable now: Loading</div>
+</div>
+
+
 
             <textarea id="ethAddresses" spellcheck="false" placeholder="Enter ETH addresses to send timelocked tokens to (one address per line)"></textarea>
 	    <textarea id="sendLockedAmounts" spellcheck="false"  placeholder="Enter BSOV amounts (one amount per line)"></textarea>
