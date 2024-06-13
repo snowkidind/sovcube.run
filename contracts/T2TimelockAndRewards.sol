@@ -239,8 +239,12 @@ contract TimelockAndRewardsContractT2 is ReentrancyGuard {
         // Update totals to storage
         totalCumulativeTimelocked = totalCumulative;
 
+        // this is set from the last balance of the existing contract
+        uint256 supply = 10781100000000;
+
         // If total rewards earned has reached 300,000 tokens, no more rewards will be calculated or sent
-        if (totalRewards >= 30000000000000) {
+        if (totalRewards >= supply) {
+            //  modded from 30000000000000
             return;
         }
 
@@ -271,18 +275,14 @@ contract TimelockAndRewardsContractT2 is ReentrancyGuard {
                 TOKEN_PRECISION;
         }
         // Ensure that total rewards earned does not exceed 300,000 tokens
-        if (totalRewards + newlyEarnedRewards > 30000000000000) {
-            newlyEarnedRewards = 30000000000000 - totalRewards;
+        if (totalRewards + newlyEarnedRewards > supply) {
+            newlyEarnedRewards = supply - totalRewards;
         }
 
         // Update totals
         totalRewardsEarned += newlyEarnedRewards;
 
         // Send earned rewards to user's Incoming Account and deduct from Rewards Reserve
-        require(
-            balanceRegularAccount[address(this)] > newlyEarnedRewards,
-            "Cannot accept deposit because contract rewards already allocated"
-        );
         balanceRegularAccount[address(this)] -= newlyEarnedRewards; // underflow
         balanceUntakenIncomingAccount[user] += newlyEarnedRewards;
 
@@ -400,6 +400,7 @@ contract TimelockAndRewardsContractT2 is ReentrancyGuard {
 
         uint lastWithdrawal = lastWithdrawalRegularAccount[msg.sender];
         uint maxWithdrawable = calculateMaxWithdrawable(lastWithdrawal);
+
         require(
             _amount <= maxWithdrawable,
             "Exceeds max allowable withdrawal amount based on elapsed time"
