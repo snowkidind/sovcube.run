@@ -29,35 +29,6 @@ let bsovDecimals
 let timelockAndRewardsContract
 let timelockRewardsReserveContract
 
-/* 
-
-The rewards contract is a setup for the future governance contract which will evaluate 
-holders in the fund for positioning in the governance system. In order to participate in
-the governance system, the user must timelock their tokens. There is a ranking system
-and in order to get voting power and voting rewards, a user must be a "top timelocker"
-
-At any point in time the balance of top timelockers is based on the owner owning 1% of 
-the locked tokens, so the intended behavior is that a user can lose their status should 
-they be outbid by a larger player.
-
-Since all token withdrawals are throttled at 100 BSOV per week, A user cannot manipluate
-the voting body by the "allocate, vote and dump" method without paying the penalty of a 
-throttled withdrawal process. 
-
-Over the course of its life the gonernance contract may have different requirements to be
-a top timelocker, perhaps the percentage in ownership required could be lowered, for 
-example, in order to prevent large players from reducing the theoretical voting body to
-manipuklable levels.
-
-As it stands, the fund contract will contain these locked user deposits far after the life 
-of the rewards program, which is intended to be run once and only once. Therefore the post 
-fund world is what this file is about in particular.
-
-In this test I will go over the lifecycle of the fund and test operation in the post-fund world.
-
-
-*/
-
 const run = async () => {
 
   const network = process.env.HARDHAT_NETWORK;
@@ -128,6 +99,9 @@ const run = async () => {
   console.log(await chainDate() + ' Init and Seed')
   await allTheGlobalThings()
 
+  // what is the balance of the contract here?
+  const bsovBalancePreDeposits = await bsovContract.balanceOf(timelockAndRewardsContract)
+
   console.log('............. Section 1: User Deposits .............\n')
   // A couple users locks his stuff in the contract
   const sendToLockA = 101000 * 10 ** 8  // just below max in a tx
@@ -144,18 +118,18 @@ const run = async () => {
   const sendToLockC = 1000 * 10 ** 8
   const step3 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockC, '0x')
 
-  if (0) {
-    console.log('User deposit totals')
-    const sent = sendToLockA + sendToLockB + sendToLockC
-    console.log('\ntotal sent:', sent)
-    const user1Deposits = sendToLockA + sendToLockC
-    console.log('user 1 deposits:' + user1Deposits)
-  }
+  // preDeposits + rewardsIssued should be even
+
+  // what are the total of rewards issued?
+  const totalRewardsEarnedPostDeposits = await timelockAndRewardsContract.totalRewardsEarned()
+  console.log(await chainDateFmt() + ' the difference between rewards assigned and initial seed deposit:')
+  console.log('  total rewards available: ', bsovBalancePreDeposits)
+  console.log('  totalRewardsEarned (after deposits): ', totalRewardsEarnedPostDeposits)
 
   console.log(await chainDateFmt() + ' User 1 details:')
   await allThe_userThings(user1.address)
 
-  console.log('............. Section 2: Claim Eligible / Accept Incoming .............\n')
+  console.log('\n............. Section 2: Claim Eligible / Accept Incoming .............\n')
 
   // Im taking the general purpose of this is to "accept the terms"
   // but Im not sure if a withdrawal of funds is possible before this.
@@ -164,7 +138,7 @@ const run = async () => {
   console.log(await chainDateFmt() + ' User 2 details: > claim eligible amount, balance moves from eligibleAmount to untakenIncomingBalance')
   await allThe_userThings(user1.address)
 
-  console.log('............. Section 3: Fast Forward  .............\n')
+  console.log('\n............. Section 3: Fast Forward  .............\n')
 
   console.log(await chainDateFmt() + ' Fast forward -> Day Before')
   await helpers.mine(1000, { interval: 86400 }) // 1 block per day for 1000 days
@@ -178,7 +152,7 @@ const run = async () => {
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
 
-  console.log('............. Section 4: Withdrawals .............\n')
+  console.log('\n............. Section 4: Withdrawals .............\n')
 
   // can only withdrawal 100 tokens per day after 1000 days has elapsed
   const withdrawal1 = 100 * 10 ** 8
@@ -197,7 +171,7 @@ const run = async () => {
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
 
-  console.log('............. Section 5: Weekly Withdrawals continued (takes a bit to simulate).............\n')
+  console.log('\n............. Section 5: Weekly Withdrawals continued (takes a bit to simulate).............\n')
 
   // can only withdrawal 100 tokens per week after 1000 days has elapsed
   let elapsedHours = 0
@@ -246,6 +220,82 @@ const run = async () => {
   console.log('Time Elapsed withdrawaling from fund: ' + days + ' days.\n')
 
   await allThe_userThings(user1.address)
+
+  console.log('\n............. Section 6: User makes deposit after zeroing balance.............\n')
+  
+  // at this point the user has deposited and withdrawn everything from the contract. balances are zero.
+
+  // are there rewards left to allocate? 
+  // const totalRewardsEarned = await timelockAndRewardsContract.totalRewardsEarned()
+  // console.log('totalRewardsEarned: ', totalRewardsEarned)
+  
+  const bsovBalanceUser1 = await bsovContract.balanceOf(user1)
+  console.log(await chainDateFmt() + '  User 1 BSOV balance before deposit.'.padEnd(45), d(bsovBalanceUser1.toString(), bsovDecimals))
+
+  const sendToLock = bsovBalanceUser1 / 10n  // just below max in a tx
+
+  await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLock, '0x')
+
+  const bsovBalanceUser1a = await bsovContract.balanceOf(user1)
+  console.log(await chainDateFmt() + '  User 1 Deposit amount from EOA.'.padEnd(45), d(sendToLock.toString(), bsovDecimals))
+  console.log(await chainDateFmt() + '  User 1 BSOV balance after deposit.'.padEnd(45), d(bsovBalanceUser1a.toString(), bsovDecimals))
+
+  // After the deposit is made the user balance on contract is lowered by 1% because of the BSOV burn
+  const contractBalanceAfter2ndDeposit_ = await timelockAndRewardsContract.getBalanceRegularAccount(user1.address)
+  const contractBalAfterDep2 = d(contractBalanceAfter2ndDeposit_.toString(), bsovDecimals)
+
+  try {
+    // immediate withdrawal is possible?!?
+    const balanceRegularAccount = await timelockAndRewardsContract.getBalanceRegularAccount(user1)
+    if (balanceRegularAccount == 0) console.log('balanceregularacct = 0')
+    if (balanceRegularAccount > 0) {
+      await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
+      const bsovBalanceUser1b = await bsovContract.balanceOf(user1)
+      console.log(await chainDateFmt() + '  User 1 BSOV balance after immediate withdrawal.'.padEnd(45), d(bsovBalanceUser1b.toString(), bsovDecimals))
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+  try {
+    // test a simple withdrawal to incoming account should fail
+    const balanceIncomingAccount = await timelockAndRewardsContract.getBalanceIncomingAccount(user1)
+    if (balanceIncomingAccount > 0) console.log('This test is invalidated.')
+    await timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(100 * 10 ** 8)
+    const bsovBalanceUser1c = await bsovContract.balanceOf(user1)
+    console.log(await chainDateFmt() + '  User 1 BSOV balance after spoof attempt.'.padEnd(45), d(bsovBalanceUser1c.toString(), bsovDecimals))
+  } catch (error) {
+    console.log(await chainDateFmt() + ' Invalid Withdrawal Test Passed.')
+  }
+
+
+  await allThe_userThings(user1.address)
+
+
+  console.log('\n............. Section 7: User begins the second withdrawal process after vesting period.............\n')
+
+  for (let i = 0; i < 1000; i++) {
+    try {
+      await helpers.mine(8, { interval: 86400 }) // 1 block per day for 8 days to get beyond 7 day withdrawal restriction 
+      await timelockAndRewardsContract.connect(user1).withdrawAll()
+      if (i % 100 == 0) await allThe_userThings(user1.address)
+    } catch (error) {
+      i = 1000
+    }
+  }  
+
+  await allThe_userThings(user1.address)
+
+  // The new user balance should be the previous balance after the deposit 
+  // plus 1 percent of the balance on the contract. This includes two 1 percent fees, in and out which can lead to 
+  // confusion if a person doesnt understand or forgot the deflationary mechanism of the underlying token contract.
+  const bsovBalanceUserPost = await bsovContract.balanceOf(user1)
+  const balanceCalc = bsovBalanceUser1a + (contractBalanceAfter2ndDeposit_ * 99n) / 100n
+  if (bsovBalanceUserPost !== balanceCalc) {
+    console.log('Warning: Rugs dont match the drapes.')
+  }
+  
+  console.log('The End.')
 
 }
 

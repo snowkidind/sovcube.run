@@ -69,8 +69,25 @@ During the ownerSeedContract() transaction, there is no code to stop a deposit o
    - should a user die, this could cause legal reason to lock up their entire estate for a abnormal period of time.
    - generally, a 3.5 year lockdown should have custodial transfer abilities
 
+# 5_afterlife.js
 
+The rewards contract is a setup for the future governance contract which will evaluate holders in the fund for positioning in the governance system. In order to participate in the governance system, the user must timelock their tokens. There is a ranking system and in order to get voting power and voting rewards, a user must be a "top timelocker"
 
+At any point in time the balance of top timelockers is based on the owner owning 1% of the locked tokens, so the intended behavior is that a user can lose their status should they be outbid by a larger player.
+
+Since all token withdrawals are throttled at 100 BSOV per week, A user cannot manipluate the voting body by the "allocate, vote and dump" method without paying the penalty of a throttled withdrawal process. 
+
+Over the course of its life the gonernance contract may have different requirements to bea top timelocker, perhaps the percentage in ownership required could be lowered, for example, in order to prevent large players from reducing the theoretical voting body to manipulable levels.
+
+As it stands, the fund contract will contain these locked user deposits far after the life of the rewards program, which is intended to be run once and only once. Therefore, testing the post fund world is what this file is about in particular.
+
+In this test I will go over the lifecycle of the fund and test operation in the post-fund world.
+
+A couple takeaways from this file:
+
+There is a **two percent fee** - one percent in and a one percent out fee from the underlying contract. While the earned rewards are accumulating, this is negligible and unnoticeable but when its 1:1 deposits to withdrawals, the cost of 2 percent is more noticeable. This should be documented as people will forget that BSOV is deflationary or just need to be reminded of this in general.
+
+Upon depositing after the rewards funds have been consumed, it is currently possible to **withdrawal 100 BSOV immediately** if you participated in the fund and withdrew all previously.
 
 
 # Compiler warnings

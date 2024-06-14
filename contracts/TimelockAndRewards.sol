@@ -51,7 +51,7 @@ import "./ReentrancyGuard.sol";
         uint constant maxWithdrawalPeriods = 10; // The user can accumulate withdrawals for a maximum number of periods.
         uint constant timeBetweenWithdrawals = 7 days; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
         uint constant resetTimeLeftIncomingAccount = 1000 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
-        uint constant withdrawalHalvingEraDuration 1000 days; // Amount of days until the periodWithdrawalAmount halves - only happens after the inital lockExpiration.
+        uint constant withdrawalHalvingEraDuration = 1000 days; // Amount of days until the periodWithdrawalAmount halves - only happens after the inital lockExpiration.
         uint constant maxWithdrawalHalvingEras = 10; // Max amount of withdrawal halving eras
         uint constant newUserLockTime = 10 weeks; // Set the time that new timelockers need to wait before withdrawing their tokens. To penalize multiple wallets. 
         uint lockExpirationDateRegularAccount;
