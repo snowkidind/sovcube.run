@@ -86,103 +86,53 @@ const run = async (userDeposit) => {
   }
 
 
+  let deployerGas = []
+
   const parameters1 = [bsovAddress]
+  await helpers.mine(1, { interval: 100 })
   const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContract")
   timelockAndRewardsContract = await Contract1.deploy(...parameters1)
+
+  const latestBlock = await hre.ethers.provider.getBlock(await helpers.time.latestBlock())
+  // I am presuming that total gasCost is gasUsed * baseFeePerGas of the block here since 
+  // blocks mined within hardhat do not consume gas.
+  const contractGasDetails = displayContractGenesisReceipt({ gasUsed: latestBlock.gasUsed, gasPrice: latestBlock.baseFeePerGas, hash: latestBlock.hash }, 'Contract Genesis Tx')
+  deployerGas.push(contractGasDetails)
+
   const timelockAndRewardsContractAddress = timelockAndRewardsContract.target
   await fs.writeFileSync(__dirname + '/' + network + '/TimelockAndRewardsContract.json', JSON.stringify({ contract: timelockAndRewardsContractAddress }, null, 4))
   // console.log("TimelockContract2 deployed to: " + timelockAndRewardsContractAddress + ' on ' + network)
 
-
   // the owner sends a percent to the contract for rewards, then seeds contract
   const seedFund = 30609121600000 // as per documentation
-  await bsovContract.connect(owner).transfer(timelockAndRewardsContractAddress, seedFund)
-  await timelockAndRewardsContract.connect(owner).ownerSeedContract()
+  const tx1 = await bsovContract.connect(owner).transfer(timelockAndRewardsContractAddress, seedFund)
+  const receipt1 = await tx1.wait()
+  let gasInfo = displayEthReceipt(receipt1, 'Initial BSOV Transfer')
+  deployerGas.push(gasInfo)
 
-  console.log('............. Section 1: User Deposits .............\n')
+  const tx2 = await timelockAndRewardsContract.connect(owner).ownerSeedContract()
+  const receipt2 = await tx2.wait()
+  gasInfo = displayEthReceipt(receipt2, 'Seed Contract Transaction')
+  deployerGas.push(gasInfo)
 
-  const userGas = []
-
-  // A couple users locks his stuff in the contract
-  const sendToLockA = 101000 * 10 ** 8 // just below max in a tx
-  // console.log('\nStep 1, user 1')
-  const step1 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, userDeposit, '0x')
-  let receipt = await step1.wait()
-  const depositGas = displayEthReceipt(receipt, 'initial deposit - approveAndCall()')
-  userGas.push(depositGas)
-
-  console.log('............. Section 2: Claim Eligible / Accept Incoming .............\n')
-
-  // Im taking the general purpose of this is to "accept the terms"
-  // but Im not sure if a withdrawal of funds is possible before this.
-  const ready = await timelockAndRewardsContract.connect(user1).acceptUntakenIncomingTokens()
-  receipt = await ready.wait()
-  const acceptUntakenGas = displayEthReceipt(receipt, 'engage waiting - acceptUntakenIncomingTokens()')
-  userGas.push(acceptUntakenGas)
-
-  console.log('............. Section 3: Fast Forward .............\n')
-  
+  // console.log('............. Section 3: Fast Forward .............\n')
   await helpers.mine(vestingPeriod, { interval: 86400 }) // 1 block per day for 1000 days
   await helpers.mine(2, { interval: 86400 })
-  console.log(await chainDateFmt() + ' no transactions')
-
-  console.log('\n............. Section 4: Withdrawals .............\n')
-
-  const withdrawal1 = 100 * 10 ** 8
-  const w1 = await timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(withdrawal1)
-  receipt = await w1.wait()
-  const incoming1 = displayEthReceipt(receipt, 'withdrawFromIncomingAccount()')
-  userGas.push(incoming1)
-
-  const withdrawal2 = 100 * 10 ** 8
-  const w2 = await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(withdrawal2)
-  receipt = await w2.wait()
-  const regular1 = displayEthReceipt(receipt, 'withdrawFromRegularAccount()')
-  userGas.push(regular1)
-
-  let withdrawalPeriod
-  for (let i = 0; i < 1003; i++) { // this is arbitrary
-    await helpers.mine(30, { interval: 86400 }) // 30 days later
-    try {
-      const w3 = await timelockAndRewardsContract.connect(user1).withdrawAll()
-      receipt = await w3.wait()
-      if (i == 0) {
-        userGas.push(displayEthReceipt(receipt, 'withdrawAll()'))
-      } else {
-        userGas.push(displayEthReceipt(receipt, 'withdrawAll()', true)) // suppress further receipts
-      }
-    } catch (error) { 
-      withdrawalPeriod = i
-      i = 1003
-    }
-  }
-
-  console.log('............. Section 5: Earnings and timing summary .............\n')
-
-  const years = vestingPeriod / 365
-  console.log('  Deposit Amount:'.padEnd(30) + d(userDeposit.toString(), bsovDecimals))
-  console.log('  Vesting Period:'.padEnd(30) + years + ' years')
-  console.log('  Withdrawal process:'.padEnd(30) + withdrawalPeriod + ' months')
-  console.log('  Completion Date:'.padEnd(30) + await chainDateFmt())
-  const balancePost = await bsovContract.balanceOf(user1)
-  // console.log('  Start BSOV balance:'.padEnd(30) + d(user1Balance.toString(), bsovDecimals))
-  // console.log('  Final BSOV balance:'.padEnd(30) + d(balancePost.toString(), bsovDecimals))
-  const diff = balancePost - user1Balance
-  console.log('  BSOV Earned:'.padEnd(30) + d(diff.toString(), bsovDecimals))
+  // console.log(await chainDateFmt() + ' no transactions')
 
 
   let current = 0
   let sixty = 0
   let usdCurrent = 0
   let usdSixty = 0
-  userGas.forEach((g) => { 
+  deployerGas.forEach((g) => {
     current += Number(g.current)
     sixty += Number(g.sixty)
     usdCurrent += Number(g.usdCurrent)
     usdSixty += Number(g.usdSixty)
   })
 
-  console.log('\n............. Section 6: Gas Consumption Totals .............\n')
+  console.log('\n............. Gas Consumption Totals .............\n')
 
   console.log('  current gas:'.padEnd(30) + current)
   console.log('  60 gwei:'.padEnd(30) + sixty)
@@ -297,6 +247,30 @@ const extraJunk = async () => {
 
 }
 
+const displayContractGenesisReceipt = (receipt, title) => {
+  const ethgas = 60000000000n
+  const txGasInCurrentEth = d((receipt.gasUsed * receipt.gasPrice).toString(), 18)
+  const txGasIn60gweiEth = d((receipt.gasUsed * ethgas).toString(), 18)
+
+  const usd = txGasIn60gweiEth * ethPrice
+  const current = txGasInCurrentEth * ethPrice
+
+  console.log('########## Ethereum Contract Genesis Receipt: ' + title + ' ##########')
+  console.log('blockhash:'.padEnd(25) + receipt.hash)
+  console.log('from:'.padEnd(25) + 'unavailable')
+  console.log('to:'.padEnd(25) + 'unavailable')
+  console.log('EthPrice, fixed:'.padEnd(25) + ethPrice)
+  console.log('Cost 60 gwei, USD:'.padEnd(25) + usd)
+  console.log('Cost current, USD:'.padEnd(25) + current)
+  console.log('CurrentGas, ETH:'.padEnd(25) + txGasInCurrentEth)
+  console.log('Gas60gwei, ETH:'.padEnd(25) + txGasIn60gweiEth)
+  console.log('gasUsed:'.padEnd(25) + d(receipt.gasUsed, 18))
+  console.log('gasPrice:'.padEnd(25) + d(receipt.gasPrice, 18))
+  console.log()
+
+  return { current: txGasInCurrentEth, sixty: txGasIn60gweiEth, usdCurrent: current, usdSixty: usd }
+}
+
 const displayEthReceipt = (receipt, title, supress) => {
 
   const ethgas = 60000000000n
@@ -323,7 +297,7 @@ const displayEthReceipt = (receipt, title, supress) => {
   }
   return { current: txGasInCurrentEth, sixty: txGasIn60gweiEth, usdCurrent: current, usdSixty: usd }
 }
-  
+
   ; (async () => {
 
     if (Number(process.version.split('.')[0].replace('v', '')) < 20) {
@@ -336,18 +310,7 @@ const displayEthReceipt = (receipt, title, supress) => {
     }
 
     try {
-
-      const userDeposits = [
-        1000, 5000, 10000, 25000, 50000, 75000, 100000
-      ]
-      
-      const snapshot = await helpers.takeSnapshot() 
-
-      for (let i = 0; i < userDeposits.length; i++) {
-        await run(userDeposits[i] * 10 ** 8)
-        await snapshot.restore()
-      }
-
+      await run(1000 * 10 ** 8)
     } catch (error) {
       console.log(error)
       process.exit(1)

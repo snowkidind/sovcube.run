@@ -1,3 +1,5 @@
+Script 6 consumer gas costs
+
 ............. Section 1: User Deposits .............
 
 ########## Ethereum Receipt: initial deposit - approveAndCall() ##########
@@ -8,7 +10,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.784856399999995
 Cost current, USD:       2.377936790406381
 CurrentGas, ETH:         0.000671733556611972
-Gas60gwei, ETH:          0.000671733556611972
+Gas60gwei, ETH:          0.01123866
 gasUsed:                 0.000000000000187311
 gasPrice:                0.000000003586193852
 
@@ -22,7 +24,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.81097431294158
 CurrentGas, ETH:         0.000229088788966548
-Gas60gwei, ETH:          0.000229088788966548
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956476
 
@@ -40,7 +42,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533097123353
 CurrentGas, ETH:         0.000182529183534558
-Gas60gwei, ETH:          0.000182529183534558
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.000000002018078914
 
@@ -52,7 +54,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048441953888383
 CurrentGas, ETH:         0.000138554920773696
-Gas60gwei, ETH:          0.000138554920773696
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586402
 
@@ -64,7 +66,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820580860398
 CurrentGas, ETH:         0.00014485368872487
-Gas60gwei, ETH:          0.00014485368872487
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.00000000152299617
 
@@ -93,7 +95,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.784856399999995
 Cost current, USD:       2.377936790406381
 CurrentGas, ETH:         0.000671733556611972
-Gas60gwei, ETH:          0.000671733556611972
+Gas60gwei, ETH:          0.01123866
 gasUsed:                 0.000000000000187311
 gasPrice:                0.000000003586193852
 
@@ -107,7 +109,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.81097431294158
 CurrentGas, ETH:         0.000229088788966548
-Gas60gwei, ETH:          0.000229088788966548
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956476
 
@@ -125,7 +127,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533097123353
 CurrentGas, ETH:         0.000182529183534558
-Gas60gwei, ETH:          0.000182529183534558
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.000000002018078914
 
@@ -137,7 +139,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048441953888383
 CurrentGas, ETH:         0.000138554920773696
-Gas60gwei, ETH:          0.000138554920773696
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586402
 
@@ -149,7 +151,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820580860398
 CurrentGas, ETH:         0.00014485368872487
-Gas60gwei, ETH:          0.00014485368872487
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.00000000152299617
 
@@ -178,7 +180,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.784856399999995
 Cost current, USD:       2.377936790406381
 CurrentGas, ETH:         0.000671733556611972
-Gas60gwei, ETH:          0.000671733556611972
+Gas60gwei, ETH:          0.01123866
 gasUsed:                 0.000000000000187311
 gasPrice:                0.000000003586193852
 
@@ -192,7 +194,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.81097431294158
 CurrentGas, ETH:         0.000229088788966548
-Gas60gwei, ETH:          0.000229088788966548
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956476
 
@@ -210,7 +212,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533097123353
 CurrentGas, ETH:         0.000182529183534558
-Gas60gwei, ETH:          0.000182529183534558
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.000000002018078914
 
@@ -222,7 +224,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048441953888383
 CurrentGas, ETH:         0.000138554920773696
-Gas60gwei, ETH:          0.000138554920773696
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586402
 
@@ -234,7 +236,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820580860398
 CurrentGas, ETH:         0.00014485368872487
-Gas60gwei, ETH:          0.00014485368872487
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.00000000152299617
 
@@ -263,7 +265,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.7874052
 Cost current, USD:       2.3780891319212136
 CurrentGas, ETH:         0.000671776590938196
-Gas60gwei, ETH:          0.000671776590938196
+Gas60gwei, ETH:          0.01123938
 gasUsed:                 0.000000000000187323
 gasPrice:                0.000000003586193852
 
@@ -277,7 +279,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.8109743769863184
 CurrentGas, ETH:         0.000229088807058282
-Gas60gwei, ETH:          0.000229088807058282
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956734
 
@@ -295,7 +297,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533468534914
 CurrentGas, ETH:         0.00018252919402641
-Gas60gwei, ETH:          0.00018252919402641
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.00000000201807903
 
@@ -307,7 +309,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048444572797373
 CurrentGas, ETH:         0.000138554928171744
-Gas60gwei, ETH:          0.000138554928171744
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586503
 
@@ -319,7 +321,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820779509232
 CurrentGas, ETH:         0.000144853694336419
-Gas60gwei, ETH:          0.000144853694336419
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.000000001522996229
 
@@ -348,7 +350,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.7874052
 Cost current, USD:       2.3780891319212136
 CurrentGas, ETH:         0.000671776590938196
-Gas60gwei, ETH:          0.000671776590938196
+Gas60gwei, ETH:          0.01123938
 gasUsed:                 0.000000000000187323
 gasPrice:                0.000000003586193852
 
@@ -362,13 +364,13 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.8109743769863184
 CurrentGas, ETH:         0.000229088807058282
-Gas60gwei, ETH:          0.000229088807058282
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956734
 
 ............. Section 3: Fast Forward .............
 
-2026-11-22 10:38:57 no transactions
+2026-11-22 10:38:56 no transactions
 
 ............. Section 4: Withdrawals .............
 
@@ -380,7 +382,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533468534914
 CurrentGas, ETH:         0.00018252919402641
-Gas60gwei, ETH:          0.00018252919402641
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.00000000201807903
 
@@ -392,7 +394,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048444572797373
 CurrentGas, ETH:         0.000138554928171744
-Gas60gwei, ETH:          0.000138554928171744
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586503
 
@@ -404,7 +406,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820779509232
 CurrentGas, ETH:         0.000144853694336419
-Gas60gwei, ETH:          0.000144853694336419
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.000000001522996229
 
@@ -413,7 +415,7 @@ gasPrice:                0.000000001522996229
   Deposit Amount:             50000
   Vesting Period:             2.73972602739726 years
   Withdrawal process:         124 months
-  Completion Date:            2036-10-25 10:43:09
+  Completion Date:            2036-10-25 10:43:08
   BSOV Earned:                48010
 
 ............. Section 6: Gas Consumption Totals .............
@@ -433,7 +435,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.7874052
 Cost current, USD:       2.3780891319212136
 CurrentGas, ETH:         0.000671776590938196
-Gas60gwei, ETH:          0.000671776590938196
+Gas60gwei, ETH:          0.01123938
 gasUsed:                 0.000000000000187323
 gasPrice:                0.000000003586193852
 
@@ -447,7 +449,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.8109743769863184
 CurrentGas, ETH:         0.000229088807058282
-Gas60gwei, ETH:          0.000229088807058282
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956734
 
@@ -465,7 +467,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533468534914
 CurrentGas, ETH:         0.00018252919402641
-Gas60gwei, ETH:          0.00018252919402641
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.00000000201807903
 
@@ -477,7 +479,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048444572797373
 CurrentGas, ETH:         0.000138554928171744
-Gas60gwei, ETH:          0.000138554928171744
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586503
 
@@ -489,7 +491,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820779509232
 CurrentGas, ETH:         0.000144853694336419
-Gas60gwei, ETH:          0.000144853694336419
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.000000001522996229
 
@@ -518,7 +520,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       39.7874052
 Cost current, USD:       2.3780891319212136
 CurrentGas, ETH:         0.000671776590938196
-Gas60gwei, ETH:          0.000671776590938196
+Gas60gwei, ETH:          0.01123938
 gasUsed:                 0.000000000000187323
 gasPrice:                0.000000003586193852
 
@@ -532,7 +534,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       14.894125200000001
 Cost current, USD:       0.8109743769863184
 CurrentGas, ETH:         0.000229088807058282
-Gas60gwei, ETH:          0.000229088807058282
+Gas60gwei, ETH:          0.00420738
 gasUsed:                 0.000000000000070123
 gasPrice:                0.000000003266956734
 
@@ -550,7 +552,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       19.210942799999998
 Cost current, USD:       0.6461533468534914
 CurrentGas, ETH:         0.00018252919402641
-Gas60gwei, ETH:          0.00018252919402641
+Gas60gwei, ETH:          0.00542682
 gasUsed:                 0.000000000000090447
 gasPrice:                0.00000000201807903
 
@@ -562,7 +564,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       15.557875200000002
 Cost current, USD:       0.49048444572797373
 CurrentGas, ETH:         0.000138554928171744
-Gas60gwei, ETH:          0.000138554928171744
+Gas60gwei, ETH:          0.00439488
 gasUsed:                 0.000000000000073248
 gasPrice:                0.000000001891586503
 
@@ -574,7 +576,7 @@ EthPrice, fixed:         3540
 Cost 60 gwei, USD:       20.2015764
 Cost current, USD:       0.5127820779509232
 CurrentGas, ETH:         0.000144853694336419
-Gas60gwei, ETH:          0.000144853694336419
+Gas60gwei, ETH:          0.00570666
 gasUsed:                 0.000000000000095111
 gasPrice:                0.000000001522996229
 
@@ -592,3 +594,54 @@ gasPrice:                0.000000001522996229
   60 gwei:                    1.439942939999995
   USD current:                88.21756563479069
   USD 60 gwei:                5097.398007599971
+
+
+
+
+
+
+Script 7: deployer gas costs
+
+########## Ethereum Contract Genesis Receipt: Contract Genesis Tx ##########
+blockhash:               0xc3de76401f5bf2ef75e1958fe58c8e65b581b143be6de144d2d6928cbd64a9fc
+from:                    unavailable
+to:                      unavailable
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       462.3213096
+Cost current, USD:       25.45396259193095
+CurrentGas, ETH:         0.007190384912974844
+Gas60gwei, ETH:          0.13059924
+gasUsed:                 0.000000000002176654
+gasPrice:                0.000000003303411986
+
+########## Ethereum Receipt: Initial BSOV Transfer ##########
+hash:                    0xea4ef2df0af01d80bc085e261dfc8da238b2a0c453560214e99aa35a2740944a
+from:                    0x6dB8518b60b2eA9cA465c2e7A2c1A8b108b4DDA5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       12.9801888
+Cost current, USD:       0.8546167908045422
+CurrentGas, ETH:         0.000241417172543656
+Gas60gwei, ETH:          0.00366672
+gasUsed:                 0.000000000000061112
+gasPrice:                0.000000003950405363
+
+########## Ethereum Receipt: Seed Contract Transaction ##########
+hash:                    0x5fbdc3616a1730e61e43ec87d9fbbcf5deaa5f64271195116f6c0c2bab2e31d1
+from:                    0x6dB8518b60b2eA9cA465c2e7A2c1A8b108b4DDA5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       26.6491908
+Cost current, USD:       1.5914484731504104
+CurrentGas, ETH:         0.000449561715579212
+Gas60gwei, ETH:          0.00752802
+gasUsed:                 0.000000000000125467
+gasPrice:                0.000000003583107236
+
+
+............. Gas Consumption Totals .............
+
+  current gas:                0.007881363801097713
+  60 gwei:                    0.14179398000000001
+  USD current:                27.900027855885902
+  USD 60 gwei:                501.9506892

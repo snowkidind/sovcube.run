@@ -137,8 +137,9 @@ Upon depositing after the rewards funds have been consumed, it is currently poss
 
 # 6_gasUsage.js
 
-Gas metrics were recorded for various deposits of size. Here are the current results for gas usage and duration requirements. This includes all consumer side transactions, based on a monthly withdrawal schedule. Gas costs can be further reduced by withdrawaling on intervals of up to ten weeks.
+## Consumer Gas Usage
 
+Gas metrics were recorded for various deposits of size. Here are the current results for gas usage and duration requirements. This includes all consumer side transactions, based on a monthly withdrawal schedule. Gas costs can be further reduced by withdrawing on intervals of up to ten weeks.
 
 | **Deposit Amount (BSOV)** | **Vesting (Years)** | **Duration** | **Completion Date** | **BSOV Earned** | **Current Gas (ETH)** | **Gas at 60 Gwei (ETH)** | **USD Current**    | **USD at 60 Gwei** |
 | ------------------ | ------------------ | ---------------------- | ------------------- | --------------- | --------------------- | ------------------------ | ------------------ | ------------------ |
@@ -149,6 +150,32 @@ Gas metrics were recorded for various deposits of size. Here are the current res
 | 50000              | 2.73   | 124 months             | 2036-10-25 | 48010           | 0.01312  | 0.7323170      | 46.46 | 2592.40  |
 | 75000              | 2.73   | 186 months             | 2041-09-27 | 72015           | 0.01902   | 1.0861300       | 67.34  | 3844.90 |
 | 100000             | 2.73  | 248 months             | 2046-08-30 | 96020           | 0.024920   | 1.4399429       | 88.21  | 5097.39  |
+
+# 7_gasUsage_deployer.js
+
+Hardhat has an ambiguous way of determining contract gas so I calculated it by counting the gasUsed within the block itself. Normal hardhat blocks without transactions dont have any gas usage. The main transaction of interest is the contract deployment and using this method I determined this information:
+
+## Deployment transaction
+
+| **Parameter**     | **Value**            |
+| ----------------- | -------------------- |
+| EthPrice, fixed   | 3540                 |
+| Cost 60 Gwei, USD | 462.3213096          |
+| Cost Current, USD | 25.45396259193095    |
+| CurrentGas, ETH   | 0.007190384912974844 |
+| Gas60Gwei, ETH    | 0.13059924           |
+| GasUsed           | 0.000000000002176654 |
+| GasPrice          | 0.000000003303411986 |
+
+
+## Totals (all transactions): 
+
+| **Parameter** | **Value** |
+| ------------- | --------- |
+| Current Gas   | 0.00788   |
+| 60 Gwei       | 0.14179   |
+| USD Current   | 27.90     |
+| USD 60 Gwei   | 501.95    |
 
 
 # Compiler warnings
