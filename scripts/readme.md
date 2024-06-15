@@ -1,4 +1,4 @@
-# BSOV sovcube contract verification and "pseudo-audit"
+# BSOV sovcube contract verification and testing
 
 DISCLAIMER: This isn't really an "official" audit because the author is not affiliated with any auditing platform, nor is this a formal process. 
 
@@ -11,10 +11,6 @@ DISCLAIMER: This isn't really an "official" audit because the author is not affi
   erc20 token BSOV is moved externally primarily by four functions
 
 - receiveApproval, which calls calculateAndSendRewardsAfterTimelock
-  
-  SST's (Stupid security tests)
-  1. What if a different currency is deposited? - ok
-
 - withdrawFromRegularAccount
 - withdrawFromIncomingAccount
 - withdrawAll
@@ -30,10 +26,12 @@ A user must "take custody" of the above sent tokens before they may withdrawal t
 the remaining functions are views and provide access primarily to hash tables
 
 # halving notes
-It appears that anyone may call the halving function, which has a guard in it that only allows a successful transaction if the duration has exceed the appropriate duration. 
+It appears that anyone may call the halving function, which has a guard in it that only allows a successful transaction if the duration has exceeded the appropriate duration. 
 
 
 # general observations
+
+  Issues/Takeaways I found are in bold print. Some of these are inherent in the design and I am just complaining and/or observing.
 
   From the initial broadcast of the contract, a 1000 day hold is mandatory for all normal deposits, and rewards payments will not be offered during this period. 
   
@@ -51,11 +49,11 @@ It appears that anyone may call the halving function, which has a guard in it th
 
   There is no way to **pause the contract** from accepting further deposits and payouts. This is fine as long as everything works, but it might be useful to have such a function if a draining exploit was found. This tweak has various implications.
 
-  RESOLVED It would be nice to **combine transactions** withdrawFromIncomingAccount and withdrawFromRegularAccount in a single transaction or better just withdrawal what is available to withdrawal right now. Although it is important to show how much comes from either action, which can be observed with events.
+  It would be nice to have a **large deposit threshold** which allows for larger withdrawals to account for the time difference it takes to close out a larger position as opposed to a smaller position. (see also the section below on gasCosts and duration)
+
+  RESOLVED It would be nice to combine transactions withdrawFromIncomingAccount and withdrawFromRegularAccount in a single transaction or better just withdrawal what is available to withdrawal right now. Although it is important to show how much comes from either action, which can be observed with events.
 
   RESOLVED It would be nice to get a block height at which the next withdrawal is possible - It was determined that this was not appropriate for the contract because it uses timestamps for this which are non deterministic
-
-  It would be nice to have a **large deposit threshold** which allows for larger withdrawals to account for the time difference it takes to close out a larer position as opposed to a smaller position.
 
 # 1_deploy.js
 
@@ -73,8 +71,6 @@ It appears that anyone may call the halving function, which has a guard in it th
 
   Initially, this was an issue for me because I was unaware of future utility of the project outside of the fund. But after a discussion, I now understand that the deposits stay in the normal user balance and also serve a future purpose which is part of a pending governance contract, which will base its priorities dependent on whom is involved with this contract.
 
-  This will require a post-rewards set of tests to ensure continuous operation after the rewards period.
-
   > Without this guard, eventually the rewards contract, maintiaining its internal balance via balanceRegularAccount[address(this)] would underflow causing the transaction to fail. In the current use case this is not an issue but, by convention, the use of hard coded amounts (300k) should be made into a constructor variable.
 
   In the case a deposit exceeds the available tokens for rewards, the contract should accept the deposit and pay whatever remaining rewards are available, allocating the remaining rewards to that deposit, ensuring balances are 
@@ -90,17 +86,17 @@ The purpose of this function is to reward early adopters to get a higher reward 
 
 Further the tier system asserts its independence from the rest of the contract by increasing account balances based on the rewards initially on the deposit transaction. This method asserts no further calculation is necessary once the deposit is processed. In other words your rewards are determined on the transaction of your deposit and are fixed. For subsequent deposits, they would be calculated on the spot as well.
 
-The contract is intended to be seeded once and only once. There are no restaking options once rewards mature. 
+The contract is intended to be **seeded once and only once**. There are no restaking options once rewards mature. 
 
-The hardcoded max of 300k locks forever any seed deposit amounts over that specific balance, which is hard to calculate to exact because of the 1 % burn. 
+The **hardcoded max of 300k** locks forever any seed deposit amounts over that specific balance, which is also hard to calculate to exact because of the 1 % burn. 
 
-As it stands the balance after the suggested seed deposit is 300000.0008016 which by default ensures that dust will remain under no ownership in the contract at the end of its life. 
+As it stands the balance after the suggested seed deposit is 300000.0008016 which by default ensures that **dust will remain under no ownership** in the contract at the end of its life. 
 
-During the ownerSeedContract() transaction, there is no code to stop a deposit of a different amount from  occurring. Consider an extra or a missing zero, fat finger type of error. It might be useful to either force the seed deposit to be an exact value, or better, allow multiple seeds. There would be some maths necessary in order to allow future seeding but it doesn't seem impossible.
+During the ownerSeedContract() transaction, **there is no code to stop a deposit of a different amount from  occurring**. Consider an extra or a missing zero, fat finger type of error. It might be useful to either force the seed deposit to be an exact value, or better, allow multiple seeds. There would be some maths necessary in order to allow future seeding but it doesn't seem impossible.
 
 # 4_sendinternalsingle.js
 
-  IN_TESTING: There is internal transfer logic which comes across as somewhat janky. An account is initied with rewards built in to it via a second internal account. When a user makes an internal transfer, the rewards tokens stay in the initial account and do not transfer along with the normal user account tokens. Both accounts stay locked for the duration but the receiving account must call acceptUntakenIncomingTokens() and restart a thousand day lockdown.
+  There is internal transfer logic which comes across as somewhat janky. An account is initied with rewards built in to it via a second internal account. When a user makes an internal transfer, the rewards tokens stay in the initial account and do not transfer along with the normal user account tokens. Both accounts stay locked for the duration but the receiving account must call acceptUntakenIncomingTokens() and restart a thousand day lockdown.
 
   I have a couple issues with that: 
   - the entire balances should be transferred
@@ -130,9 +126,7 @@ In this test I will go over the lifecycle of the fund and test operation in the 
 
 A couple takeaways from this file:
 
-There is a **two percent fee** - one percent in and a one percent out fee from the underlying contract. While the earned rewards are accumulating, this is negligible and unnoticeable but when its 1:1 deposits to withdrawals, the cost of 2 percent is more noticeable. This should be documented as people will forget that BSOV is deflationary or just need to be reminded of this in general.
-
-Upon depositing after the rewards funds have been consumed, it is currently possible to **withdrawal 100 BSOV immediately** if you participated in the fund and withdrew all previously.
+There is a two percent fee - one percent in and a one percent out fee from the underlying contract. While the earned rewards are accumulating, this is negligible and unnoticeable but when its 1:1 deposits to withdrawals, the cost of 2 percent is more noticeable. This should be documented as people will forget that BSOV is deflationary or just need to be reminded of this in general.
 
 
 # 6_gasUsage.js
