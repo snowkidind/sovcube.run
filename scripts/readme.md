@@ -177,7 +177,7 @@ Hardhat has an ambiguous way of determining contract gas so I calculated it by c
 | USD Current   | 27.90     |
 | USD 60 Gwei   | 501.95    |
 
-
+ 
 # Compiler warnings
 
 Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
