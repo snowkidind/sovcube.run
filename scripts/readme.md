@@ -137,7 +137,7 @@ Upon depositing after the rewards funds have been consumed, it is currently poss
 
 # 6_gasUsage.js
 
-Gas metrics were recorded for various deposits of size. Here are the current results for gas usage and duration requirements
+Gas metrics were recorded for various deposits of size. Here are the current results for gas usage and duration requirements. This includes all consumer side transactions, based on a monthly withdrawal schedule. Gas costs can be further reduced by withdrawaling on intervals of up to ten weeks.
 
 
 | **Deposit Amount (BSOV)** | **Vesting (Years)** | **Duration** | **Completion Date** | **BSOV Earned** | **Current Gas (ETH)** | **Gas at 60 Gwei (ETH)** | **USD Current**    | **USD at 60 Gwei** |
