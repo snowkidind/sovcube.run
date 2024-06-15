@@ -1,14 +1,59 @@
+# BSOV sovcube contract verification and "pseudo-audit"
+
+DISCLAIMER: This isn't really an "official" audit because the author is not affiliated with any auditing platform, nor is this a formal process. 
+
+# Contract details:
+
+ ## The flow of tokens
+
+  the contract doesnt deal with ether at all so there are no payable functions.
+
+  erc20 token BSOV is moved externally primarily by four functions
+
+- receiveApproval, which calls calculateAndSendRewardsAfterTimelock
+  
+  SST's (Stupid security tests)
+  1. What if a different currency is deposited? - ok
+
+- withdrawFromRegularAccount
+- withdrawFromIncomingAccount
+- withdrawAll
+
+there are functions which contain internal transfer logic as well. this allows for one account to transfer to another account. It should be noted that these are internal transfers and the contract balance is not affected therefore these transfers are not subject to the 1% burn on transfer fee.
+
+- sendLockedTokensToSingle
+- sendLockedTokensToMany
+
+A user must "take custody" of the above sent tokens before they may withdrawal them
+ - function acceptUntakenIncomingTokens
+
+the remaining functions are views and provide access primarily to hash tables
+
+# halving notes
+It appears that anyone may call the halving function, which has a guard in it that only allows a successful transaction if the duration has exceed the appropriate duration. 
+
+
 # general observations
 
-  Any subsequent deposits to the same address reset the countdown to 1000 days. A user should expect to make **multiple deposits** and store unlock times for each discrete deposit. (the obvious workaround is to use multiple accounts)
+  From the initial broadcast of the contract, a 1000 day hold is mandatory for all normal deposits, and rewards payments will not be offered during this period. 
+  
+  After the initial 1000 days of the contract life, an existing deposit account is able to make subsequent deposits with a 7 day wait before being able to withdrawal a distribution of the original principal. 
+  
+  During the initial 1000 days of the contract life, the user is also able to make additional deposits.
+  
+  After the initial 1000 days, any new accounts must wait ten weeks before qualifying for distributions.
 
-  The ability to **transfer locked assets including rewards** would also allow secondary markets to operate over those tokens. Ideally, this feature would be integrated by utilizing an NFT, which would also allow a single user to have multiple deposits with different unlock times.
+  There are two accounts, a normal deposit account and a rewards account. Deposits that qualify for rewards require an extra step in order to claim the rewards. In order to collect rewards, the user must call acceptUntakenIncomingTokens.
+  
+  Calling acceptUntakenIncomingTokens initiates a secondary 1000 day timer, in order to accept rewards the deposit qualified for. Subsequent calls to this endpoint cause the rewards received timer to update to 1000 days from the subsequent transaction. In this design, **there is no independent tracking for multiple deposits to a single account**. 
+
+  The ability to **transfer locked assets including untaken rewards** would also allow secondary markets to operate over those tokens. Ideally, this feature would be integrated by utilizing an NFT, which would also allow a single user to have multiple deposits with different unlock times.
 
   There is no way to **pause the contract** from accepting further deposits and payouts. This is fine as long as everything works, but it might be useful to have such a function if a draining exploit was found. This tweak has various implications.
 
-  It would be nice to **combine transactions** withdrawFromIncomingAccount and withdrawFromRegularAccount in a single transaction or better just withdrawal what is available to withdrawal right now. Although it is important to show how much comes from either action, which can be observed with events.
+  RESOLVED It would be nice to **combine transactions** withdrawFromIncomingAccount and withdrawFromRegularAccount in a single transaction or better just withdrawal what is available to withdrawal right now. Although it is important to show how much comes from either action, which can be observed with events.
 
-  It would be nice to get a block height at which the next withdrawal is possible
+  RESOLVED It would be nice to get a block height at which the next withdrawal is possible - It was determined that this was not appropriate for the contract because it uses timestamps for this which are non deterministic
 
   It would be nice to have a **large deposit threshold** which allows for larger withdrawals to account for the time difference it takes to close out a larer position as opposed to a smaller position.
 
@@ -77,7 +122,7 @@ At any point in time the balance of top timelockers is based on the owner owning
 
 Since all token withdrawals are throttled at 100 BSOV per week, A user cannot manipluate the voting body by the "allocate, vote and dump" method without paying the penalty of a throttled withdrawal process. 
 
-Over the course of its life the gonernance contract may have different requirements to bea top timelocker, perhaps the percentage in ownership required could be lowered, for example, in order to prevent large players from reducing the theoretical voting body to manipulable levels.
+Over the course of its life the governance contract may have different requirements to be a top timelocker, perhaps the percentage in ownership required could be lowered, for example, in order to prevent large players from reducing the theoretical voting body to manipulable levels.
 
 As it stands, the fund contract will contain these locked user deposits far after the life of the rewards program, which is intended to be run once and only once. Therefore, testing the post fund world is what this file is about in particular.
 
@@ -88,6 +133,22 @@ A couple takeaways from this file:
 There is a **two percent fee** - one percent in and a one percent out fee from the underlying contract. While the earned rewards are accumulating, this is negligible and unnoticeable but when its 1:1 deposits to withdrawals, the cost of 2 percent is more noticeable. This should be documented as people will forget that BSOV is deflationary or just need to be reminded of this in general.
 
 Upon depositing after the rewards funds have been consumed, it is currently possible to **withdrawal 100 BSOV immediately** if you participated in the fund and withdrew all previously.
+
+
+# 6_gasUsage.js
+
+Gas metrics were recorded for various deposits of size. Here are the current results for gas usage and duration requirements
+
+
+| **Deposit Amount** | **Vesting Period** | **Withdrawal Process** | **Completion Date** | **BSOV Earned** | **Current Gas (ETH)** | **Gas at 60 Gwei (ETH)** | **USD Current**    | **USD at 60 Gwei** |
+| ------------------ | ------------------ | ---------------------- | ------------------- | --------------- | --------------------- | ------------------------ | ------------------ | ------------------ |
+| 1000               | 2.73972602739726   | 3 months               | 2027-03-18 10:39:06 | 960.2           | 0.001591937905387585  | 0.041810520000000004     | 5.635460185072051  | 148.0092408        |
+| 5000               | 2.73972602739726   | 13 months              | 2028-01-02 10:39:26 | 4801            | 0.002568962184368722  | 0.09887712000000003      | 9.094126132665277  | 350.02500480000003 |
+| 10000              | 2.73972602739726   | 25 months              | 2028-12-15 10:39:50 | 9602            | 0.0037104198421367557 | 0.16735704000000004      | 13.134886241164114 | 592.4439216000002  |
+| 25000              | 2.73972602739726   | 62 months              | 2031-11-23 10:41:04 | 24005           | 0.0072295701571799    | 0.3785041799999995       | 25.592678356416904 | 1339.904797200001  |
+| 50000              | 2.73972602739726   | 124 months             | 2036-10-25 10:43:09 | 48010           | 0.013126452198458049  | 0.7323170999999981       | 46.467640782541544 | 2592.402533999996  |
+| 75000              | 2.73972602739726   | 186 months             | 2041-09-27 10:45:13 | 72015           | 0.01902333423973626   | 1.0861300199999966       | 67.34260320866612  | 3844.9002707999834 |
+| 100000             | 2.73972602739726   | 248 months             | 2046-08-30 10:47:17 | 96020           | 0.02492021628101452   | 1.439942939999995        | 88.21756563479069  | 5097.398007599971  |
 
 
 # Compiler warnings

@@ -1,0 +1,594 @@
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0x24418342c29bb5ba38afa029e2d8f3ad96b11f3e169f98233caa3d5277494656
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.784856399999995
+Cost current, USD:       2.377936790406381
+CurrentGas, ETH:         0.000671733556611972
+Gas60gwei, ETH:          0.000671733556611972
+gasUsed:                 0.000000000000187311
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x1d23cf2b75cb43b31f0503ea45b6c4edf2e4361838503a3ec9c0b8700e344546
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.81097431294158
+CurrentGas, ETH:         0.000229088788966548
+Gas60gwei, ETH:          0.000229088788966548
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956476
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:56 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0xb951fb8e74e08ced8385a712852dee4314419d8f53a1fceba21516458a31bc26
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533097123353
+CurrentGas, ETH:         0.000182529183534558
+Gas60gwei, ETH:          0.000182529183534558
+gasUsed:                 0.000000000000090447
+gasPrice:                0.000000002018078914
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0xc5e10b0c7e851173d624f9efe58df5fc3e09dc777d3d95479013331ab2b5a9f2
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048441953888383
+CurrentGas, ETH:         0.000138554920773696
+Gas60gwei, ETH:          0.000138554920773696
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586402
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x983c7ea5d77d18720b5c28487dcfd893cd0714f97db99e0e59191af44040cce0
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820580860398
+CurrentGas, ETH:         0.00014485368872487
+Gas60gwei, ETH:          0.00014485368872487
+gasUsed:                 0.000000000000095111
+gasPrice:                0.00000000152299617
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             1000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         3 months
+  Completion Date:            2027-03-18 10:39:06
+  BSOV Earned:                960.2
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.001591937905387585
+  60 gwei:                    0.041810520000000004
+  USD current:                5.635460185072051
+  USD 60 gwei:                148.0092408
+
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0x986f3fd42c87970dd51f2a0c696fb65eeda01a1e65089d97ffe358c08a0f4ef1
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.784856399999995
+Cost current, USD:       2.377936790406381
+CurrentGas, ETH:         0.000671733556611972
+Gas60gwei, ETH:          0.000671733556611972
+gasUsed:                 0.000000000000187311
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x1d23cf2b75cb43b31f0503ea45b6c4edf2e4361838503a3ec9c0b8700e344546
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.81097431294158
+CurrentGas, ETH:         0.000229088788966548
+Gas60gwei, ETH:          0.000229088788966548
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956476
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:56 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0xb951fb8e74e08ced8385a712852dee4314419d8f53a1fceba21516458a31bc26
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533097123353
+CurrentGas, ETH:         0.000182529183534558
+Gas60gwei, ETH:          0.000182529183534558
+gasUsed:                 0.000000000000090447
+gasPrice:                0.000000002018078914
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0xc5e10b0c7e851173d624f9efe58df5fc3e09dc777d3d95479013331ab2b5a9f2
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048441953888383
+CurrentGas, ETH:         0.000138554920773696
+Gas60gwei, ETH:          0.000138554920773696
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586402
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x983c7ea5d77d18720b5c28487dcfd893cd0714f97db99e0e59191af44040cce0
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820580860398
+CurrentGas, ETH:         0.00014485368872487
+Gas60gwei, ETH:          0.00014485368872487
+gasUsed:                 0.000000000000095111
+gasPrice:                0.00000000152299617
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             5000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         13 months
+  Completion Date:            2028-01-02 10:39:26
+  BSOV Earned:                4801
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.002568962184368722
+  60 gwei:                    0.09887712000000003
+  USD current:                9.094126132665277
+  USD 60 gwei:                350.02500480000003
+
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0xc9b56c788518c1566d959406814201319200d2e3d0fe03b645f48afc894aa336
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.784856399999995
+Cost current, USD:       2.377936790406381
+CurrentGas, ETH:         0.000671733556611972
+Gas60gwei, ETH:          0.000671733556611972
+gasUsed:                 0.000000000000187311
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x1d23cf2b75cb43b31f0503ea45b6c4edf2e4361838503a3ec9c0b8700e344546
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.81097431294158
+CurrentGas, ETH:         0.000229088788966548
+Gas60gwei, ETH:          0.000229088788966548
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956476
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:56 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0xb951fb8e74e08ced8385a712852dee4314419d8f53a1fceba21516458a31bc26
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533097123353
+CurrentGas, ETH:         0.000182529183534558
+Gas60gwei, ETH:          0.000182529183534558
+gasUsed:                 0.000000000000090447
+gasPrice:                0.000000002018078914
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0xc5e10b0c7e851173d624f9efe58df5fc3e09dc777d3d95479013331ab2b5a9f2
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048441953888383
+CurrentGas, ETH:         0.000138554920773696
+Gas60gwei, ETH:          0.000138554920773696
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586402
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x983c7ea5d77d18720b5c28487dcfd893cd0714f97db99e0e59191af44040cce0
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820580860398
+CurrentGas, ETH:         0.00014485368872487
+Gas60gwei, ETH:          0.00014485368872487
+gasUsed:                 0.000000000000095111
+gasPrice:                0.00000000152299617
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             10000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         25 months
+  Completion Date:            2028-12-15 10:39:50
+  BSOV Earned:                9602
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.0037104198421367557
+  60 gwei:                    0.16735704000000004
+  USD current:                13.134886241164114
+  USD 60 gwei:                592.4439216000002
+
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0x88450dfa31b9a7dea9ff321a5c7e8d1f3b80989981299dcc1b7cb12017a56c87
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.7874052
+Cost current, USD:       2.3780891319212136
+CurrentGas, ETH:         0.000671776590938196
+Gas60gwei, ETH:          0.000671776590938196
+gasUsed:                 0.000000000000187323
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x8de04c4aa6d8e1b60a6b51082351cf62d468e5324f6928b77398a1c61101919f
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.8109743769863184
+CurrentGas, ETH:         0.000229088807058282
+Gas60gwei, ETH:          0.000229088807058282
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956734
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:56 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0x9860fb6c746aaf9d2b8276339ccd07bd7718d70f6022c441db483cf2980d0bba
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533468534914
+CurrentGas, ETH:         0.00018252919402641
+Gas60gwei, ETH:          0.00018252919402641
+gasUsed:                 0.000000000000090447
+gasPrice:                0.00000000201807903
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0x68c6cc20756dd43f25d2786fd2130cdba23df899fadca4f5aad223b4ed0f1f98
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048444572797373
+CurrentGas, ETH:         0.000138554928171744
+Gas60gwei, ETH:          0.000138554928171744
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586503
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x1799d21fc619c702cc1fb6ed90f56102c999a6841f46aa134b2193ab53526fb4
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820779509232
+CurrentGas, ETH:         0.000144853694336419
+Gas60gwei, ETH:          0.000144853694336419
+gasUsed:                 0.000000000000095111
+gasPrice:                0.000000001522996229
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             25000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         62 months
+  Completion Date:            2031-11-23 10:41:04
+  BSOV Earned:                24005
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.0072295701571799
+  60 gwei:                    0.3785041799999995
+  USD current:                25.592678356416904
+  USD 60 gwei:                1339.904797200001
+
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0xb312458b028c3d86869315ab13e4f41e9ab5d89b4bb561ebb3990ebb0862e7bd
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.7874052
+Cost current, USD:       2.3780891319212136
+CurrentGas, ETH:         0.000671776590938196
+Gas60gwei, ETH:          0.000671776590938196
+gasUsed:                 0.000000000000187323
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x8de04c4aa6d8e1b60a6b51082351cf62d468e5324f6928b77398a1c61101919f
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.8109743769863184
+CurrentGas, ETH:         0.000229088807058282
+Gas60gwei, ETH:          0.000229088807058282
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956734
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:57 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0x9860fb6c746aaf9d2b8276339ccd07bd7718d70f6022c441db483cf2980d0bba
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533468534914
+CurrentGas, ETH:         0.00018252919402641
+Gas60gwei, ETH:          0.00018252919402641
+gasUsed:                 0.000000000000090447
+gasPrice:                0.00000000201807903
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0x68c6cc20756dd43f25d2786fd2130cdba23df899fadca4f5aad223b4ed0f1f98
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048444572797373
+CurrentGas, ETH:         0.000138554928171744
+Gas60gwei, ETH:          0.000138554928171744
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586503
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x1799d21fc619c702cc1fb6ed90f56102c999a6841f46aa134b2193ab53526fb4
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820779509232
+CurrentGas, ETH:         0.000144853694336419
+Gas60gwei, ETH:          0.000144853694336419
+gasUsed:                 0.000000000000095111
+gasPrice:                0.000000001522996229
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             50000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         124 months
+  Completion Date:            2036-10-25 10:43:09
+  BSOV Earned:                48010
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.013126452198458049
+  60 gwei:                    0.7323170999999981
+  USD current:                46.467640782541544
+  USD 60 gwei:                2592.402533999996
+
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0xd8b1ed62870ff0d69d5b265cc8650a2b005008617e5caaab4b1dfebf009930e8
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.7874052
+Cost current, USD:       2.3780891319212136
+CurrentGas, ETH:         0.000671776590938196
+Gas60gwei, ETH:          0.000671776590938196
+gasUsed:                 0.000000000000187323
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x8de04c4aa6d8e1b60a6b51082351cf62d468e5324f6928b77398a1c61101919f
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.8109743769863184
+CurrentGas, ETH:         0.000229088807058282
+Gas60gwei, ETH:          0.000229088807058282
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956734
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:57 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0x9860fb6c746aaf9d2b8276339ccd07bd7718d70f6022c441db483cf2980d0bba
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533468534914
+CurrentGas, ETH:         0.00018252919402641
+Gas60gwei, ETH:          0.00018252919402641
+gasUsed:                 0.000000000000090447
+gasPrice:                0.00000000201807903
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0x68c6cc20756dd43f25d2786fd2130cdba23df899fadca4f5aad223b4ed0f1f98
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048444572797373
+CurrentGas, ETH:         0.000138554928171744
+Gas60gwei, ETH:          0.000138554928171744
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586503
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x1799d21fc619c702cc1fb6ed90f56102c999a6841f46aa134b2193ab53526fb4
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820779509232
+CurrentGas, ETH:         0.000144853694336419
+Gas60gwei, ETH:          0.000144853694336419
+gasUsed:                 0.000000000000095111
+gasPrice:                0.000000001522996229
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             75000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         186 months
+  Completion Date:            2041-09-27 10:45:13
+  BSOV Earned:                72015
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.01902333423973626
+  60 gwei:                    1.0861300199999966
+  USD current:                67.34260320866612
+  USD 60 gwei:                3844.9002707999834
+
+............. Section 1: User Deposits .............
+
+########## Ethereum Receipt: initial deposit - approveAndCall() ##########
+hash:                    0x7751075917501861798e269cbec4c7d6f5bbe025bd3a688a04910af6970e49c4
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       39.7874052
+Cost current, USD:       2.3780891319212136
+CurrentGas, ETH:         0.000671776590938196
+Gas60gwei, ETH:          0.000671776590938196
+gasUsed:                 0.000000000000187323
+gasPrice:                0.000000003586193852
+
+............. Section 2: Claim Eligible / Accept Incoming .............
+
+########## Ethereum Receipt: engage waiting - acceptUntakenIncomingTokens() ##########
+hash:                    0x8de04c4aa6d8e1b60a6b51082351cf62d468e5324f6928b77398a1c61101919f
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       14.894125200000001
+Cost current, USD:       0.8109743769863184
+CurrentGas, ETH:         0.000229088807058282
+Gas60gwei, ETH:          0.000229088807058282
+gasUsed:                 0.000000000000070123
+gasPrice:                0.000000003266956734
+
+............. Section 3: Fast Forward .............
+
+2026-11-22 10:38:57 no transactions
+
+............. Section 4: Withdrawals .............
+
+########## Ethereum Receipt: withdrawFromIncomingAccount() ##########
+hash:                    0x9860fb6c746aaf9d2b8276339ccd07bd7718d70f6022c441db483cf2980d0bba
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       19.210942799999998
+Cost current, USD:       0.6461533468534914
+CurrentGas, ETH:         0.00018252919402641
+Gas60gwei, ETH:          0.00018252919402641
+gasUsed:                 0.000000000000090447
+gasPrice:                0.00000000201807903
+
+########## Ethereum Receipt: withdrawFromRegularAccount() ##########
+hash:                    0x68c6cc20756dd43f25d2786fd2130cdba23df899fadca4f5aad223b4ed0f1f98
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       15.557875200000002
+Cost current, USD:       0.49048444572797373
+CurrentGas, ETH:         0.000138554928171744
+Gas60gwei, ETH:          0.000138554928171744
+gasUsed:                 0.000000000000073248
+gasPrice:                0.000000001891586503
+
+########## Ethereum Receipt: withdrawAll() ##########
+hash:                    0x1799d21fc619c702cc1fb6ed90f56102c999a6841f46aa134b2193ab53526fb4
+from:                    0x7ea7Dfe2B2937647e88831AcD5BF91C6133573d5
+to:                      0xcD7A2A3D560A33f97B48aCd65058935930483C41
+EthPrice, fixed:         3540
+Cost 60 gwei, USD:       20.2015764
+Cost current, USD:       0.5127820779509232
+CurrentGas, ETH:         0.000144853694336419
+Gas60gwei, ETH:          0.000144853694336419
+gasUsed:                 0.000000000000095111
+gasPrice:                0.000000001522996229
+
+............. Section 5: Earnings and timing summary .............
+
+  Deposit Amount:             100000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         248 months
+  Completion Date:            2046-08-30 10:47:17
+  BSOV Earned:                96020
+
+............. Section 6: Gas Consumption Totals .............
+
+  current gas:                0.02492021628101452
+  60 gwei:                    1.439942939999995
+  USD current:                88.21756563479069
+  USD 60 gwei:                5097.398007599971

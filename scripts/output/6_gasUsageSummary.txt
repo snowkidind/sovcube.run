@@ -1,0 +1,70 @@
+
+  Deposit Amount:             1000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         3 months
+  Completion Date:            2027-03-18 10:39:06
+  BSOV Earned:                960.2
+  current gas:                0.001591937905387585
+  60 gwei:                    0.041810520000000004
+  USD current:                5.635460185072051
+  USD 60 gwei:                148.0092408
+
+  Deposit Amount:             5000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         13 months
+  Completion Date:            2028-01-02 10:39:26
+  BSOV Earned:                4801
+  current gas:                0.002568962184368722
+  60 gwei:                    0.09887712000000003
+  USD current:                9.094126132665277
+  USD 60 gwei:                350.02500480000003
+
+  Deposit Amount:             10000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         25 months
+  Completion Date:            2028-12-15 10:39:50
+  BSOV Earned:                9602
+  current gas:                0.0037104198421367557
+  60 gwei:                    0.16735704000000004
+  USD current:                13.134886241164114
+  USD 60 gwei:                592.4439216000002
+
+  Deposit Amount:             25000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         62 months
+  Completion Date:            2031-11-23 10:41:04
+  BSOV Earned:                24005
+  current gas:                0.0072295701571799
+  60 gwei:                    0.3785041799999995
+  USD current:                25.592678356416904
+  USD 60 gwei:                1339.904797200001
+
+  Deposit Amount:             50000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         124 months
+  Completion Date:            2036-10-25 10:43:09
+  BSOV Earned:                48010
+  current gas:                0.013126452198458049
+  60 gwei:                    0.7323170999999981
+  USD current:                46.467640782541544
+  USD 60 gwei:                2592.402533999996
+
+  Deposit Amount:             75000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         186 months
+  Completion Date:            2041-09-27 10:45:13
+  BSOV Earned:                72015
+  current gas:                0.01902333423973626
+  60 gwei:                    1.0861300199999966
+  USD current:                67.34260320866612
+  USD 60 gwei:                3844.9002707999834
+
+  Deposit Amount:             100000
+  Vesting Period:             2.73972602739726 years
+  Withdrawal process:         248 months
+  Completion Date:            2046-08-30 10:47:17
+  BSOV Earned:                96020
+  current gas:                0.02492021628101452
+  60 gwei:                    1.439942939999995
+  USD current:                88.21756563479069
+  USD 60 gwei:                5097.398007599971
