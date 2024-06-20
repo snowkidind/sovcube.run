@@ -154,61 +154,6 @@ const run = async () => {
   console.log('User 3 totals postAccept: can observe that balancIncoming is now populated')
   await allThe_userThings(user3.address)
 
-
-
-
-
-  return
-
-  console.log('............. Section 3: Fast Forward  .............\n')
-
-  console.log(await chainDateFmt() + ' Fast forward -> Day Before')
-  await helpers.mine(1000, { interval: 86400 }) // 1 block per day for 1000 days
-
-  await allTheGlobalThings()
-  await allThe_userThings(user1.address)
-
-  console.log(await chainDateFmt() + ' Day After: User able to withdrawal 100 tokens from either account')
-  await helpers.mine(2, { interval: 86400 })
-
-  await allTheGlobalThings()
-  await allThe_userThings(user1.address)
-
-  console.log('............. Section 4: Withdrawals .............\n')
-
-  // can only withdrawal 100 tokens per day after 1000 days has elapsed
-  const withdrawal1 = 100 * 10 ** 8
-  await timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(withdrawal1)
-
-  console.log(await chainDateFmt() + ' After Withdrawal 1: Balances')
-  await allTheGlobalThings()
-  await allThe_userThings(user1.address)
-
-
-  // can only withdrawal 100 tokens per day after 1000 days has elapsed
-  const withdrawal2 = 100 * 10 ** 8
-  await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(withdrawal2)
-
-  console.log(await chainDateFmt() + ' After Withdrawal 2: Balances')
-  await allTheGlobalThings()
-  await allThe_userThings(user1.address)
-
-  console.log('............. Section 5: Weekly Withdrawals continued (takes a bit to simulate).............\n')
-
-  // can only withdrawal 100 tokens per week after 1000 days has elapsed
-  let elapsedHours = 0
-  for (let i = 0; i < 1003; i++) {
-    await helpers.mine(170, { interval: 3600 }) // A week and two hours later
-    const a = timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(100 * 10 ** 8)
-    const b = timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
-    await Promise.all([a, b])
-    elapsedHours += 170
-  }
-  const days = elapsedHours / 24
-  console.log('Time Elapsed withdrawaling from fund: ' + days + ' days.\n')
-
-  await allThe_userThings(user1.address)
-
 }
 
 const chainDateFmt = async () => {
@@ -300,6 +245,11 @@ const getFunds = async (whale, owner) => {
   const receipt = await tx.wait()
 }
 
+const mine = async (days) => {
+  const duration = days * 86400
+  await helpers.time.increase(duration)
+  await helpers.mine(1)
+}
 
 
   ; (async () => {

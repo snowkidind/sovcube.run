@@ -135,13 +135,15 @@ const run = async () => {
   console.log('............. Section 3: Fast Forward  .............\n')
 
   console.log(await chainDateFmt() + ' Fast forward -> Day Before')
-  await helpers.mine(1000, { interval: 86400 }) // 1 block per day for 1000 days
+
+  await mine(1100)
 
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
 
   console.log(await chainDateFmt() + ' Day After: User able to withdrawal 100 tokens from either account')
-  await helpers.mine(2, { interval: 86400 })
+
+  await mine(2)
 
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
@@ -170,7 +172,7 @@ const run = async () => {
   // can only withdrawal 100 tokens per week after 1000 days has elapsed
   let elapsedHours = 0
   for (let i = 0; i < 1003; i++) {
-    await helpers.mine(170, { interval: 3600 }) // A week and two hours later
+    await mine(7)
     const a = timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(100 * 10 ** 8)
     const b = timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
     await Promise.all([a, b])
@@ -272,23 +274,12 @@ const getFunds = async (whale, owner) => {
   const receipt = await tx.wait()
 }
 
-const extraJunk = async () => {
-
-  const rewardsFunctions = await getFunctionDefinitionsFromAbi(timelockReserveRewardsAbi, ethers)
-  // console.log(rewardsFunctions)
-
-  const currentTier = await timelockRewardsReserveContract.currentTier()
-  // console.log('tier:', currentTier)
-
-  const tiers = await timelockRewardsReserveContract.tiers(2)
-  // console.log('tiers:', tiers)
-
-  const timelockFunctions = await getFunctionDefinitionsFromAbi(timelockContract2Abi, ethers)
-  // console.log(timelockFunctions)
-
+const mine = async (days) => {
+  const duration = days * 86400
+  await helpers.time.increase(duration)
+  await helpers.mine(1)
 }
-
-
+  
   ; (async () => {
 
     if (Number(process.version.split('.')[0].replace('v', '')) < 20) {

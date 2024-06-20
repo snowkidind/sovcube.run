@@ -28,8 +28,10 @@ https://SovCube.com
 
 */
 
-import "./ReentrancyGuard.sol";
-  //  import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v5.0.2/contracts/utils/ReentrancyGuard.sol";
+
+import "hardhat/console.sol";
+  // import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v5.0.2/contracts/utils/ReentrancyGuard.sol";
+  import "./ReentrancyGuard.sol";
 
 // Defines the interface of the BSOV Token contract
     abstract contract ERC20Interface {
@@ -37,8 +39,10 @@ import "./ReentrancyGuard.sol";
         function transferFrom(address from, address to, uint tokens) public virtual returns(bool success);
         function approve(address spender, uint tokens) public virtual returns(bool success);
         function approveAndCall(address spender, uint tokens, bytes memory data) public virtual returns(bool success);
+        function balanceOf(address account) public virtual returns (uint256);
         event Transfer(address indexed from, address indexed to, uint tokens);
         event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+        
     }
 
     contract TimelockAndRewardsContract is ReentrancyGuard {
@@ -50,7 +54,7 @@ import "./ReentrancyGuard.sol";
         uint constant setGlobalLockExpirationRegularAccounts = 1000 days; // A global countdown that unlocks timelocked tokens in all user's Regular Accounts when it expires. 
         uint constant maxWithdrawalPeriods = 10; // The user can accumulate withdrawals for a maximum number of periods.
         uint constant timeBetweenWithdrawals = 7 days; // The user has to wait this amount of time to withdraw periodWithdrawalAmount
-        uint constant resetTimeLeftIncomingAccount = 1000 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
+        uint constant resetTimeLeftIncomingAccount = 100 days; // Whenever a user takes untaken incoming tokens, the timer will reset to this amount of time.
         uint constant withdrawalHalvingEraDuration = 1500 days; // Amount of days until the periodWithdrawalAmount halves - only happens after the inital lockExpiration.
         uint constant maxWithdrawalHalvingEras = 5; // Max amount of withdrawal halving eras
         uint constant newUserLockTime = 10 weeks; // Set the duration that new timelockers need to wait before withdrawing their tokens. To penalize multiple wallets. 
@@ -73,7 +77,9 @@ import "./ReentrancyGuard.sol";
 
 // Address of the owner/contract deployer - Supposed to become the burn address (0x0000...) after owner revokes ownership.
         address public owner;
-        
+        bool public isContractSeeded;
+        uint seedSupply;
+
 // Mappings for Regular Accounts        
         mapping(address => uint) balanceRegularAccount;
         mapping(address => uint) lastWithdrawalRegularAccount;
@@ -94,6 +100,7 @@ import "./ReentrancyGuard.sol";
         event TokenWithdrawalRegularAccount(address indexed addr, uint256 amt, uint256 time);
         event TokenWithdrawalIncomingAccount(address indexed addr, uint256 amt, uint256 time);
         event NewWithdrawalHalving(uint256 era, uint256 time);
+        event AccountMigration(address indexed oldAddress, address indexed newAddress);
 
 // When deploying this contract, you will need to input the BSOV Token contract address.
         constructor(address _tokenContractAddress) {
@@ -108,6 +115,7 @@ import "./ReentrancyGuard.sol";
             
             lastWithdrawalHalving = globalLockExpirationDateRegularAccount; // Initialize the last halving timestamp
             withdrawalHalvingEra = 1; // Initialize the halving era
+            isContractSeeded = false;
         }
 
         modifier onlyOwner() {
@@ -118,7 +126,11 @@ import "./ReentrancyGuard.sol";
 // This function "seeds" the 300,000 tokens that are reserved for the Timelock Rewards.
 // First the owner needs to transfer at least 30609121600000 tokens to this contract, then he can call this function.
         function ownerSeedContract() public onlyOwner {
-            require(tokenContract.approveAndCall(address(this), 30303030384000, "0x"), "Token approval failed");
+            require (!isContractSeeded, "Contract is already seeded");
+            uint256 balance = tokenContract.balanceOf(address(this));
+            require(tokenContract.approveAndCall(address(this), balance, "0x"), "Token approval failed");
+            isContractSeeded = true;
+            seedSupply = (balance * 99) / 100;
         }
 
 // Move ownership of contract to the burn address.
@@ -172,6 +184,7 @@ import "./ReentrancyGuard.sol";
             if (lastWithdrawalRegularAccount[_sender] < block.timestamp + oldUserLockTime) {
                 lastWithdrawalRegularAccount[_sender] = block.timestamp + oldUserLockTime;
             }
+            // this is unsafe
         }
             
                 // If sender is not this contract, meaning a normal user initiates timelock, then calculate and send Timelock Rewards
@@ -196,7 +209,7 @@ import "./ReentrancyGuard.sol";
             totalCumulativeTimelocked = totalCumulative;
 
                 // If total rewards earned has reached 300,000 tokens, no more rewards will be calculated or sent
-                if (totalRewards >= 30000000000000) {
+                if (totalRewards >= seedSupply) {
                     return;
                 }
 
@@ -222,8 +235,8 @@ import "./ReentrancyGuard.sol";
 
                 }
                     // Ensure that total rewards earned does not exceed 300,000 tokens
-                if (totalRewards + newlyEarnedRewards > 30000000000000) {
-                newlyEarnedRewards = 30000000000000 - totalRewards;
+                if (totalRewards + newlyEarnedRewards > seedSupply) {
+                newlyEarnedRewards = seedSupply - totalRewards;
                 }
 
             // Update totals
@@ -300,7 +313,7 @@ import "./ReentrancyGuard.sol";
         }
 
 
-// Accept locked tokens that have been sent from other users, or received as rewards
+/*// Accept locked tokens that have been sent from other users, or received as rewards
         function acceptUntakenIncomingTokens() public nonReentrant {
             require(balanceUntakenIncomingAccount[msg.sender] > 0, "You have no Incoming Tokens to accept!");
 
@@ -313,7 +326,32 @@ import "./ReentrancyGuard.sol";
 
             delete balanceUntakenIncomingAccount[msg.sender];
             emit AcceptedUntakenIncomingTokens(msg.sender, incomingTokensAmount);
+    }*/
+
+
+    // Accept locked tokens that have been sent from other users, or received as rewards
+function acceptUntakenIncomingTokens() public nonReentrant {
+    require(balanceUntakenIncomingAccount[msg.sender] > 0, "You have no Incoming Tokens to accept!");
+
+    uint256 incomingTokensAmount = balanceUntakenIncomingAccount[msg.sender];
+    balanceIncomingAccount[msg.sender] += incomingTokensAmount;
+
+    // Set the lock time of IncomingAccount based on the Global Lock Time, if the Global Lock Time has not expired yet
+    if (block.timestamp < globalLockExpirationDateRegularAccount) {
+        lockExpirationForUserIncomingAccount[msg.sender] = globalLockExpirationDateRegularAccount + resetTimeLeftIncomingAccount;
+    } else {
+        lockExpirationForUserIncomingAccount[msg.sender] = block.timestamp + resetTimeLeftIncomingAccount;
     }
+
+    // Update the last withdrawal timestamp for incoming account
+    lastWithdrawalIncomingAccount[msg.sender] = block.timestamp;
+
+    // Reset the untaken incoming balance
+    delete balanceUntakenIncomingAccount[msg.sender];
+    
+    emit AcceptedUntakenIncomingTokens(msg.sender, incomingTokensAmount);
+}
+
 
 
 // Withdrawal functions - Enforce a set withdrawal rate
@@ -338,8 +376,8 @@ import "./ReentrancyGuard.sol";
 
         function withdrawFromIncomingAccount(uint _amount) public nonReentrant {
             require(_amount > 0, "Withdraw amount must be greater than zero");
-            require(block.timestamp >= lockExpirationForUserIncomingAccount[msg.sender], "Tokens are locked!");
 
+           require(block.timestamp >= lockExpirationForUserIncomingAccount[msg.sender], "Tokens are locked!");
             uint senderBalance = balanceIncomingAccount[msg.sender];
             require(senderBalance >= _amount, "Insufficient timelocked balance for withdrawal");
 
@@ -368,10 +406,10 @@ import "./ReentrancyGuard.sol";
 
             uint regularBalance = balanceRegularAccount[msg.sender];
             uint incomingBalance = balanceIncomingAccount[msg.sender];
-
+// console.log('rb', regularBalance, maxWithdrawableFromRegular);
             uint amountToWithdrawFromRegular = maxWithdrawableFromRegular > regularBalance ? regularBalance : maxWithdrawableFromRegular;
             uint amountToWithdrawFromIncoming = maxWithdrawableFromIncoming > incomingBalance ? incomingBalance : maxWithdrawableFromIncoming;
-
+// console.log(amountToWithdrawFromRegular, amountToWithdrawFromIncoming);
             // Ensure there is something to withdraw
             require(amountToWithdrawFromRegular > 0 || amountToWithdrawFromIncoming > 0, "No withdrawable tokens available");
 
@@ -396,6 +434,7 @@ import "./ReentrancyGuard.sol";
 
 // Let the user accumulate a withdrawal amount for a set amount of periods, so that they do not need to waste gas on too many transactions.
         function calculateMaxWithdrawable(uint lastWithdrawalTime) internal view returns (uint) {
+          // console.log('bt', block.timestamp);
             if (block.timestamp < lastWithdrawalTime + timeBetweenWithdrawals) {
                 return 0; // If it's not yet time for the next withdrawal, return 0
             }
@@ -418,18 +457,55 @@ import "./ReentrancyGuard.sol";
             emit NewWithdrawalHalving (withdrawalHalvingEra, block.timestamp);
         }
 
-// Get-functions to retrieve essential data about users and stats.
+// If a user needs to change the ownership of their account to another address, they can do so, using this function.
+// E.g. this can be used if you wish to move your account to a cold wallet, or a future contract, or another person.
+        function migrateAccount(address _receiver) public nonReentrant {
+            
+            // Require the receiver to be a new account without any history with SovCube
+            require(_receiver != address(0), "Invalid address");
+            require(balanceRegularAccount[_receiver] == 0, "The receiver account is not fresh");
+            require(balanceIncomingAccount[_receiver] == 0, "The receiver account is not fresh");
+            require(balanceUntakenIncomingAccount[_receiver] == 0, "The receiver account is not fresh");
 
-	// Get the timestamp of the next withdrawal halving
+            // Transfer balance and lastWithdrawal from Regular Account
+            balanceRegularAccount[_receiver] = balanceRegularAccount[msg.sender];
+            balanceRegularAccount[msg.sender] = 0;
+
+            lastWithdrawalRegularAccount[_receiver] = lastWithdrawalRegularAccount[msg.sender];
+            lastWithdrawalRegularAccount[msg.sender] = 0;
+
+            // Transfer balance, lockExpiration, lastWithdrawal and untakenBalance from Incoming Account
+            lockExpirationForUserIncomingAccount[_receiver] = lockExpirationForUserIncomingAccount[msg.sender];
+            lockExpirationForUserIncomingAccount[msg.sender] = 0;
+
+            balanceIncomingAccount[_receiver] = balanceIncomingAccount[msg.sender];
+            balanceIncomingAccount[msg.sender] = 0;
+
+            lastWithdrawalIncomingAccount[_receiver] = lastWithdrawalIncomingAccount[msg.sender];
+            lastWithdrawalIncomingAccount[msg.sender] = 0;
+
+            balanceUntakenIncomingAccount[_receiver] = balanceUntakenIncomingAccount[msg.sender];
+            balanceUntakenIncomingAccount[msg.sender] = 0;
+
+            emit AccountMigration(msg.sender, _receiver);
+        }
+
+
+//
+//
+// Get-functions to retrieve essential data about users and stats.
+//
+//
+
+// Get the timestamp of the next withdrawal halving
         function getTimestampOfNextWithdrawalHalving() public view returns (uint256) {
-            
             if (block.timestamp < globalLockExpirationDateRegularAccount) {
-                return 0; // Global lock expiration has not been reached
+                // Global lock expiration has not been reached
+                // Return the timestamp when the global lock will expire plus the first halving duration
+                return globalLockExpirationDateRegularAccount + withdrawalHalvingEraDuration;
             }
             
-            if (withdrawalHalvingEra >= maxWithdrawalHalvingEras) {
-                return 0; // All halving eras have been completed
-            }
+            require(withdrawalHalvingEra < maxWithdrawalHalvingEras, "All halving eras have been completed");
             
             uint256 nextHalvingTimestamp = lastWithdrawalHalving + withdrawalHalvingEraDuration;
             
@@ -440,6 +516,9 @@ import "./ReentrancyGuard.sol";
             return nextHalvingTimestamp; // Return the timestamp of the next halving
         }
 
+
+
+// Get the amount of tokens unlocked for withdrawal to Regular Account
         function getUnlockedForWithdrawalRegularAccount(address user) public view returns (uint) {
             uint balance = balanceRegularAccount[user];
             if (balance == 0) {
@@ -449,6 +528,7 @@ import "./ReentrancyGuard.sol";
             return balance < maxWithdrawable ? balance : maxWithdrawable;
         }
 
+// Get the amount of tokens unlocked for withdrawal to Incoming Account
         function getUnlockedForWithdrawalIncomingAccount(address user) public view returns (uint) {
             uint balance = balanceIncomingAccount[user];
             if (balance == 0) {
@@ -458,26 +538,32 @@ import "./ReentrancyGuard.sol";
             return balance < maxWithdrawable ? balance : maxWithdrawable;
         }
 
+// Get amount of tokens timelocked in Regular Account
         function getBalanceRegularAccount(address _addr) public view returns (uint256 _balance) {
             return balanceRegularAccount[_addr];
         }
 
+// Get amount of pending tokens in the Untaken Incoming Tokens Account
         function getBalanceUntakenIncomingAccount(address _user) public view returns (uint256) {
             return balanceUntakenIncomingAccount[_user];
         }
 
+// Get amount of timelocked tokens in the Incoming Account
         function getBalanceIncomingAccount(address _addr) public view returns (uint256 _balance) {
             return balanceIncomingAccount[_addr];
         }
 
+// Get the timestamp of the last withdrawal of Incoming Account
         function getLastWithdrawalIncomingAccount(address _addr) public view returns (uint256 _lastWithdrawalTime) {
             return lastWithdrawalIncomingAccount[_addr];
         }
 
+// Get the timestamp of the last withdrawal of Regular Account
         function getLastWithdrawalRegularAccount(address _addr) public view returns (uint256 _lastWithdrawal) {
             return lastWithdrawalRegularAccount[_addr];
         }
 
+// Get the timestamp of the next withdrawal, or accumulation of withdrawals to the Incoming Account
         function getNextWithdrawalIncomingAccount(address _addr) public view returns (uint256 _nextWithdrawalTime) {
             uint lastWithdrawal = lastWithdrawalIncomingAccount[_addr];
             uint lockExpiration = lockExpirationForUserIncomingAccount[_addr];
@@ -502,6 +588,7 @@ import "./ReentrancyGuard.sol";
             }
         }
 
+// Get the timestamp of the next withdrawal, or accumulation of withdrawals to the Regular Account
         function getNextWithdrawalRegularAccount(address _addr) public view returns (uint256 _nextWithdrawalTime) {
             uint lastWithdrawal = lastWithdrawalRegularAccount[_addr];
             uint lockExpiration = globalLockExpirationDateRegularAccount;
@@ -526,13 +613,13 @@ import "./ReentrancyGuard.sol";
             }
         }
 
-
-
+// Get the time left until the Global Lock Time of all Regular Accounts expire.
         function getGlobalTimeLeftRegularAccount() public view returns (uint256 _timeLeft) {
             require(globalLockExpirationDateRegularAccount > block.timestamp, "Tokens are unlocked and ready for withdrawal");
             return globalLockExpirationDateRegularAccount - block.timestamp;
         }
 
+// Get the time left until the Lock Time of individual Incoming Accounts expire.
         function getTimeLeftIncomingAccount(address _addr) public view returns (uint256 _timeLeft) {
             if (lockExpirationForUserIncomingAccount[_addr] <= block.timestamp) {
                 return 0;

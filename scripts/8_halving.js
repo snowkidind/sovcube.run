@@ -1,14 +1,65 @@
+// side quest: is it possible for someone to send your tokens to another account?
+
+/* 
+
+the contract has a halving function and this file is intended to iterate the lifecycle 
+of these halvings and verify the behavior is as intended.
+
+the variable periodWithdrawalAmount is the main controller at what determines how much 
+can be determined at a specific time. It is set to 100 BSOV upon contract initialization
+and then is modified during "halving" events which are triggered by newWithdrawalHalving(), 
+a public function that divides that number by two.
+
+This will result in the periodWithdrawalAmount being modified as such: 
+100/2 = 50, 50/2 = 25, 25/2 = 12.5, 12.5/2 = 6.25, 6.25/2 = 3.125
+But, because solidity does not support floating point logic, the actual results of this are:
+50, 25, 12, 6, 3
+
+Although this math should be considered safe, the last three halvings arent actually halvings
+and they reduce the payout by more than half.  You might want to consider using an array (KISS) 
+or a fixed point math library to provide a more accurate halving method.
+
+Allowing the halving to occur, is regulated by the variable lastWithdrawalHalving which stores
+the timestamp of the transaction that caused the most recent halving, or during contract init, 
+which is different because in the constructor, it adds 1000 days and the current block timestamp.
+
+the math of the halvings can be interpreted on this schedule, where "delay" represents the time 
+when it is possible to call the function to the time it is actually called, illustrated here in increments of ten
+
+Alha time is the time the contract is broadcasted
+initial: Alpha Time plus 1000 days (withdrawals are not allowed during this period anyway) +1000
+first: initial + delay + 1500 days  = 2510 days out
+second: 4020 days out (11 years)
+third: 5530 days out ( 15 years )
+fourth: 7040 days out ( 19 years )
+fifth: 8550 days out ( 23 years )
+
+During the withdrawal process, elapsedWithdrawalPeriods may grow to ten, but if it goes above ten, 
+the number is set to ten  
+
+One consideration is if someone is accumulating withdrawals and a halving occurs, all accumulated 
+withdrawals before the halving are lowered to the post halving amount.
+
+there is a getter function for the next withdrawal halving
+returning zero for withdrawalHalvingEra >= maxWithdrawalHalvingEras
+should probably be replaced with a require statement and error msg
+
+*/
+
+
 const fs = require('fs')
 
 const hre = require("hardhat");
 const ethers = hre.ethers
 const provider = ethers.provider
+
 const helpers = require("@nomicfoundation/hardhat-network-helpers")
 
 const { decimals, readlineUtils, txUtils, dateUtils } = require('../utils/')
 const { getFunctionsForContract, getFunctionDefinitionsFromAbi } = txUtils
+const { getAnswer } = readlineUtils
 const { getTimeAgo, dateNowBKK, timeFmtDb } = dateUtils
-const { d, bigD } = decimals
+const { d } = decimals
 
 const bsovAddress = '0x26946adA5eCb57f3A1F91605050Ce45c482C9Eb1'
 const bsovAbi = require('../utils/bsovAbi.json')
@@ -28,9 +79,8 @@ let timelockAndRewardsContract
 let timelockRewardsReserveContract
 
 const ethPrice = 3540
-const vestingPeriod = 1000
 
-const run = async (userDeposit) => {
+const run = async () => {
 
   const network = process.env.HARDHAT_NETWORK;
   if (typeof (network) === 'undefined') {
@@ -63,15 +113,13 @@ const run = async (userDeposit) => {
   await bsovContract.connect(owner).transfer(user1.address, 200000 * 10 ** 8)
   await bsovContract.connect(owner).transfer(user2.address, 100000 * 10 ** 8)
 
-  const user1Balance = await bsovContract.balanceOf(user1.address)
+  console.log('Transferred ' + d(bsovBalance, bsovDecimals) + ' BSOV from whale wallets.')
 
-  // console.log('Transferred ' + d(bsovBalance, bsovDecimals) + ' BSOV from whale wallets.')
-
-  // console.log("Deployer: " + owner.address)
-  // console.log("User 1:   " + user1.address)
-  // console.log("User 2:   " + user2.address)
-  // console.log("User 3:   " + user3.address)
-  // console.log()
+  console.log("Deployer: " + owner.address)
+  console.log("User 1:   " + user1.address)
+  console.log("User 2:   " + user2.address)
+  console.log("User 3:   " + user3.address)
+  console.log()
 
   const exists = await fs.existsSync(__dirname + '/' + network)
   if (!exists) {
@@ -91,105 +139,121 @@ const run = async (userDeposit) => {
   timelockAndRewardsContract = await Contract1.deploy(...parameters1)
   const timelockAndRewardsContractAddress = timelockAndRewardsContract.target
   await fs.writeFileSync(__dirname + '/' + network + '/TimelockAndRewardsContract.json', JSON.stringify({ contract: timelockAndRewardsContractAddress }, null, 4))
-  // console.log("TimelockContract2 deployed to: " + timelockAndRewardsContractAddress + ' on ' + network)
+  console.log("TimelockContract2 deployed to: " + timelockAndRewardsContractAddress + ' on ' + network)
 
 
   // the owner sends a percent to the contract for rewards, then seeds contract
   const seedFund = 30609121600000 // as per documentation
   await bsovContract.connect(owner).transfer(timelockAndRewardsContractAddress, seedFund)
   await timelockAndRewardsContract.connect(owner).ownerSeedContract()
+  console.log(await chainDate() + ' Init and Seed')
+  await allTheGlobalThings()
 
   console.log('............. Section 1: User Deposits .............\n')
-
-  const userGas = []
-
   // A couple users locks his stuff in the contract
   const sendToLockA = 101000 * 10 ** 8 // just below max in a tx
   // console.log('\nStep 1, user 1')
-  const step1 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, userDeposit, '0x')
-  let receipt = await step1.wait()
-  const depositGas = displayEthReceipt(receipt, 'initial deposit - approveAndCall()')
-  userGas.push(depositGas)
+  const step1 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockA, '0x')
+
+  const sendToLockB = 60000 * 10 ** 8 // blast thresh by a little
+  // console.log('\nStep 1, user 2')
+  const step2 = await bsovContract.connect(user2).approveAndCall(timelockAndRewardsContractAddress, sendToLockB, '0x')
+
+  const sendToLockC = 1000 * 10 ** 8
+  // console.log('\nStep 1, user 1')
+  const step3 = await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLockC, '0x')
+
+  if (0) {
+    console.log('User deposit totals')
+    const sent = sendToLockA + sendToLockB + sendToLockC
+    console.log('\ntotal sent:', sent)
+    const user1Deposits = sendToLockA + sendToLockC
+    console.log('user 1 deposits:' + user1Deposits)
+  }
+
+  console.log(await chainDateFmt() + ' User 1 details:')
+  await allThe_userThings(user1.address)
 
   console.log('............. Section 2: Claim Eligible / Accept Incoming .............\n')
 
   // Im taking the general purpose of this is to "accept the terms"
   // but Im not sure if a withdrawal of funds is possible before this.
   const ready = await timelockAndRewardsContract.connect(user1).acceptUntakenIncomingTokens()
-  receipt = await ready.wait()
-  const acceptUntakenGas = displayEthReceipt(receipt, 'engage waiting - acceptUntakenIncomingTokens()')
-  userGas.push(acceptUntakenGas)
 
-  console.log('............. Section 3: Fast Forward .............\n')
-  
-  await mine(vestingPeriod)
-  await mine(100)
+  console.log(await chainDateFmt() + ' User 2 details: > claim eligible amount, balance moves from eligibleAmount to untakenIncomingBalance')
+  await allThe_userThings(user1.address)
 
-  console.log(await chainDateFmt() + ' no transactions')
+  console.log('............. Section 3: Fast Forward  .............\n')
 
-  console.log('\n............. Section 4: Withdrawals .............\n')
+  console.log(await chainDateFmt() + ' Fast forward -> Day Before')
+  await mine(1100)
 
+  await allTheGlobalThings()
+  await allThe_userThings(user1.address)
+
+  console.log(await chainDateFmt() + ' Day After: User able to withdrawal 100 tokens from either account')
+  await mine(2)
+
+  await allTheGlobalThings()
+  await allThe_userThings(user1.address)
+
+  console.log('............. Section 4: Withdrawals .............\n')
+
+  // can only withdrawal 100 tokens per day after 1000 days has elapsed
   const withdrawal1 = 100 * 10 ** 8
-  const w1 = await timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(withdrawal1)
-  receipt = await w1.wait()
-  const incoming1 = displayEthReceipt(receipt, 'withdrawFromIncomingAccount()')
-  userGas.push(incoming1)
+  await timelockAndRewardsContract.connect(user1).withdrawFromIncomingAccount(withdrawal1)
 
+  console.log(await chainDateFmt() + ' After Withdrawal 1: Balances')
+  await allTheGlobalThings()
+  await allThe_userThings(user1.address)
+
+
+  // can only withdrawal 100 tokens per day after 1000 days has elapsed
   const withdrawal2 = 100 * 10 ** 8
-  const w2 = await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(withdrawal2)
-  receipt = await w2.wait()
-  const regular1 = displayEthReceipt(receipt, 'withdrawFromRegularAccount()')
-  userGas.push(regular1)
+  await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(withdrawal2)
 
+  console.log(await chainDateFmt() + ' After Withdrawal 2: Balances')
+  await allTheGlobalThings()
+  await allThe_userThings(user1.address)
+
+  console.log('............. Section 5: Weekly Withdrawals continued (takes a bit to simulate).............\n')
+
+  // can only withdrawal 100 tokens per week after 1000 days has elapsed
+  let elapsedHours = 0
   let withdrawalPeriod
-  for (let i = 0; i < 1003; i++) { // this is arbitrary
-    await mine(30)
+  const limit = 3500
+  for (let i = 0; i < limit; i++) { // this is arbitrary
+    await mine(7)
     try {
+      
       const w3 = await timelockAndRewardsContract.connect(user1).withdrawAll()
       receipt = await w3.wait()
+      elapsedHours += 170
       if (i == 0) {
-        userGas.push(displayEthReceipt(receipt, 'withdrawAll()'))
+        displayEthReceipt(receipt, 'withdrawAll()')
       } else {
-        userGas.push(displayEthReceipt(receipt, 'withdrawAll()', true)) // suppress further receipts
+        displayEthReceipt(receipt, 'withdrawAll()', true)
       }
-    } catch (error) { 
+
+      const ts = await timelockAndRewardsContract.getTimestampOfNextWithdrawalHalving()
+      const halvingBlock = (await provider.getBlock()).timestamp
+      if (Number(ts) === halvingBlock) {
+        await timelockAndRewardsContract.newWithdrawalHalving()
+        const multiplier = await timelockAndRewardsContract.periodWithdrawalAmount()
+        const era = await timelockAndRewardsContract.withdrawalHalvingEra()
+        console.log('Halved at ' + halvingBlock + ' multiplier: ' + multiplier + ' ' + era)
+      }
+      // process.exit()
+    } catch (error) {
       withdrawalPeriod = i
-      i = 1003
+      i = limit
     }
   }
 
-  console.log('............. Section 5: Earnings and timing summary .............\n')
+  const days = elapsedHours / 24
+  console.log('Time Elapsed withdrawaling from fund: ' + days + ' days.\n')
 
-  const years = vestingPeriod / 365
-  console.log('  Deposit Amount:'.padEnd(30) + d(userDeposit.toString(), bsovDecimals))
-  console.log('  Vesting Period:'.padEnd(30) + years + ' years')
-  console.log('  Withdrawal process:'.padEnd(30) + withdrawalPeriod + ' months')
-  console.log('  Completion Date:'.padEnd(30) + await chainDateFmt())
-  const balancePost = await bsovContract.balanceOf(user1)
-  // console.log('  Start BSOV balance:'.padEnd(30) + d(user1Balance.toString(), bsovDecimals))
-  // console.log('  Final BSOV balance:'.padEnd(30) + d(balancePost.toString(), bsovDecimals))
-  const diff = balancePost - user1Balance
-  console.log('  BSOV Earned:'.padEnd(30) + d(diff.toString(), bsovDecimals))
-
-
-  let current = 0
-  let sixty = 0
-  let usdCurrent = 0
-  let usdSixty = 0
-  userGas.forEach((g) => { 
-    current += Number(g.current)
-    sixty += Number(g.sixty)
-    usdCurrent += Number(g.usdCurrent)
-    usdSixty += Number(g.usdSixty)
-  })
-
-  console.log('\n............. Section 6: Gas Consumption Totals .............\n')
-
-  console.log('  current gas:'.padEnd(30) + current)
-  console.log('  60 gwei:'.padEnd(30) + sixty)
-  console.log('  USD current:'.padEnd(30) + usdCurrent)
-  console.log('  USD 60 gwei:'.padEnd(30) + usdSixty)
-  console.log()
+  await allThe_userThings(user1.address)
 
 }
 
@@ -282,13 +346,6 @@ const getFunds = async (whale, owner) => {
   const receipt = await tx.wait()
 }
 
-const mine = async (days) => {
-  const duration = days * 86400
-  await helpers.time.increase(duration)
-  await helpers.mine(1)
-}
-
-
 const displayEthReceipt = (receipt, title, supress) => {
 
   const ethgas = 60000000000n
@@ -315,6 +372,13 @@ const displayEthReceipt = (receipt, title, supress) => {
   }
   return { current: txGasInCurrentEth, sixty: txGasIn60gweiEth, usdCurrent: current, usdSixty: usd }
 }
+  
+const mine = async (days) => {
+  const duration = days * 86400
+  await helpers.time.increase(duration)
+  await helpers.mine(1)
+}
+
 
   ; (async () => {
 
@@ -328,18 +392,7 @@ const displayEthReceipt = (receipt, title, supress) => {
     }
 
     try {
-
-      const userDeposits = [
-        1000, 5000, 10000, 25000, 50000, 75000, 100000
-      ]
-      
-      const snapshot = await helpers.takeSnapshot() 
-
-      for (let i = 0; i < userDeposits.length; i++) {
-        await run(userDeposits[i] * 10 ** 8)
-        await snapshot.restore()
-      }
-
+      await run()
     } catch (error) {
       console.log(error)
       process.exit(1)

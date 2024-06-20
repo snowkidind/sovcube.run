@@ -89,7 +89,7 @@ const run = async (userDeposit) => {
   let deployerGas = []
 
   const parameters1 = [bsovAddress]
-  await helpers.mine(1, { interval: 100 })
+  await mine(1)
   const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContract")
   timelockAndRewardsContract = await Contract1.deploy(...parameters1)
 
@@ -116,8 +116,8 @@ const run = async (userDeposit) => {
   deployerGas.push(gasInfo)
 
   // console.log('............. Section 3: Fast Forward .............\n')
-  await helpers.mine(vestingPeriod, { interval: 86400 }) // 1 block per day for 1000 days
-  await helpers.mine(2, { interval: 86400 })
+  await mine(vestingPeriod)
+  await mine(2)
   // console.log(await chainDateFmt() + ' no transactions')
 
 
@@ -296,6 +296,12 @@ const displayEthReceipt = (receipt, title, supress) => {
     console.log()
   }
   return { current: txGasInCurrentEth, sixty: txGasIn60gweiEth, usdCurrent: current, usdSixty: usd }
+}
+
+const mine = async (days) => {
+  const duration = days * 86400
+  await helpers.time.increase(duration)
+  await helpers.mine(1)
 }
 
   ; (async () => {

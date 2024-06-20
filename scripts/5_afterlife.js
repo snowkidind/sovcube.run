@@ -29,6 +29,7 @@ let bsovDecimals
 let timelockAndRewardsContract
 let timelockRewardsReserveContract
 
+
 const run = async () => {
 
   const network = process.env.HARDHAT_NETWORK;
@@ -84,7 +85,7 @@ const run = async () => {
 
 
   const parameters1 = [bsovAddress]
-  const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContractT2")
+  const Contract1 = await hre.ethers.getContractFactory("TimelockAndRewardsContract")
   timelockAndRewardsContract = await Contract1.deploy(...parameters1)
   const timelockAndRewardsContractAddress = timelockAndRewardsContract.target
   await fs.writeFileSync(__dirname + '/' + network + '/TimelockAndRewardsContract.json', JSON.stringify({ contract: timelockAndRewardsContractAddress }, null, 4))
@@ -141,13 +142,13 @@ const run = async () => {
   console.log('\n............. Section 3: Fast Forward  .............\n')
 
   console.log(await chainDateFmt() + ' Fast forward -> Day Before')
-  await helpers.mine(1000, { interval: 86400 }) // 1 block per day for 1000 days
+  await mine(1100)
 
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
 
   console.log(await chainDateFmt() + ' Day After: User able to withdrawal 100 tokens from either account')
-  await helpers.mine(2, { interval: 86400 })
+  await mine(2)
 
   await allTheGlobalThings()
   await allThe_userThings(user1.address)
@@ -179,7 +180,7 @@ const run = async () => {
   let foundB = false
   let forever = 1500
   for (let i = 0; i < forever; i++) {
-    await helpers.mine(170, { interval: 3600 }) // A week and two hours later
+    await mine(7)
     try {
 
       const balanceRegularAccount = await timelockAndRewardsContract.getBalanceRegularAccount(user1)
@@ -234,6 +235,7 @@ const run = async () => {
 
   const sendToLock = bsovBalanceUser1 / 10n  // just below max in a tx
 
+  // make the deposit
   await bsovContract.connect(user1).approveAndCall(timelockAndRewardsContractAddress, sendToLock, '0x')
 
   const bsovBalanceUser1a = await bsovContract.balanceOf(user1)
@@ -245,16 +247,17 @@ const run = async () => {
   const contractBalAfterDep2 = d(contractBalanceAfter2ndDeposit_.toString(), bsovDecimals)
 
   try {
-    // immediate withdrawal is possible?!?
+    // immediate withdrawal is possible?!? This should require a ? day wait from here (7 or 100 idk)
     const balanceRegularAccount = await timelockAndRewardsContract.getBalanceRegularAccount(user1)
     if (balanceRegularAccount == 0) console.log('balanceregularacct = 0')
     if (balanceRegularAccount > 0) {
       await timelockAndRewardsContract.connect(user1).withdrawFromRegularAccount(100 * 10 ** 8)
+      console.log('An immediate withdrawal shouldnt be possible.')
       const bsovBalanceUser1b = await bsovContract.balanceOf(user1)
       console.log(await chainDateFmt() + '  User 1 BSOV balance after immediate withdrawal.'.padEnd(45), d(bsovBalanceUser1b.toString(), bsovDecimals))
     }
   } catch (error) {
-    console.log(error)
+    //console.log(error)
   }
 
   try {
@@ -268,31 +271,35 @@ const run = async () => {
     console.log(await chainDateFmt() + ' Invalid Withdrawal Test Passed.')
   }
 
-
   await allThe_userThings(user1.address)
 
-
   console.log('\n............. Section 7: User begins the second withdrawal process after vesting period.............\n')
+  
+  // Since I'm an old user, the sysstem adds 7 days to the deposit period
+  // essentially setting my last withdrawal to 7 days in the future
+  await mine(7) 
+  // now I must wait an additional 7 days from the deposit to withdrawal
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 2500; i++) {
     try {
-      await helpers.mine(8, { interval: 86400 }) // 1 block per day for 8 days to get beyond 7 day withdrawal restriction 
+      await mine(7)
       await timelockAndRewardsContract.connect(user1).withdrawAll()
       if (i % 100 == 0) await allThe_userThings(user1.address)
     } catch (error) {
-      i = 1000
+      console.log('final balances')
+      await allThe_userThings(user1.address)
+      // console.log(error)
+      i = 2500
     }
   }  
-
-  await allThe_userThings(user1.address)
-
+  
   // The new user balance should be the previous balance after the deposit 
   // plus 1 percent of the balance on the contract. This includes two 1 percent fees, in and out which can lead to 
   // confusion if a person doesnt understand or forgot the deflationary mechanism of the underlying token contract.
   const bsovBalanceUserPost = await bsovContract.balanceOf(user1)
   const balanceCalc = bsovBalanceUser1a + (contractBalanceAfter2ndDeposit_ * 99n) / 100n
   if (bsovBalanceUserPost !== balanceCalc) {
-    console.log('Warning: Rugs dont match the drapes.')
+    console.log('Warning: Rugs dont match the drapes.' + bsovBalanceUserPost, balanceCalc)
   }
   
   console.log('The End.')
@@ -388,20 +395,17 @@ const getFunds = async (whale, owner) => {
   const receipt = await tx.wait()
 }
 
-const extraJunk = async () => {
-
-  const rewardsFunctions = await getFunctionDefinitionsFromAbi(timelockReserveRewardsAbi, ethers)
-  // console.log(rewardsFunctions)
-
-  const currentTier = await timelockRewardsReserveContract.currentTier()
-  // console.log('tier:', currentTier)
-
-  const tiers = await timelockRewardsReserveContract.tiers(2)
-  // console.log('tiers:', tiers)
-
-  const timelockFunctions = await getFunctionDefinitionsFromAbi(timelockContract2Abi, ethers)
-  // console.log(timelockFunctions)
-
+// let sway = 0
+const mine = async (days) => {
+  // sway += 1
+  const duration = days * 86400
+  await helpers.time.increase(duration)
+  await helpers.mine(1)
+  // if (sway > 500) {
+  //   await helpers.time.increase(86400)
+  //   await helpers.mine(1)
+  //   sway = 0
+  // }
 }
 
 
