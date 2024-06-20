@@ -28,8 +28,6 @@ https://SovCube.com
 
 */
 
-
-import "hardhat/console.sol";
   // import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v5.0.2/contracts/utils/ReentrancyGuard.sol";
   import "./ReentrancyGuard.sol";
 
@@ -406,10 +404,8 @@ function acceptUntakenIncomingTokens() public nonReentrant {
 
             uint regularBalance = balanceRegularAccount[msg.sender];
             uint incomingBalance = balanceIncomingAccount[msg.sender];
-// console.log('rb', regularBalance, maxWithdrawableFromRegular);
             uint amountToWithdrawFromRegular = maxWithdrawableFromRegular > regularBalance ? regularBalance : maxWithdrawableFromRegular;
             uint amountToWithdrawFromIncoming = maxWithdrawableFromIncoming > incomingBalance ? incomingBalance : maxWithdrawableFromIncoming;
-// console.log(amountToWithdrawFromRegular, amountToWithdrawFromIncoming);
             // Ensure there is something to withdraw
             require(amountToWithdrawFromRegular > 0 || amountToWithdrawFromIncoming > 0, "No withdrawable tokens available");
 
@@ -434,7 +430,6 @@ function acceptUntakenIncomingTokens() public nonReentrant {
 
 // Let the user accumulate a withdrawal amount for a set amount of periods, so that they do not need to waste gas on too many transactions.
         function calculateMaxWithdrawable(uint lastWithdrawalTime) internal view returns (uint) {
-          // console.log('bt', block.timestamp);
             if (block.timestamp < lastWithdrawalTime + timeBetweenWithdrawals) {
                 return 0; // If it's not yet time for the next withdrawal, return 0
             }
